@@ -16,3 +16,4 @@ pyproj==3.8.0
 reportlab==5.0.1
 celery==5.7.0
 redis==8.1.0
+firebase-admin==7.1.0

@@ -21,11 +21,12 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_MINUTES: int = 30
     REFRESH_TOKEN_DAYS: int = 7
+    FIREBASE_PROJECT_ID: str = ""
     # Development only: echo verification/reset tokens in API responses so the flow can be tested without SMTP.
     EMAIL_DEV_ECHO: bool = False
 
     # CORS
-    CORS_ORIGINS: list[str] = ["http://localhost:3000"]
+    CORS_ORIGINS: str | list[str] = ["http://localhost:3000"]
 
     # Email (SMTP). If SMTP_HOST is empty, emails are logged instead of sent.
     SMTP_HOST: str = ""
@@ -48,10 +49,16 @@ class Settings(BaseSettings):
     # Optional LLM assistant (server-side only)
     LLM_API_KEY: str = ""
 
-    @field_validator("CORS_ORIGINS", mode="before")
+    @field_validator("CORS_ORIGINS", mode="after")
     @classmethod
     def split_origins(cls, v):
-        if isinstance(v, str) and not v.startswith("["):
+        if isinstance(v, str):
+            if v.startswith("[") and v.endswith("]"):
+                import json
+                try:
+                    return json.loads(v)
+                except Exception:
+                    pass
             return [o.strip() for o in v.split(",") if o.strip()]
         return v
 

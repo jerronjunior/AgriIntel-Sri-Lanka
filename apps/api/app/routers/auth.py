@@ -1,13 +1,16 @@
 import re
+import secrets
 import uuid
 from datetime import UTC, datetime, timedelta
 
 import jwt
 from fastapi import APIRouter, Depends, Request
+from firebase_admin import auth
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.core.config import get_settings
+from app.core.firebase import verify_id_token
 from app.core.security import (create_access_token, create_refresh_token, decode_token, hash_password,
                                new_opaque_token, sha256, verify_password)
 from app.db import get_db
@@ -15,7 +18,7 @@ from app.deps import api_error, client_ip, current_user
 from app.models import Organization, OrganizationMember, Subscription, SubscriptionPlan, User, UserToken
 from app.rate_limit import limiter
 from app.schemas import (AcceptInviteIn, EmailIn, LoginIn, MeOut, MembershipOut, RefreshIn, RegisterIn,
-                         ResetPasswordIn, TokenIn, TokenOut)
+                         FirebaseRegisterIn, FirebaseSessionIn, ResetPasswordIn, TokenIn, TokenOut)
 from app.services.common import audit, send_email
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -54,6 +57,68 @@ def _consume(db: Session, raw: str, purpose: str) -> UserToken:
 
 def _dev(extra: dict) -> dict:
     return extra if get_settings().EMAIL_DEV_ECHO else {}
+
+
+def _firebase_user(id_token: str) -> tuple[str, str, str, bool]:
+    try:
+        claims = verify_id_token(id_token)
+    except Exception as exc:
+        raise api_error(401, "invalid_firebase_token", f"Invalid or expired Firebase token: {exc}")
+    uid = claims.get("uid") or claims.get("user_id") or claims.get("sub")
+    email = claims.get("email")
+    if not uid or not email:
+        raise api_error(401, "invalid_firebase_token", "Firebase token has no user identity")
+    return str(uid), str(email).lower(), str(claims.get("name") or email), claims.get("email_verified") is True
+
+
+@router.post("/firebase/session", response_model=TokenOut)
+@limiter.limit("10/minute")
+def firebase_session(request: Request, body: FirebaseSessionIn, db: Session = Depends(get_db)):
+    firebase_uid, email, full_name, email_verified = _firebase_user(body.id_token)
+    user = db.query(User).filter_by(firebase_uid=firebase_uid).one_or_none()
+    if not user:
+        user = db.query(User).filter(func.lower(User.email) == email).one_or_none()
+        if user and user.firebase_uid and user.firebase_uid != firebase_uid:
+            raise api_error(401, "account_mismatch", "This email is linked to another Firebase account")
+        if user:
+            user.firebase_uid = firebase_uid
+        else:
+            raise api_error(404, "account_not_registered", "Create an AgriIntel organization before signing in")
+    if not user.is_active:
+        raise api_error(403, "account_suspended", "This account is suspended")
+    user.last_login_at = datetime.now(UTC)
+    if not user.full_name:
+        user.full_name = full_name
+    if email_verified and not user.email_verified_at:
+        user.email_verified_at = datetime.now(UTC)
+    audit(db, "auth.firebase_login", user_id=user.id, ip=client_ip(request))
+    db.commit()
+    return _tokens(user)
+
+
+@router.post("/firebase/register", status_code=201)
+@limiter.limit("5/minute")
+def firebase_register(request: Request, body: FirebaseRegisterIn, db: Session = Depends(get_db)):
+    firebase_uid, email, firebase_name, email_verified = _firebase_user(body.id_token)
+    existing = db.query(User).filter((User.firebase_uid == firebase_uid) | (func.lower(User.email) == email)).one_or_none()
+    if existing:
+        if existing.firebase_uid != firebase_uid:
+            raise api_error(409, "email_taken", "An account with this email already exists")
+        return {"user_id": str(existing.id), **_tokens(existing).model_dump()}
+    plan = db.query(SubscriptionPlan).filter_by(key=body.plan_key).one_or_none()
+    if not plan:
+        raise api_error(400, "invalid_plan", "Unknown plan")
+    user = User(email=email, full_name=body.full_name or firebase_name,
+                password_hash=hash_password(secrets.token_urlsafe(32)), firebase_uid=firebase_uid,
+                email_verified_at=datetime.now(UTC) if email_verified else None)
+    org = Organization(name=body.organization_name, slug=_slugify(body.organization_name, db), industry=body.industry)
+    db.add_all([user, org])
+    db.flush()
+    db.add(OrganizationMember(org_id=org.id, user_id=user.id, role="org_admin"))
+    db.add(Subscription(org_id=org.id, plan_id=plan.id, status="trial", current_period_end=datetime.now(UTC) + timedelta(days=14)))
+    audit(db, "auth.firebase_register", user_id=user.id, org_id=org.id, ip=client_ip(request))
+    db.commit()
+    return {"user_id": str(user.id), "org_id": str(org.id), **_tokens(user).model_dump()}
 
 
 @router.post("/register", status_code=201)

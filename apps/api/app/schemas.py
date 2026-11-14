@@ -43,6 +43,14 @@ class LoginIn(BaseModel):
     password: str
 
 
+class FirebaseSessionIn(BaseModel):
+    id_token: str = Field(min_length=20)
+
+
+class FirebaseRegisterIn(RegisterIn):
+    id_token: str = Field(min_length=20)
+
+
 class TokenOut(BaseModel):
     access_token: str
     refresh_token: str
