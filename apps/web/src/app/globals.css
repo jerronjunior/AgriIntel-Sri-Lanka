@@ -6,30 +6,43 @@
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 :root {
-  /* brand palette (fixed by brief) */
-  --navy: #061421;
-  --abyss: #030b14;
+  /* Futuristic aerospace brand palette */
+  --navy: #051322;
+  --abyss: #02070f;
   --emerald: #10b981;
   --cyan: #22d3ee;
   --snow: #f8fafc;
   --slate: #94a3b8;
-  /* semantic, dark default */
-  --bg: var(--abyss);
-  --panel: #071a2b;
-  --panel-2: #0a2236;
-  --line: rgb(148 163 184 / 0.16);
-  --text: var(--snow);
-  --muted: var(--slate);
+  --violet: #a855f7;
   --amber: #f59e0b;
   --rose: #fb7185;
+
+  /* Semantic transmission theme (dark default) */
+  --bg: #030812;
+  --panel: rgba(8, 22, 38, 0.72);
+  --panel-2: rgba(12, 30, 52, 0.65);
+  --line: rgba(56, 189, 248, 0.16);
+  --text: var(--snow);
+  --muted: #8ca2b8;
+
+  /* Volumetric 3D & glow tokens */
+  --glow-cyan: rgba(34, 211, 238, 0.35);
+  --glow-emerald: rgba(16, 185, 129, 0.35);
+  --glow-violet: rgba(168, 85, 247, 0.3);
+  --shadow-3d: 0 20px 50px -10px rgba(0, 0, 0, 0.75), 0 0 25px -5px rgba(34, 211, 238, 0.14);
 }
+
 [data-theme="light"] {
-  --bg: #eef3f7;
-  --panel: #ffffff;
-  --panel-2: #f4f8fb;
-  --line: rgb(6 20 33 / 0.12);
+  --bg: #f0f4f9;
+  --panel: rgba(255, 255, 255, 0.85);
+  --panel-2: rgba(241, 245, 249, 0.9);
+  --line: rgba(15, 23, 42, 0.12);
   --text: #061421;
   --muted: #4b5d70;
+  --glow-cyan: rgba(14, 165, 233, 0.25);
+  --glow-emerald: rgba(16, 185, 129, 0.25);
+  --glow-violet: rgba(147, 51, 234, 0.2);
+  --shadow-3d: 0 16px 36px -8px rgba(15, 23, 42, 0.12), 0 0 15px -3px rgba(14, 165, 233, 0.08);
 }
 
 @theme inline {
@@ -47,11 +60,16 @@
   --color-slate: var(--slate);
   --color-amber: var(--amber);
   --color-rose: var(--rose);
+  --color-violet: var(--violet);
   --font-display: "Bricolage Grotesque Variable", ui-sans-serif, system-ui;
   --font-sans: "Instrument Sans Variable", ui-sans-serif, system-ui;
 }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+}
+
 body {
   background: var(--bg);
   color: var(--text);
@@ -59,36 +77,317 @@ body {
   font-size: 16px;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
 }
-h1, h2, h3, .display { font-family: var(--font-display); letter-spacing: -0.02em; line-height: 1.05; }
-:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; border-radius: 4px; }
-::selection { background: rgb(16 185 129 / 0.35); }
 
-/* glass panel used for floating analytics over imagery/3D */
-.glass {
-  background: linear-gradient(160deg, rgb(10 34 54 / 0.72), rgb(3 11 20 / 0.6));
-  backdrop-filter: blur(14px) saturate(140%);
-  border: 1px solid rgb(34 211 238 / 0.18);
+/* Background atmospheric depth mesh */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -15%, rgba(34, 211, 238, 0.15), transparent 70%),
+    radial-gradient(ellipse 60% 40% at 90% 85%, rgba(16, 185, 129, 0.1), transparent 60%),
+    radial-gradient(ellipse 50% 35% at 10% 70%, rgba(168, 85, 247, 0.08), transparent 60%);
+  z-index: -2;
 }
-.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; }
+
+/* Perspective horizon grid lines */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: 
+    linear-gradient(to right, rgba(56, 189, 248, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(56, 189, 248, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: radial-gradient(ellipse at 50% 50%, black 20%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 50%, black 20%, transparent 80%);
+  z-index: -1;
+}
+
+h1, h2, h3, .display {
+  font-family: var(--font-display);
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+}
+
+:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+::selection {
+  background: rgba(34, 211, 238, 0.35);
+  color: #fff;
+}
+
+/* -------------------------------------------------------------
+   3D & Optical Transmission Material System
+------------------------------------------------------------- */
+
+/* Optical transmission glassmorphism */
+.glass, .glass-transmission {
+  background: linear-gradient(135deg, rgba(10, 26, 44, 0.75) 0%, rgba(4, 13, 23, 0.82) 100%);
+  backdrop-filter: blur(24px) saturate(180%) contrast(108%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%) contrast(108%);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 
+    0 24px 50px -12px rgba(0, 0, 0, 0.75),
+    0 0 25px -4px rgba(34, 211, 238, 0.12),
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 3D Elevated Panel */
+.panel {
+  background: linear-gradient(160deg, rgba(8, 22, 38, 0.8) 0%, rgba(4, 12, 22, 0.88) 100%);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgba(56, 189, 248, 0.16);
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 18px;
+  box-shadow: 
+    0 16px 40px -10px rgba(0, 0, 0, 0.65),
+    0 0 20px -3px rgba(34, 211, 238, 0.08),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.1);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease, border-color 0.28s ease;
+}
+
+/* 3D Interactive Card with Perspective Lift */
+.card-3d {
+  transform: perspective(1000px) translateZ(0);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, box-shadow;
+}
+
+.card-3d:hover {
+  transform: perspective(1000px) translateY(-4px) translateZ(10px) rotateX(1.5deg);
+  border-color: rgba(34, 211, 238, 0.35);
+  box-shadow: 
+    0 28px 60px -12px rgba(0, 0, 0, 0.85),
+    0 0 35px -2px rgba(34, 211, 238, 0.25),
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* Telemetry scanline sweep across transmission panels */
+.transmission-scan::before {
+  content: "";
+  position: absolute;
+  top: 0; left: -100%; width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.12), rgba(16, 185, 129, 0.16), transparent);
+  transform: skewX(-20deg);
+  animation: telemetry-scan 5s infinite;
+  pointer-events: none;
+}
+
+@keyframes telemetry-scan {
+  0% { left: -120%; }
+  40%, 100% { left: 140%; }
+}
+
+/* High-tech field inputs */
 .field {
-  width: 100%; background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px;
-  padding: 0.6rem 0.8rem; color: var(--text); font-size: 0.95rem;
+  width: 100%;
+  background: linear-gradient(180deg, rgba(8, 22, 38, 0.85) 0%, rgba(4, 12, 22, 0.95) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 0.72rem 1rem;
+  color: var(--text);
+  font-size: 0.95rem;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.field:focus { outline: none; border-color: var(--cyan); box-shadow: 0 0 0 3px rgb(34 211 238 / 0.18); }
+
+.field:focus {
+  outline: none;
+  border-color: var(--cyan);
+  box-shadow: 
+    0 0 0 3px rgba(34, 211, 238, 0.25),
+    0 0 20px rgba(34, 211, 238, 0.3),
+    inset 0 2px 4px rgba(0, 0, 0, 0.4);
+  background: linear-gradient(180deg, rgba(10, 28, 48, 0.9) 0%, rgba(6, 16, 28, 0.98) 100%);
+}
+
+.field::placeholder {
+  color: #64748b;
+}
+
+/* 3D Volumetric Action Buttons */
 .btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: .5rem; border-radius: 999px;
-  padding: .65rem 1.2rem; font-weight: 600; font-size: .95rem; transition: background .15s, transform .15s, opacity .15s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  border-radius: 9999px;
+  padding: 0.72rem 1.4rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: -0.01em;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
 }
-.btn:disabled { opacity: .5; cursor: not-allowed; }
-.btn-primary { background: var(--emerald); color: #02150e; }
-.btn-primary:hover:not(:disabled) { background: #34d399; }
-.btn-ghost { border: 1px solid var(--line); color: var(--text); }
-.btn-ghost:hover { border-color: var(--cyan); }
-.skeleton { background: linear-gradient(90deg, var(--panel-2), var(--line), var(--panel-2)); background-size: 200% 100%; animation: sk 1.4s infinite; border-radius: 8px; }
-@keyframes sk { to { background-position: -200% 0; } }
-.tabular { font-variant-numeric: tabular-nums; }
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%);
+  color: #021a11;
+  font-weight: 700;
+  border: 1px solid rgba(110, 231, 183, 0.45);
+  box-shadow: 
+    0 8px 24px -4px rgba(16, 185, 129, 0.5),
+    0 0 15px -2px rgba(16, 185, 129, 0.3),
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.4);
+}
+
+.btn-primary::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 50%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, transparent 100%);
+  border-radius: 9999px 9999px 0 0;
+  pointer-events: none;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #34d399 0%, #10b981 50%, #059669 100%);
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 
+    0 14px 32px -4px rgba(16, 185, 129, 0.65),
+    0 0 25px 3px rgba(34, 211, 238, 0.4),
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.6);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 
+    0 4px 12px -2px rgba(16, 185, 129, 0.4),
+    inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.btn-cyan {
+  background: linear-gradient(135deg, #22d3ee 0%, #0284c7 100%);
+  color: #041824;
+  font-weight: 700;
+  border: 1px solid rgba(186, 230, 253, 0.5);
+  box-shadow: 
+    0 8px 24px -4px rgba(34, 211, 238, 0.5),
+    0 0 15px -2px rgba(34, 211, 238, 0.3),
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.4);
+}
+
+.btn-cyan:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 
+    0 14px 32px -4px rgba(34, 211, 238, 0.7),
+    0 0 25px 3px rgba(34, 211, 238, 0.5),
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.6);
+}
+
+.btn-ghost {
+  background: rgba(10, 26, 44, 0.6);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--text);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.08);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: rgba(18, 42, 68, 0.75);
+  border-color: var(--cyan);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5), 0 0 16px rgba(34, 211, 238, 0.25);
+}
+
+/* Pulsing radar ring */
+.radar-ring {
+  position: relative;
+}
+
+.radar-ring::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 9999px;
+  border: 1.5px solid var(--emerald);
+  animation: radar-pulse 2.2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+  pointer-events: none;
+}
+
+@keyframes radar-pulse {
+  0% { transform: scale(0.9); opacity: 1; }
+  70% { transform: scale(1.8); opacity: 0; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+/* Holographic Shimmer Skeleton */
+.skeleton {
+  background: linear-gradient(90deg, rgba(8, 22, 38, 0.6), rgba(56, 189, 248, 0.12), rgba(8, 22, 38, 0.6));
+  background-size: 200% 100%;
+  animation: sk 1.8s infinite;
+  border-radius: 10px;
+  border: 1px solid rgba(56, 189, 248, 0.08);
+}
+
+@keyframes sk {
+  to { background-position: -200% 0; }
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(3, 8, 18, 0.8);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(56, 189, 248, 0.2);
+  border-radius: 9999px;
+  border: 2px solid rgba(3, 8, 18, 0.8);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(34, 211, 238, 0.45);
+}
+
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
-.maplibregl-popup-content { background: var(--panel); color: var(--text); border: 1px solid var(--line); }
+
+.maplibregl-popup-content {
+  background: rgba(8, 22, 38, 0.95);
+  color: var(--text);
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  backdrop-filter: blur(16px);
+  border-radius: 12px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.7), 0 0 20px rgba(34, 211, 238, 0.2);
+}

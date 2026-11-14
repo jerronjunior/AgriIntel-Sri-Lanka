@@ -10,6 +10,7 @@ import { startSession } from "@/lib/session";
 import { Label } from "@/components/ui/kit";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { firebaseAuth } from "@/lib/firebase";
+import { ArrowRight, Building2, Lock, Mail, User, Loader2, Sparkles, ShieldCheck } from "lucide-react";
 
 const schema = z.object({
   full_name: z.string().min(2, "Enter your name"),
@@ -20,16 +21,30 @@ const schema = z.object({
   plan_key: z.enum(["farm", "insurance", "banking", "enterprise"]),
 });
 type F = z.infer<typeof schema>;
-const PLAN_FOR: Record<string, F["plan_key"]> = { farm: "farm", agribusiness: "farm", insurance: "insurance", banking: "banking", government: "enterprise" };
+const PLAN_FOR: Record<string, F["plan_key"]> = {
+  farm: "farm",
+  agribusiness: "farm",
+  insurance: "insurance",
+  banking: "banking",
+  government: "enterprise",
+};
 
 function RegisterForm() {
   const router = useRouter();
   const sp = useSearchParams();
   const [err, setErr] = useState<string | null>(null);
-  const { register, handleSubmit, setValue, formState: { errors, isSubmitting } } = useForm<F>({
-    resolver: zodResolver(schema), defaultValues: { industry: "farm", plan_key: (sp.get("plan") as F["plan_key"]) ?? "farm" },
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm<F>({
+    resolver: zodResolver(schema),
+    defaultValues: { industry: "farm", plan_key: (sp.get("plan") as F["plan_key"]) ?? "farm" },
   });
+
   const field = (k: keyof F) => errors[k] && <p className="mt-1 text-xs text-rose">{errors[k]?.message}</p>;
+
   const submit = async (v: F) => {
     setErr(null);
     let sessionData: { access_token: string; refresh_token: string; org_id: string } | null = null;
@@ -73,21 +88,94 @@ function RegisterForm() {
       setErr((sessionErr as ApiError)?.message || "Failed to start session");
     }
   };
+
   return (
-    <form onSubmit={handleSubmit(submit)} className="mt-8 grid gap-4 sm:grid-cols-2" noValidate>
-      <div className="sm:col-span-2"><Label htmlFor="n">Your name</Label><input id="n" className="field" autoComplete="name" {...register("full_name")} />{field("full_name")}</div>
-      <div className="sm:col-span-2"><Label htmlFor="e">Work email</Label><input id="e" type="email" autoComplete="email" className="field" {...register("email")} />{field("email")}</div>
-      <div className="sm:col-span-2"><Label htmlFor="p">Password</Label><input id="p" type="password" autoComplete="new-password" className="field" {...register("password")} />{field("password")}</div>
-      <div className="sm:col-span-2"><Label htmlFor="o">Organization</Label><input id="o" className="field" {...register("organization_name")} />{field("organization_name")}</div>
-      <div><Label htmlFor="i">Industry</Label>
-        <select id="i" className="field" {...register("industry", { onChange: (e) => setValue("plan_key", PLAN_FOR[e.target.value]) })}>
-          <option value="farm">Commercial farm</option><option value="agribusiness">Agribusiness</option><option value="insurance">Insurance</option><option value="banking">Agricultural bank</option><option value="government">Government</option>
-        </select></div>
-      <div><Label htmlFor="pl">Trial plan</Label>
-        <select id="pl" className="field" {...register("plan_key")}><option value="farm">Farm Intelligence</option><option value="insurance">Insurance Intelligence</option><option value="banking">Banking Intelligence</option><option value="enterprise">Enterprise Intelligence</option></select></div>
-      {err && <p role="alert" className="text-sm text-rose sm:col-span-2">{err}</p>}
-      <button disabled={isSubmitting} className="btn btn-primary sm:col-span-2">{isSubmitting ? "Creating…" : "Create organization"}</button>
-      <p className="text-xs text-muted sm:col-span-2">You become the organization admin and can invite your team afterwards. We&apos;ll email you a link to verify your address.</p>
+    <form onSubmit={handleSubmit(submit)} className="mt-6 grid gap-4 sm:grid-cols-2" noValidate>
+      <div className="sm:col-span-2">
+        <Label htmlFor="n">Your Name</Label>
+        <div className="relative mt-1">
+          <User className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-muted/70" />
+          <input id="n" className="field !pl-10" placeholder="Dr. Samantha Perera" autoComplete="name" {...register("full_name")} />
+        </div>
+        {field("full_name")}
+      </div>
+
+      <div className="sm:col-span-2">
+        <Label htmlFor="e">Work Email</Label>
+        <div className="relative mt-1">
+          <Mail className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-muted/70" />
+          <input id="e" type="email" placeholder="samantha@agri.lk" autoComplete="email" className="field !pl-10" {...register("email")} />
+        </div>
+        {field("email")}
+      </div>
+
+      <div className="sm:col-span-2">
+        <Label htmlFor="p">Password</Label>
+        <div className="relative mt-1">
+          <Lock className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-muted/70" />
+          <input id="p" type="password" placeholder="At least 10 characters (letters + numbers)" autoComplete="new-password" className="field !pl-10" {...register("password")} />
+        </div>
+        {field("password")}
+      </div>
+
+      <div className="sm:col-span-2">
+        <Label htmlFor="o">Organization</Label>
+        <div className="relative mt-1">
+          <Building2 className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-muted/70" />
+          <input id="o" className="field !pl-10" placeholder="Ceylon Agri Ventures Ltd" {...register("organization_name")} />
+        </div>
+        {field("organization_name")}
+      </div>
+
+      <div>
+        <Label htmlFor="i">Industry Sector</Label>
+        <select
+          id="i"
+          className="field mt-1 cursor-pointer"
+          {...register("industry", { onChange: (e) => setValue("plan_key", PLAN_FOR[e.target.value]) })}
+        >
+          <option value="farm">Commercial Farm</option>
+          <option value="agribusiness">Agribusiness & Export</option>
+          <option value="insurance">Agricultural Insurance</option>
+          <option value="banking">Agricultural Bank / Finance</option>
+          <option value="government">Government / Policy</option>
+        </select>
+      </div>
+
+      <div>
+        <Label htmlFor="pl">Trial Tier</Label>
+        <select id="pl" className="field mt-1 cursor-pointer" {...register("plan_key")}>
+          <option value="farm">Farm Intelligence</option>
+          <option value="insurance">Insurance Intelligence</option>
+          <option value="banking">Banking Intelligence</option>
+          <option value="enterprise">Enterprise Intelligence</option>
+        </select>
+      </div>
+
+      {err && (
+        <div role="alert" className="sm:col-span-2 rounded-xl border border-rose/30 bg-rose/10 p-3.5 text-xs text-rose shadow-[0_0_15px_rgba(251,113,133,0.15)]">
+          {err}
+        </div>
+      )}
+
+      <button disabled={isSubmitting} className="btn btn-primary sm:col-span-2 !py-3.5 shadow-lg mt-2">
+        {isSubmitting ? (
+          <>
+            <Loader2 className="h-4 w-4 animate-spin" />
+            <span>Deploying organization tenant…</span>
+          </>
+        ) : (
+          <>
+            <span>Initialize 14-Day Free Trial</span>
+            <ArrowRight className="h-4 w-4" />
+          </>
+        )}
+      </button>
+
+      <p className="text-xs text-muted sm:col-span-2 flex items-center gap-1.5 pt-1">
+        <ShieldCheck className="h-3.5 w-3.5 text-emerald shrink-0" />
+        <span>No credit card required. Includes instant access to 25 districts & NASA satellite telemetry.</span>
+      </p>
     </form>
   );
 }
@@ -95,9 +183,22 @@ function RegisterForm() {
 export default function Register() {
   return (
     <>
-      <h1 className="text-4xl font-semibold">Start your 14-day trial</h1>
-      <p className="mt-2 text-muted">Already have an account? <Link href="/login" className="text-cyan hover:underline">Sign in</Link></p>
-      <Suspense><RegisterForm /></Suspense>
+      <div className="mb-4">
+        <div className="inline-flex items-center gap-1.5 rounded-full border border-emerald/40 bg-emerald/10 px-3 py-1 text-xs font-semibold text-emerald shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+          <Sparkles className="h-3.5 w-3.5" />
+          <span>Full Platform Access · 14 Days</span>
+        </div>
+        <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-snow">Create organization</h1>
+        <p className="mt-2 text-sm text-muted">
+          Already registered?{" "}
+          <Link href="/login" className="font-semibold text-cyan transition-colors hover:text-cyan/80 hover:underline">
+            Sign in
+          </Link>
+        </p>
+      </div>
+      <Suspense fallback={<div className="skeleton h-80 w-full" />}>
+        <RegisterForm />
+      </Suspense>
     </>
   );
 }

@@ -7,6 +7,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { firebaseAuth } from "@/lib/firebase";
 import { startSession } from "@/lib/session";
 import { Label } from "@/components/ui/kit";
+import { ArrowRight, Lock, Mail, Loader2, Sparkles } from "lucide-react";
 
 export default function Login() {
   const router = useRouter();
@@ -69,16 +70,82 @@ export default function Login() {
       setBusy(false);
     }
   }
+
   return (
     <>
-      <h1 className="text-4xl font-semibold">Sign in</h1>
-      <p className="mt-2 text-muted">New to AgriIntel? <Link href="/register" className="text-cyan hover:underline">Create an organization</Link></p>
-      <form onSubmit={onSubmit} className="mt-8 space-y-4">
-        <div><Label htmlFor="email">Email</Label><input id="email" name="email" type="email" required autoComplete="email" className="field" /></div>
-        <div><Label htmlFor="password">Password</Label><input id="password" name="password" type="password" required autoComplete="current-password" className="field" /></div>
-        {err && <p role="alert" className="text-sm text-rose">{err}</p>}
-        <button disabled={busy} className="btn btn-primary w-full">{busy ? "Signing in…" : "Sign in"}</button>
-        <Link href="/forgot-password" className="block text-sm text-muted hover:text-ink">Forgot your password?</Link>
+      <div className="mb-8">
+        <div className="inline-flex items-center gap-1.5 rounded-full border border-cyan/40 bg-cyan/10 px-3 py-1 text-xs font-semibold text-cyan shadow-[0_0_15px_rgba(34,211,238,0.2)]">
+          <Sparkles className="h-3.5 w-3.5" />
+          <span>Agricultural Intelligence Terminal</span>
+        </div>
+        <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-snow">Sign in</h1>
+        <p className="mt-2 text-sm text-muted">
+          New to AgriIntel?{" "}
+          <Link href="/register" className="font-semibold text-cyan transition-colors hover:text-cyan/80 hover:underline">
+            Create an organization
+          </Link>
+        </p>
+      </div>
+
+      <form onSubmit={onSubmit} className="space-y-5">
+        <div>
+          <Label htmlFor="email">Work Email</Label>
+          <div className="relative mt-1">
+            <Mail className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-muted/70" />
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              autoComplete="email"
+              placeholder="name@company.com"
+              className="field !pl-10"
+            />
+          </div>
+        </div>
+
+        <div>
+          <Label htmlFor="password">Password</Label>
+          <div className="relative mt-1">
+            <Lock className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-muted/70" />
+            <input
+              id="password"
+              name="password"
+              type="password"
+              required
+              autoComplete="current-password"
+              placeholder="••••••••••••"
+              className="field !pl-10"
+            />
+          </div>
+        </div>
+
+        {err && (
+          <div role="alert" className="rounded-xl border border-rose/30 bg-rose/10 p-3.5 text-xs text-rose shadow-[0_0_15px_rgba(251,113,133,0.15)]">
+            {err}
+          </div>
+        )}
+
+        <button disabled={busy} className="btn btn-primary w-full !py-3.5 shadow-lg">
+          {busy ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" />
+              <span>Authenticating telemetry…</span>
+            </>
+          ) : (
+            <>
+              <span>Sign in to console</span>
+              <ArrowRight className="h-4 w-4" />
+            </>
+          )}
+        </button>
+
+        <div className="flex items-center justify-between pt-2">
+          <Link href="/forgot-password" className="text-xs text-muted transition-colors hover:text-cyan">
+            Forgot your password?
+          </Link>
+          <span className="text-[11px] font-mono text-muted/60">SSL · 256-bit AES</span>
+        </div>
       </form>
     </>
   );
