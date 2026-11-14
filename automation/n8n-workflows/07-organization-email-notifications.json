@@ -1,0 +1,171 @@
+{
+  "name": "AgriIntel 07 - Organization email notifications",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "*/30 * * * *"
+            }
+          ]
+        }
+      },
+      "name": "Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "208f76e4-05d5-5bcc-ac68-1e284db5a0da"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.AGRIINTEL_API_URL }}/automation/run",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"kind\": \"email_notifications\", \"params\": {}, \"idempotency_key\": null, \"wait\": true}",
+        "options": {
+          "timeout": 600000,
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "name": "Run AgriIntel job",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 30000,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "agriintel-automation-key",
+          "name": "AgriIntel automation key (X-Automation-Key)"
+        }
+      },
+      "id": "85c8fd4e-ccb1-5a5e-a526-53860fd87da5"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "combinator": "or",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "failed",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists"
+              }
+            }
+          ]
+        }
+      },
+      "name": "Job failed?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        520,
+        0
+      ],
+      "id": "ef19291e-fec9-5b83-9445-c5dccfc4eabe"
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $env.AGRIINTEL_ALERT_FROM }}",
+        "toEmail": "={{ $env.AGRIINTEL_ALERT_TO }}",
+        "subject": "[AgriIntel] email_notifications failed",
+        "emailFormat": "text",
+        "text": "={{ JSON.stringify($json, null, 2) }}"
+      },
+      "name": "Alert platform admin",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        780,
+        -100
+      ],
+      "credentials": {
+        "smtp": {
+          "id": "agriintel-smtp",
+          "name": "AgriIntel SMTP"
+        }
+      },
+      "id": "7f498399-9578-5814-8199-956835200faf"
+    }
+  ],
+  "connections": {
+    "Schedule": {
+      "main": [
+        [
+          {
+            "node": "Run AgriIntel job",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run AgriIntel job": {
+      "main": [
+        [
+          {
+            "node": "Job failed?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Job failed?": {
+      "main": [
+        [
+          {
+            "node": "Alert platform admin",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "errorWorkflow": "AgriIntel 08 - Failure alerts"
+  },
+  "meta": {
+    "description": "Emails new alerts to org admins every 30 minutes; each alert is emailed exactly once (notifications.emailed_at)."
+  },
+  "tags": [
+    {
+      "name": "agriintel"
+    }
+  ]
+}

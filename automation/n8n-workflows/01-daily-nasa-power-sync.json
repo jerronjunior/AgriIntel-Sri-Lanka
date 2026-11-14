@@ -1,0 +1,171 @@
+{
+  "name": "AgriIntel 01 - Daily NASA POWER sync",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "17 6 * * *"
+            }
+          ]
+        }
+      },
+      "name": "Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "48a3409c-3f3b-5aec-8480-7f425d8550c3"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.AGRIINTEL_API_URL }}/automation/run",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"kind\": \"sync_power_daily\", \"params\": {\"days\": 10}, \"idempotency_key\": \"power-{{ $now.setZone('Asia/Colombo').toFormat('yyyy-LL-dd') }}\", \"wait\": true}",
+        "options": {
+          "timeout": 600000,
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "name": "Run AgriIntel job",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 30000,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "agriintel-automation-key",
+          "name": "AgriIntel automation key (X-Automation-Key)"
+        }
+      },
+      "id": "18446557-4968-5540-9306-9d09b60db6ea"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "combinator": "or",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "failed",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists"
+              }
+            }
+          ]
+        }
+      },
+      "name": "Job failed?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        520,
+        0
+      ],
+      "id": "fda73790-e3e1-52d3-855b-b560a9ac3b89"
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $env.AGRIINTEL_ALERT_FROM }}",
+        "toEmail": "={{ $env.AGRIINTEL_ALERT_TO }}",
+        "subject": "[AgriIntel] sync_power_daily failed",
+        "emailFormat": "text",
+        "text": "={{ JSON.stringify($json, null, 2) }}"
+      },
+      "name": "Alert platform admin",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        780,
+        -100
+      ],
+      "credentials": {
+        "smtp": {
+          "id": "agriintel-smtp",
+          "name": "AgriIntel SMTP"
+        }
+      },
+      "id": "40bdd990-675f-56bd-9129-5f6c875cd08e"
+    }
+  ],
+  "connections": {
+    "Schedule": {
+      "main": [
+        [
+          {
+            "node": "Run AgriIntel job",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run AgriIntel job": {
+      "main": [
+        [
+          {
+            "node": "Job failed?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Job failed?": {
+      "main": [
+        [
+          {
+            "node": "Alert platform admin",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "errorWorkflow": "AgriIntel 08 - Failure alerts"
+  },
+  "meta": {
+    "description": "Fetches the last 10 days of NASA POWER daily weather and soil wetness for all 25 districts. Idempotent per day."
+  },
+  "tags": [
+    {
+      "name": "agriintel"
+    }
+  ]
+}

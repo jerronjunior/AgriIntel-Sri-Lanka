@@ -1,0 +1,196 @@
+{
+  "name": "AgriIntel 04 - Market price import",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "37 10 * * 1"
+            }
+          ]
+        }
+      },
+      "name": "Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "0b33ae0a-5ffa-5064-af75-7afa050455b6"
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.AGRIINTEL_MARKET_CSV_URL }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "name": "Download official price CSV",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "id": "b8834b6d-fde5-51c3-a388-50712d2960f1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.AGRIINTEL_API_URL }}/automation/market-import",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Import into AgriIntel",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        520,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "agriintel-automation-key",
+          "name": "AgriIntel automation key (X-Automation-Key)"
+        }
+      },
+      "id": "3ba14219-c07a-5a07-ad47-c2da38f8b2f0"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.errors.length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ]
+        }
+      },
+      "name": "Rows rejected?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        780,
+        0
+      ],
+      "id": "e6f10298-070e-5b77-b511-bfdf1aec9aff"
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $env.AGRIINTEL_ALERT_FROM }}",
+        "toEmail": "={{ $env.AGRIINTEL_ALERT_TO }}",
+        "subject": "[AgriIntel] Market import had rejected rows",
+        "emailFormat": "text",
+        "text": "={{ JSON.stringify($json, null, 2) }}"
+      },
+      "name": "Alert platform admin",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1040,
+        -100
+      ],
+      "credentials": {
+        "smtp": {
+          "id": "agriintel-smtp",
+          "name": "AgriIntel SMTP"
+        }
+      },
+      "id": "5e44af0e-316c-5fd5-b930-d50beba6a58e"
+    }
+  ],
+  "connections": {
+    "Schedule": {
+      "main": [
+        [
+          {
+            "node": "Download official price CSV",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download official price CSV": {
+      "main": [
+        [
+          {
+            "node": "Import into AgriIntel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Import into AgriIntel": {
+      "main": [
+        [
+          {
+            "node": "Rows rejected?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rows rejected?": {
+      "main": [
+        [
+          {
+            "node": "Alert platform admin",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "errorWorkflow": "AgriIntel 08 - Failure alerts"
+  },
+  "meta": {
+    "description": "Downloads a CSV you are authorized to use (AGRIINTEL_MARKET_CSV_URL, AgriIntel column format) and upserts it. Re-running is safe."
+  },
+  "tags": [
+    {
+      "name": "agriintel"
+    }
+  ]
+}

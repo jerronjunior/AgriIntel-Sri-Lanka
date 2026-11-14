@@ -1,0 +1,171 @@
+{
+  "name": "AgriIntel 03 - SMAP soil moisture processing",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "11 8 * * *"
+            }
+          ]
+        }
+      },
+      "name": "Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "1bca440a-9f98-5de7-801b-4f06dec3a80e"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.AGRIINTEL_API_URL }}/automation/run",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"kind\": \"discover_granules\", \"params\": {\"product\": \"smap_l3_enhanced\", \"days\": 7}, \"idempotency_key\": \"smap-{{ $now.setZone('Asia/Colombo').toFormat('yyyy-LL-dd') }}\", \"wait\": true}",
+        "options": {
+          "timeout": 600000,
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "name": "Run AgriIntel job",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 30000,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "agriintel-automation-key",
+          "name": "AgriIntel automation key (X-Automation-Key)"
+        }
+      },
+      "id": "fd5b4812-26be-5e1d-b640-f01347d7e34d"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "combinator": "or",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "failed",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists"
+              }
+            }
+          ]
+        }
+      },
+      "name": "Job failed?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        520,
+        0
+      ],
+      "id": "ad702d78-ca0c-5f2a-9de3-c0d217c7d522"
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $env.AGRIINTEL_ALERT_FROM }}",
+        "toEmail": "={{ $env.AGRIINTEL_ALERT_TO }}",
+        "subject": "[AgriIntel] discover_granules failed",
+        "emailFormat": "text",
+        "text": "={{ JSON.stringify($json, null, 2) }}"
+      },
+      "name": "Alert platform admin",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        780,
+        -100
+      ],
+      "credentials": {
+        "smtp": {
+          "id": "agriintel-smtp",
+          "name": "AgriIntel SMTP"
+        }
+      },
+      "id": "1a9d8da3-3c8e-5ee1-9f47-80ec64ecf874"
+    }
+  ],
+  "connections": {
+    "Schedule": {
+      "main": [
+        [
+          {
+            "node": "Run AgriIntel job",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run AgriIntel job": {
+      "main": [
+        [
+          {
+            "node": "Job failed?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Job failed?": {
+      "main": [
+        [
+          {
+            "node": "Alert platform admin",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "errorWorkflow": "AgriIntel 08 - Failure alerts"
+  },
+  "meta": {
+    "description": "Discovers SMAP L3 enhanced granules via NASA CMR. Raster processing requires EARTHDATA_TOKEN (see docs/nasa-data.md)."
+  },
+  "tags": [
+    {
+      "name": "agriintel"
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+ "type": "Feature",
+ "geometry": {
+  "type": "Point",
+  "coordinates": [
+   81.35,
+   6.87,
+   128.4
+  ]
+ },
+ "properties": {
+  "parameter": {
+   "T2M": {
+    "JAN": 25.8,
+    "FEB": 26.6,
+    "MAR": 27.9,
+    "APR": 28.6,
+    "MAY": 28.9,
+    "JUN": 28.6,
+    "JUL": 28.4,
+    "AUG": 28.4,
+    "SEP": 28.2,
+    "OCT": 27.3,
+    "NOV": 26.4,
+    "DEC": 25.9,
+    "ANN": 27.6
+   },
+   "T2M_MAX": {
+    "JAN": 30.8,
+    "FEB": 31.6,
+    "MAR": 32.9,
+    "APR": 33.6,
+    "MAY": 33.9,
+    "JUN": 33.6,
+    "JUL": 33.4,
+    "AUG": 33.4,
+    "SEP": 33.2,
+    "OCT": 32.3,
+    "NOV": 31.4,
+    "DEC": 30.9,
+    "ANN": 32.6
+   },
+   "T2M_MIN": {
+    "JAN": 21.8,
+    "FEB": 22.6,
+    "MAR": 23.9,
+    "APR": 24.6,
+    "MAY": 24.9,
+    "JUN": 24.6,
+    "JUL": 24.4,
+    "AUG": 24.4,
+    "SEP": 24.2,
+    "OCT": 23.3,
+    "NOV": 22.4,
+    "DEC": 21.9,
+    "ANN": 23.6
+   },
+   "PRECTOTCORR": {
+    "JAN": 5.6,
+    "FEB": 2.4,
+    "MAR": 2.8,
+    "APR": 5.0,
+    "MAY": 2.7,
+    "JUN": 0.9,
+    "JUL": 1.0,
+    "AUG": 1.2,
+    "SEP": 2.0,
+    "OCT": 6.5,
+    "NOV": 9.0,
+    "DEC": 8.4,
+    "ANN": 3.9
+   },
+   "RH2M": {
+    "JAN": 80,
+    "FEB": 80,
+    "MAR": 80,
+    "APR": 80,
+    "MAY": 80,
+    "JUN": 80,
+    "JUL": 80,
+    "AUG": 80,
+    "SEP": 80,
+    "OCT": 80,
+    "NOV": 80,
+    "DEC": 80,
+    "ANN": 80
+   }
+  }
+ },
+ "header": {
+  "title": "NASA/LaRC POWER CERES/MERRA2 Native Resolution Climatology Climatologies",
+  "fill_value": -999.0,
+  "range": "20-year (2001-2020)"
+ },
+ "_fixture_note": "Synthetic values in documented NASA POWER climatology structure \u2014 for tests only"
+}

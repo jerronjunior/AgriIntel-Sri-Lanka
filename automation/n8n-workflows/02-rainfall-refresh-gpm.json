@@ -1,0 +1,171 @@
+{
+  "name": "AgriIntel 02 - GPM IMERG rainfall refresh",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "43 7 * * *"
+            }
+          ]
+        }
+      },
+      "name": "Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "e10e0df8-9450-5212-8e54-44f6f14abe6a"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.AGRIINTEL_API_URL }}/automation/run",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"kind\": \"discover_granules\", \"params\": {\"product\": \"gpm_imerg_final\", \"days\": 7}, \"idempotency_key\": \"gpm-{{ $now.setZone('Asia/Colombo').toFormat('yyyy-LL-dd') }}\", \"wait\": true}",
+        "options": {
+          "timeout": 600000,
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "name": "Run AgriIntel job",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 30000,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "agriintel-automation-key",
+          "name": "AgriIntel automation key (X-Automation-Key)"
+        }
+      },
+      "id": "b8c86437-974a-5a38-aa31-8da6acc42d23"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "combinator": "or",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "failed",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists"
+              }
+            }
+          ]
+        }
+      },
+      "name": "Job failed?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        520,
+        0
+      ],
+      "id": "933a78fc-b5fb-5d71-9775-bedd32428a6b"
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $env.AGRIINTEL_ALERT_FROM }}",
+        "toEmail": "={{ $env.AGRIINTEL_ALERT_TO }}",
+        "subject": "[AgriIntel] discover_granules failed",
+        "emailFormat": "text",
+        "text": "={{ JSON.stringify($json, null, 2) }}"
+      },
+      "name": "Alert platform admin",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        780,
+        -100
+      ],
+      "credentials": {
+        "smtp": {
+          "id": "agriintel-smtp",
+          "name": "AgriIntel SMTP"
+        }
+      },
+      "id": "e3c4ad5e-983c-5052-b3f9-f21ce7e557e9"
+    }
+  ],
+  "connections": {
+    "Schedule": {
+      "main": [
+        [
+          {
+            "node": "Run AgriIntel job",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run AgriIntel job": {
+      "main": [
+        [
+          {
+            "node": "Job failed?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Job failed?": {
+      "main": [
+        [
+          {
+            "node": "Alert platform admin",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "errorWorkflow": "AgriIntel 08 - Failure alerts"
+  },
+  "meta": {
+    "description": "Discovers new GPM IMERG Final daily granules over Sri Lanka via NASA CMR and records them for processing."
+  },
+  "tags": [
+    {
+      "name": "agriintel"
+    }
+  ]
+}

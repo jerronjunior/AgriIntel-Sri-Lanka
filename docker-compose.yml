@@ -1,0 +1,76 @@
+# Local development stack:  cp .env.example .env && docker compose up --build
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_USER: agri
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-agri}
+      POSTGRES_DB: agriintel
+    ports: ["5432:5432"]
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck: { test: ["CMD-SHELL", "pg_isready -U agri -d agriintel"], interval: 5s, retries: 20 }
+
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+
+  migrate:  # runs as schema owner; creates the restricted agri_app role + RLS policies, then seeds reference data
+    build: { context: ., dockerfile: infrastructure/docker/api.Dockerfile }
+    env_file: .env
+    environment:
+      MIGRATION_DATABASE_URL: postgresql+psycopg://agri:${POSTGRES_PASSWORD:-agri}@db:5432/agriintel
+      DATABASE_URL: postgresql+psycopg://agri:${POSTGRES_PASSWORD:-agri}@db:5432/agriintel
+    command: sh -c "alembic upgrade head && python -m app.seed --superadmin ${SUPERADMIN_EMAIL:-admin@agriintel.local} ${SUPERADMIN_PASSWORD:-ChangeMe12345}"
+    depends_on: { db: { condition: service_healthy } }
+
+  api:
+    build: { context: ., dockerfile: infrastructure/docker/api.Dockerfile }
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+psycopg://agri_app:${APP_DB_PASSWORD:-agri_app}@db:5432/agriintel
+      REDIS_URL: redis://redis:6379/0
+    ports: ["8000:8000"]
+    depends_on: { migrate: { condition: service_completed_successfully }, redis: { condition: service_started } }
+
+  worker:
+    build: { context: ., dockerfile: infrastructure/docker/api.Dockerfile }
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+psycopg://agri_app:${APP_DB_PASSWORD:-agri_app}@db:5432/agriintel
+      REDIS_URL: redis://redis:6379/0
+    command: celery -A app.worker worker -l info
+    depends_on: [api]
+    profiles: [celery]   # optional: use n8n OR celery beat for scheduling, not both
+
+  beat:
+    build: { context: ., dockerfile: infrastructure/docker/api.Dockerfile }
+    env_file: .env
+    environment: { REDIS_URL: "redis://redis:6379/0", DATABASE_URL: "postgresql+psycopg://agri_app:${APP_DB_PASSWORD:-agri_app}@db:5432/agriintel" }
+    command: celery -A app.worker beat -l info
+    depends_on: [worker]
+    profiles: [celery]
+
+  web:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/web.Dockerfile
+      args: { NEXT_PUBLIC_API_URL: "http://localhost:8000/api/v1" }
+    ports: ["3000:3000"]
+    depends_on: [api]
+
+  n8n:
+    image: n8nio/n8n:latest
+    ports: ["5678:5678"]
+    environment:
+      AGRIINTEL_API_URL: http://api:8000/api/v1
+      AGRIINTEL_ALERT_FROM: ${SMTP_FROM:-alerts@agriintel.local}
+      AGRIINTEL_ALERT_TO: ${SUPERADMIN_EMAIL:-admin@agriintel.local}
+      AGRIINTEL_MARKET_CSV_URL: ${AGRIINTEL_MARKET_CSV_URL:-}
+      N8N_BLOCK_ENV_ACCESS_IN_NODE: "false"
+      GENERIC_TIMEZONE: Asia/Colombo
+    volumes: [n8ndata:/home/node/.n8n, ./automation/n8n-workflows:/workflows:ro]
+    depends_on: [api]
+
+volumes:
+  pgdata:
+  n8ndata:
