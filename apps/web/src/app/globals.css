@@ -1,0 +1,94 @@
+@import "tailwindcss";
+@import "@fontsource-variable/bricolage-grotesque";
+@import "@fontsource-variable/instrument-sans";
+@import "maplibre-gl/dist/maplibre-gl.css";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+:root {
+  /* brand palette (fixed by brief) */
+  --navy: #061421;
+  --abyss: #030b14;
+  --emerald: #10b981;
+  --cyan: #22d3ee;
+  --snow: #f8fafc;
+  --slate: #94a3b8;
+  /* semantic, dark default */
+  --bg: var(--abyss);
+  --panel: #071a2b;
+  --panel-2: #0a2236;
+  --line: rgb(148 163 184 / 0.16);
+  --text: var(--snow);
+  --muted: var(--slate);
+  --amber: #f59e0b;
+  --rose: #fb7185;
+}
+[data-theme="light"] {
+  --bg: #eef3f7;
+  --panel: #ffffff;
+  --panel-2: #f4f8fb;
+  --line: rgb(6 20 33 / 0.12);
+  --text: #061421;
+  --muted: #4b5d70;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-panel: var(--panel);
+  --color-panel-2: var(--panel-2);
+  --color-line: var(--line);
+  --color-ink: var(--text);
+  --color-muted: var(--muted);
+  --color-navy: var(--navy);
+  --color-abyss: var(--abyss);
+  --color-emerald: var(--emerald);
+  --color-cyan: var(--cyan);
+  --color-snow: var(--snow);
+  --color-slate: var(--slate);
+  --color-amber: var(--amber);
+  --color-rose: var(--rose);
+  --font-display: "Bricolage Grotesque Variable", ui-sans-serif, system-ui;
+  --font-sans: "Instrument Sans Variable", ui-sans-serif, system-ui;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, .display { font-family: var(--font-display); letter-spacing: -0.02em; line-height: 1.05; }
+:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; border-radius: 4px; }
+::selection { background: rgb(16 185 129 / 0.35); }
+
+/* glass panel used for floating analytics over imagery/3D */
+.glass {
+  background: linear-gradient(160deg, rgb(10 34 54 / 0.72), rgb(3 11 20 / 0.6));
+  backdrop-filter: blur(14px) saturate(140%);
+  border: 1px solid rgb(34 211 238 / 0.18);
+}
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; }
+.field {
+  width: 100%; background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px;
+  padding: 0.6rem 0.8rem; color: var(--text); font-size: 0.95rem;
+}
+.field:focus { outline: none; border-color: var(--cyan); box-shadow: 0 0 0 3px rgb(34 211 238 / 0.18); }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem; border-radius: 999px;
+  padding: .65rem 1.2rem; font-weight: 600; font-size: .95rem; transition: background .15s, transform .15s, opacity .15s;
+}
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.btn-primary { background: var(--emerald); color: #02150e; }
+.btn-primary:hover:not(:disabled) { background: #34d399; }
+.btn-ghost { border: 1px solid var(--line); color: var(--text); }
+.btn-ghost:hover { border-color: var(--cyan); }
+.skeleton { background: linear-gradient(90deg, var(--panel-2), var(--line), var(--panel-2)); background-size: 200% 100%; animation: sk 1.4s infinite; border-radius: 8px; }
+@keyframes sk { to { background-position: -200% 0; } }
+.tabular { font-variant-numeric: tabular-nums; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+.maplibregl-popup-content { background: var(--panel); color: var(--text); border: 1px solid var(--line); }
