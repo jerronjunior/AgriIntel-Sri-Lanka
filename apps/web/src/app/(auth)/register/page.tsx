@@ -10,11 +10,12 @@ import { startSession } from "@/lib/session";
 import { Label } from "@/components/ui/kit";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { firebaseAuth } from "@/lib/firebase";
-import { ArrowRight, Building2, Lock, Mail, User, Loader2, Sparkles, ShieldCheck } from "lucide-react";
+import { ArrowRight, Building2, Lock, Mail, User, Loader2, Sparkles, ShieldCheck, AtSign } from "lucide-react";
 
 const schema = z.object({
   full_name: z.string().min(2, "Enter your name"),
   email: z.string().email("Enter a valid email"),
+  username: z.string().min(2, "At least 2 characters").optional().or(z.literal("")),
   password: z.string().min(10, "At least 10 characters").regex(/[A-Za-z]/, "Include a letter").regex(/\d/, "Include a number"),
   organization_name: z.string().min(2, "Enter your organization's name"),
   industry: z.enum(["farm", "insurance", "banking", "agribusiness", "government"]),
@@ -107,6 +108,15 @@ function RegisterForm() {
           <input id="e" type="email" placeholder="samantha@agri.lk" autoComplete="email" className="field !pl-10" {...register("email")} />
         </div>
         {field("email")}
+      </div>
+
+      <div className="sm:col-span-2">
+        <Label htmlFor="u">Username (optional, can be used to sign in)</Label>
+        <div className="relative mt-1">
+          <AtSign className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-muted/70" />
+          <input id="u" className="field !pl-10" placeholder="e.g. samantha01" autoComplete="username" {...register("username")} />
+        </div>
+        {field("username")}
       </div>
 
       <div className="sm:col-span-2">

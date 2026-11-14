@@ -7,7 +7,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { firebaseAuth } from "@/lib/firebase";
 import { startSession } from "@/lib/session";
 import { Label } from "@/components/ui/kit";
-import { ArrowRight, Lock, Mail, Loader2, Sparkles } from "lucide-react";
+import { ArrowRight, Lock, User as UserIcon, Loader2, Sparkles } from "lucide-react";
 
 export default function Login() {
   const router = useRouter();
@@ -17,7 +17,7 @@ export default function Login() {
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
-    const email = String(f.get("email")).trim();
+    const identifier = String(f.get("identifier") || f.get("email") || "").trim();
     const password = String(f.get("password"));
 
     setBusy(true);
@@ -26,36 +26,37 @@ export default function Login() {
     let sessionTokens: { access_token: string; refresh_token: string } | null = null;
     let authError: string | null = null;
 
-    // 1. Try Firebase Authentication with a timeout so it never hangs indefinitely
-    try {
-      const firebaseTimeout = new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error("Firebase authentication timed out")), 5000)
-      );
-      const credential = await Promise.race([
-        signInWithEmailAndPassword(firebaseAuth, email, password),
-        firebaseTimeout,
-      ]);
-      const idToken = await credential.user.getIdToken();
-      sessionTokens = await api<{ access_token: string; refresh_token: string }>("/auth/firebase/session", {
-        body: { id_token: idToken },
-        auth: false,
-        org: false,
-      });
-    } catch (fbErr: unknown) {
-      // If Firebase auth failed or timed out, we fall back to native AgriIntel login
-      authError = (fbErr as Error)?.message || "Firebase sign in failed";
+    // 1. If identifier is an email, try Firebase Authentication first
+    if (identifier.includes("@")) {
+      try {
+        const firebaseTimeout = new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error("Firebase authentication timed out")), 5000)
+        );
+        const credential = await Promise.race([
+          signInWithEmailAndPassword(firebaseAuth, identifier, password),
+          firebaseTimeout,
+        ]);
+        const idToken = await credential.user.getIdToken();
+        sessionTokens = await api<{ access_token: string; refresh_token: string }>("/auth/firebase/session", {
+          body: { id_token: idToken },
+          auth: false,
+          org: false,
+        });
+      } catch (fbErr: unknown) {
+        authError = (fbErr as Error)?.message || "Firebase sign in failed";
+      }
     }
 
-    // 2. If Firebase did not authenticate (or timed out / user registered natively), try native API login
+    // 2. If not authenticated yet (or if username was entered instead of email), log in via native API
     if (!sessionTokens) {
       try {
         sessionTokens = await api<{ access_token: string; refresh_token: string }>("/auth/login", {
-          body: { email, password },
+          body: { username_or_email: identifier, password },
           auth: false,
           org: false,
         });
       } catch (nativeErr: unknown) {
-        setErr((nativeErr as ApiError)?.message || authError || "Invalid email or password");
+        setErr((nativeErr as ApiError)?.message || authError || "Invalid username/email or password");
         setBusy(false);
         return;
       }
@@ -89,16 +90,16 @@ export default function Login() {
 
       <form onSubmit={onSubmit} className="space-y-5">
         <div>
-          <Label htmlFor="email">Work Email</Label>
+          <Label htmlFor="identifier">Username or Email</Label>
           <div className="relative mt-1">
-            <Mail className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-muted/70" />
+            <UserIcon className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-muted/70" />
             <input
-              id="email"
-              name="email"
-              type="email"
+              id="identifier"
+              name="identifier"
+              type="text"
               required
-              autoComplete="email"
-              placeholder="name@company.com"
+              autoComplete="username"
+              placeholder="Username (e.g. user01) or email"
               className="field !pl-10"
             />
           </div>

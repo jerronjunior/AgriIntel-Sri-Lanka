@@ -42,7 +42,21 @@ export async function api<T = unknown>(path: string, o: Opts = {}, retried = fal
       signal: AbortSignal.timeout(15000),
     });
   } catch {
-    throw new ApiError(0, "network_error", "Can't reach the AgriIntel API. Check your connection or the API URL.");
+    // If localhost failed (e.g. Windows IPv6 ::1 resolution issue), try with 127.0.0.1 directly
+    if (API_URL.includes("localhost")) {
+      try {
+        const fallbackUrl = API_URL.replace("localhost", "127.0.0.1");
+        res = await fetch(`${fallbackUrl}${path}`, {
+          method: o.method ?? (o.body !== undefined || o.form ? "POST" : "GET"), headers,
+          body: o.form ?? (o.body !== undefined ? JSON.stringify(o.body) : undefined),
+          signal: AbortSignal.timeout(15000),
+        });
+      } catch {
+        throw new ApiError(0, "network_error", "Can't reach the AgriIntel API. Check your connection or the API URL.");
+      }
+    } else {
+      throw new ApiError(0, "network_error", "Can't reach the AgriIntel API. Check your connection or the API URL.");
+    }
   }
   if (res.status === 401 && o.auth !== false && !retried && (await tryRefresh())) return api<T>(path, o, true);
   if (!res.ok) {

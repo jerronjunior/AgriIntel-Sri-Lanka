@@ -48,9 +48,24 @@ async def validation_exc(_: Request, exc: RequestValidationError):
     return JSONResponse({"error": "validation_error", "message": "Request validation failed", "details": details}, status_code=422)
 
 
+from sqlalchemy.exc import OperationalError as SQLAlchemyOperationalError
+
+
 @app.exception_handler(RateLimitExceeded)
 async def rate_exc(_: Request, exc: RateLimitExceeded):
     return JSONResponse({"error": "rate_limited", "message": f"Too many requests: {exc.detail}"}, status_code=429)
+
+
+@app.exception_handler(SQLAlchemyOperationalError)
+async def db_operational_exc(_: Request, exc: SQLAlchemyOperationalError):
+    logging.getLogger("agriintel").error(f"Database connection error: {exc}")
+    return JSONResponse(
+        {
+            "error": "database_unavailable",
+            "message": "PostgreSQL database is offline or unreachable on port 5432. Please start PostgreSQL.",
+        },
+        status_code=503,
+    )
 
 
 @app.exception_handler(Exception)

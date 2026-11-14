@@ -31,6 +31,7 @@ def _password_ok(v: str) -> str:
 class RegisterIn(BaseModel):
     full_name: str = Field(min_length=2, max_length=200)
     email: EmailStr
+    username: str | None = Field(default=None, min_length=2, max_length=50)
     password: str
     organization_name: str = Field(min_length=2, max_length=200)
     industry: Industry
@@ -39,8 +40,14 @@ class RegisterIn(BaseModel):
 
 
 class LoginIn(BaseModel):
-    email: EmailStr
+    username_or_email: str | None = None
+    email: str | None = None
+    username: str | None = None
     password: str
+
+    @property
+    def identifier(self) -> str:
+        return (self.username_or_email or self.username or self.email or "").strip()
 
 
 class FirebaseSessionIn(BaseModel):

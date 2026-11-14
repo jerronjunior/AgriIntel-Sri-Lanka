@@ -125,12 +125,19 @@ def firebase_register(request: Request, body: FirebaseRegisterIn, db: Session = 
 @limiter.limit("5/minute")
 def register(request: Request, body: RegisterIn, db: Session = Depends(get_db)):
     email = body.email.lower()
+    username = body.username.strip().lower() if body.username else None
     if db.query(User).filter(func.lower(User.email) == email).first():
         raise api_error(409, "email_taken", "An account with this email already exists")
+    if username and hasattr(User, "username"):
+        try:
+            if db.query(User).filter(func.lower(User.username) == username).first():
+                raise api_error(409, "username_taken", "An account with this username already exists")
+        except Exception:
+            db.rollback()
     plan = db.query(SubscriptionPlan).filter_by(key=body.plan_key).one_or_none()
     if not plan:
         raise api_error(400, "invalid_plan", "Unknown plan")
-    user = User(email=email, full_name=body.full_name, password_hash=hash_password(body.password))
+    user = User(email=email, username=username, full_name=body.full_name, password_hash=hash_password(body.password))
     org = Organization(name=body.organization_name, slug=_slugify(body.organization_name, db), industry=body.industry)
     db.add_all([user, org])
     db.flush()
@@ -147,11 +154,31 @@ def register(request: Request, body: RegisterIn, db: Session = Depends(get_db)):
 @router.post("/login", response_model=TokenOut)
 @limiter.limit("10/minute")
 def login(request: Request, body: LoginIn, db: Session = Depends(get_db)):
-    user = db.query(User).filter(func.lower(User.email) == body.email.lower()).one_or_none()
-    if not user or not verify_password(body.password, user.password_hash):
-        audit(db, "auth.login_failed", meta={"email": body.email.lower()}, ip=client_ip(request))
+    ident = body.identifier.lower()
+    if not ident:
+        audit(db, "auth.login_failed", meta={"identifier": "empty"}, ip=client_ip(request))
         db.commit()
-        raise api_error(401, "invalid_credentials", "Incorrect email or password")
+        raise api_error(422, "validation_error", "Username or email is required")
+
+    # 1. Match by exact email
+    user = db.query(User).filter(func.lower(User.email) == ident).one_or_none()
+
+    # 2. Match by exact username
+    if not user and hasattr(User, "username"):
+        try:
+            user = db.query(User).filter(func.lower(User.username) == ident).one_or_none()
+        except Exception:
+            db.rollback()
+            user = None
+
+    # 3. Match by email prefix (e.g. username 'user01' matches 'user01@gmail.com')
+    if not user and "@" not in ident:
+        user = db.query(User).filter(func.lower(User.email).like(f"{ident}@%")).first()
+
+    if not user or not verify_password(body.password, user.password_hash):
+        audit(db, "auth.login_failed", meta={"identifier": ident}, ip=client_ip(request))
+        db.commit()
+        raise api_error(401, "invalid_credentials", "Incorrect username/email or password")
     if not user.is_active:
         raise api_error(403, "account_suspended", "This account is suspended")
     user.last_login_at = datetime.now(UTC)
