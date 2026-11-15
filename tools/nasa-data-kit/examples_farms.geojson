@@ -1,0 +1,3 @@
+{"type":"FeatureCollection","features":[
+{"type":"Feature","properties":{"name":"Paddy block A"},"geometry":{"type":"Polygon","coordinates":[[[80.40,8.35],[80.42,8.35],[80.42,8.37],[80.40,8.37],[80.40,8.35]]]}},
+{"type":"Feature","properties":{"name":"Chilli field B"},"geometry":{"type":"Polygon","coordinates":[[[80.60,7.95],[80.61,7.95],[80.61,7.96],[80.60,7.96],[80.60,7.95]]]}}]}

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NASA data by district — Sri Lanka</title>
+<!-- Works on any website (WordPress, PHP, plain HTML). Put sri_lanka_nasa.json next to this file, or change DATA_URL. -->
+<style>
+ body{font:15px/1.5 system-ui,sans-serif;color:#1d2a22;background:#f3f5f1;margin:0;padding:24px}
+ main{max-width:760px;margin:auto}
+ select{font:inherit;padding:6px 10px;border-radius:8px;border:1px solid #c9d2ca}
+ .card{background:#fff;border:1px solid #dfe5df;border-radius:12px;padding:16px;margin-top:16px}
+ .score{font-size:40px;font-weight:700}
+ table{width:100%;border-collapse:collapse;margin-top:8px}
+ th{text-align:left;font-size:13px;color:#5d6b62;padding:10px 0 4px;border-bottom:1px solid #dfe5df}
+ td{padding:4px 0}td:last-child{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+ .na{color:#98a39c;font-weight:400!important}.demo{background:#fff4d6;color:#6b4d00;padding:8px 10px;border-radius:8px;font-weight:600}
+ small{color:#5d6b62}
+</style>
+</head>
+<body>
+<main>
+ <h1>NASA data by district</h1>
+ <label>District <select id="pick"></select></label>
+ <div id="out"></div>
+ <p><small id="attr"></small></p>
+</main>
+<script>
+const DATA_URL = "sri_lanka_nasa.json"; // or "http://127.0.0.1:8090" style API: use /districts/<name>
+const n = (v, d = 1, u = "") => v == null ? null : v.toFixed(d) + u;
+const row = (label, v, src) => `<tr><td>${label}${src ? ` <small>(${src})</small>` : ""}</td><td class="${v == null ? "na" : ""}">${v ?? "Not loaded yet"}</td></tr>`;
+const head = (t) => `<tr><th colspan="2">${t}</th></tr>`;
+
+function render(d, demo) {
+  const r = d.gpm_imerg.rain_30_days && d.gpm_imerg.rain_30_days.available ? d.gpm_imerg.rain_30_days : null;
+  const p = d.nasa_power.last_30_days || {};
+  const nd = d.modis.ndvi || {};
+  const et = d.ecostress.evapotranspiration || {};
+  const c = d.crop_condition;
+  document.getElementById("out").innerHTML = `<div class="card">
+   ${demo ? '<p class="demo">Sample data for layout testing, not real NASA values.</p>' : ""}
+   <div><span class="score">${c.score == null ? "–" : Math.round(c.score)}</span>/100 crop condition (${c.level})</div>
+   <small>${d.name}, ${d.province} Province · ${d.code}</small>
+   <table>
+    ${head("Rainfall, last 30 days (GPM IMERG)")}
+    ${row("Total", r && n(r.total_mm, 0, " mm"))}${row("Versus normal", r && r.anomaly_pct != null ? (r.anomaly_pct > 0 ? "+" : "") + r.anomaly_pct.toFixed(0) + "%" : null)}
+    ${row("Days ≥ 50 mm", r ? String(r.heavy_rain_days_50mm) : null)}
+    ${head("Soil water (SMAP)")}
+    ${row("Root zone wetness (0–1)", n(d.smap.root_zone_wetness ?? d.smap.fallback_merra2_root_zone, 2))}
+    ${row("Surface soil moisture", n(d.smap.surface_soil_moisture_m3m3, 2, " m³/m³"))}${row("Water stress", d.smap.water_stress)}
+    ${head("Vegetation (MODIS NDVI)")}
+    ${row("NDVI", n(nd.ndvi, 2))}${row("Versus past years", nd.anomaly != null ? (nd.anomaly > 0 ? "+" : "") + nd.anomaly.toFixed(2) : null)}
+    ${head("Heat and water use (ECOSTRESS)")}
+    ${row("Land surface temperature", n(d.ecostress.surface_temp_c, 1, " °C"))}${row("Heat stress", d.ecostress.heat_stress)}${row("Evapotranspiration", n(et.et, 1))}
+    ${head("Terrain (SRTM)")}
+    ${row("Mean elevation", n(d.srtm.elevation_mean, 0, " m"))}${row("Ruggedness", n(d.srtm.elevation_std, 0, " m"))}
+    ${head("Weather (NASA POWER)")}
+    ${row("Mean temperature, 30 days", n(p.mean_temp_c, 1, " °C"))}${row("Humidity", n(p.humidity_pct, 0, "%"))}
+    ${row("Maha normal rainfall", n(d.nasa_power.season_normals_2001_2020.maha?.rainfall_mm, 0, " mm"))}
+    ${row("Yala normal rainfall", n(d.nasa_power.season_normals_2001_2020.yala?.rainfall_mm, 0, " mm"))}
+   </table></div>`;
+}
+
+fetch(DATA_URL).then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); }).then(ds => {
+  const sel = document.getElementById("pick");
+  sel.innerHTML = Object.keys(ds.districts).sort().map(k => `<option>${k}</option>`).join("");
+  sel.onchange = () => render(ds.districts[sel.value], ds.demo);
+  render(ds.districts[sel.value], ds.demo);
+  document.getElementById("attr").textContent = "Data: " + ds.attribution + " Generated " + ds.generated_at;
+}).catch(e => document.getElementById("out").innerHTML = `<div class="card">Could not load ${DATA_URL}: ${e.message}. Run "python -m nasa_kit export" and copy output/sri_lanka_nasa.json here.</div>`);
+</script>
+</body>
+</html>

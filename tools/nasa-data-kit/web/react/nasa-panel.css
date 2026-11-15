@@ -1,0 +1,19 @@
+/* NASA Data Kit panel. Override the variables to match your site. */
+.nk-panel { --nk-ink:#1d2a22; --nk-soft:#5d6b62; --nk-line:#dfe5df; --nk-bg:#fbfcfa; --nk-good:#2f7d4f; --nk-fair:#b7791f; --nk-poor:#b4442e;
+  font: 14px/1.45 system-ui, sans-serif; color: var(--nk-ink); background: var(--nk-bg); border: 1px solid var(--nk-line); border-radius: 12px; padding: 16px; display: grid; gap: 14px; }
+.nk-state { color: var(--nk-soft); }
+.nk-error { color: var(--nk-poor); }
+.nk-demo { margin: 0; padding: 8px 10px; border-radius: 8px; background: #fff4d6; color: #6b4d00; font-weight: 600; }
+.nk-score { display: flex; gap: 14px; align-items: center; padding: 12px 14px; border-radius: 10px; border-left: 5px solid var(--nk-soft); background: #fff; }
+.nk-good { border-left-color: var(--nk-good); } .nk-fair { border-left-color: var(--nk-fair); } .nk-poor { border-left-color: var(--nk-poor); }
+.nk-score-n { font-size: 34px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.nk-score-of { color: var(--nk-soft); margin-left: 2px; }
+.nk-score p { margin: 2px 0 0; color: var(--nk-soft); }
+.nk-block header { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; border-bottom: 1px solid var(--nk-line); padding-bottom: 4px; margin-bottom: 4px; }
+.nk-block h4 { margin: 0; font-size: 14px; }
+.nk-source { font-size: 12px; color: var(--nk-soft); }
+.nk-row { display: grid; grid-template-columns: 1fr auto; column-gap: 12px; padding: 3px 0; }
+.nk-label { color: var(--nk-soft); }
+.nk-value { font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; text-transform: capitalize; }
+.nk-missing { font-weight: 400; color: #98a39c; text-transform: none; }
+.nk-hint { grid-column: 1 / -1; font-size: 12px; color: #8a968e; }
