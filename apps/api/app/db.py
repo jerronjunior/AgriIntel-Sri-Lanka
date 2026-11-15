@@ -66,7 +66,7 @@ def set_tenant(db: Session, org_id: str | None, bypass: bool = False) -> None:
         db.execute(text("SELECT set_config('app.bypass_rls', :v, false)"), {"v": "on" if bypass else "off"})
 
 
-def _bootstrap_sqlite_if_needed():
+def bootstrap_database():
     if engine.dialect.name == "sqlite":
         try:
             import app.models  # ensure models are loaded into Base.metadata
@@ -80,4 +80,5 @@ def _bootstrap_sqlite_if_needed():
             logger.error("Failed to seed local SQLite database: %s", seed_err)
 
 
-_bootstrap_sqlite_if_needed()
+# Automatically bootstrap SQLite tables and demo accounts on initialization
+bootstrap_database()

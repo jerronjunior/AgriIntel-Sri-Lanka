@@ -39,7 +39,7 @@ export async function api<T = unknown>(path: string, o: Opts = {}, retried = fal
     res = await fetch(`${API_URL}${path}`, {
       method: o.method ?? (o.body !== undefined || o.form ? "POST" : "GET"), headers,
       body: o.form ?? (o.body !== undefined ? JSON.stringify(o.body) : undefined),
-      signal: AbortSignal.timeout(15000),
+      signal: AbortSignal.timeout(4000),
     });
   } catch {
     // If localhost failed (e.g. Windows IPv6 ::1 resolution issue), try with 127.0.0.1 directly
@@ -49,7 +49,7 @@ export async function api<T = unknown>(path: string, o: Opts = {}, retried = fal
         res = await fetch(`${fallbackUrl}${path}`, {
           method: o.method ?? (o.body !== undefined || o.form ? "POST" : "GET"), headers,
           body: o.form ?? (o.body !== undefined ? JSON.stringify(o.body) : undefined),
-          signal: AbortSignal.timeout(15000),
+          signal: AbortSignal.timeout(3000),
         });
       } catch {
         throw new ApiError(0, "network_error", "Can't reach the AgriIntel API. Check your connection or the API URL.");

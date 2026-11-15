@@ -5,7 +5,6 @@ from datetime import UTC, datetime, timedelta
 
 import jwt
 from fastapi import APIRouter, Depends, Request
-from firebase_admin import auth
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 

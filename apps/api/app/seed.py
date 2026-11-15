@@ -6,7 +6,7 @@ from sqlalchemy import text
 from app.core.security import hash_password
 from app.data.crops import CROPS, SEASONS, SOURCE_NOTE
 from app.data.reference import DATA_SOURCES, PLANS, ROLES
-from app.db import SessionLocal, set_tenant
+from app.db import set_tenant
 from app.models import (CropCalendar, CropCatalog, CropRequirement, Organization,
                         OrganizationMember, Role, SatelliteDataSource, Subscription,
                         SubscriptionPlan, User)
@@ -134,6 +134,7 @@ def ensure_superadmin(db, email: str, password: str) -> None:
 
 
 if __name__ == "__main__":
+    from app.db import SessionLocal
     db = SessionLocal()
     seed(db)
     ensure_demo_users(db)
