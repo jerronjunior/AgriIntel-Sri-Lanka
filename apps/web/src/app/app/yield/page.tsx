@@ -227,8 +227,8 @@ function YieldForecastContent() {
                 <YAxis {...axis} unit=" MT" />
                 <Tooltip
                   {...tooltip}
-                  formatter={(val: any, name: any) => [
-                    `${Number(val ?? 0).toFixed(2)} MT/Ha`,
+                  formatter={(val: string | number | readonly (string | number)[] | undefined, name: string | number | undefined) => [
+                    `${Number(Array.isArray(val) ? val[0] : val ?? 0).toFixed(2)} MT/Ha`,
                     name === "best" ? "Best Case" : name === "expected" ? "Average Case" : "Worst Case",
                   ]}
                 />

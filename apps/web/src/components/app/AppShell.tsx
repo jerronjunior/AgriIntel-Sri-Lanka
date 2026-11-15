@@ -5,7 +5,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Bell, ChevronsLeft, ChevronsRight, CloudRain, Droplets, Gauge, LineChart, LogOut, Map, Moon, Search, Settings, ShieldAlert,
-  SlidersHorizontal, Sprout, Sun, Tractor, TrendingUp, Crown, Satellite, Radio, Zap
+  SlidersHorizontal, Sprout, Sun, Tractor, TrendingUp, Crown, Satellite, Radio, Zap, MapPinned
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth-store";
@@ -14,6 +14,7 @@ import { useDistricts, useMe } from "@/lib/hooks";
 const NAV = [
   { href: "/app", label: "Overview", icon: Gauge },
   { href: "/app/map", label: "Intelligence map", icon: Map, feature: "map" },
+  { href: "/app/intelligence", label: "District intelligence", icon: MapPinned, feature: "map" },
   { href: "/app/simulator", label: "Decision Simulator", icon: SlidersHorizontal, feature: "simulator" },
   { href: "/app/climate", label: "Climate Engine (M1)", icon: CloudRain, feature: "climate" },
   { href: "/app/water", label: "Water Engine (M2)", icon: Droplets, feature: "soil_water" },

@@ -1,17 +1,14 @@
 "use client";
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import {
   CloudRain, Droplets, Landmark, LineChart, Shield, Sprout, Tractor, TrendingUp, Building2, Wheat,
   Sparkles, ArrowRight, Radio, Satellite, Layers, ShieldCheck, Award, AlertOctagon, CheckCircle2, PieChart
 } from "lucide-react";
-import Globe from "@/components/globe/Globe";
 import { DataTag } from "@/components/ui/kit";
 import { api } from "@/lib/api";
-import type { Plan } from "@/lib/types";
 
 const FEED_LABEL: Record<string, string> = {
   nasa_power_daily: "NASA POWER Daily Weather",
@@ -146,41 +143,13 @@ type EngineTab = "climate" | "water" | "soil" | "crops" | "yield";
 
 export default function Home() {
   const [activeEngine, setActiveEngine] = useState<EngineTab>("climate");
-  const hero = useRef<HTMLDivElement>(null);
-  const progress = useRef(0);
-  const reduce = useReducedMotion();
-
-  useEffect(() => {
-    const onScroll = () => {
-      const el = hero.current;
-      if (!el) return;
-      const r = el.getBoundingClientRect();
-      progress.current = Math.min(1, Math.max(0, -r.top / (r.height - window.innerHeight)));
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  const plans = useQuery({
-    queryKey: ["plans"],
-    queryFn: () => api<{ items: Plan[] }>("/subscriptions/plans", { auth: false, org: false }),
-  });
-
   return (
     <>
-      {/* Hero Section with 3D Globe */}
-      <div ref={hero} className="relative md:h-[185vh]">
-        <section className="relative overflow-hidden md:sticky md:top-16 md:h-[calc(100vh-4rem)] flex items-center">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_70%_45%,rgba(34,211,238,0.14),transparent_55%)]" />
-
-          <div className="mx-auto grid h-full max-w-7xl items-center gap-8 px-5 py-16 md:grid-cols-[1.1fr_1fr] md:py-0">
-            <motion.div
-              initial={reduce ? false : { opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-              className="relative z-10"
-            >
+      {/* Hero Section */}
+      <section className="relative overflow-hidden border-b border-line/40">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_70%_45%,rgba(34,211,238,0.14),transparent_55%)]" />
+        <div className="mx-auto grid max-w-7xl items-center gap-10 px-5 py-24 md:grid-cols-[1.1fr_0.9fr]">
+          <div className="relative z-10">
               <div className="inline-flex items-center gap-2 rounded-full border border-cyan/40 bg-cyan/10 px-3.5 py-1 text-xs font-semibold text-cyan shadow-[0_0_18px_rgba(34,211,238,0.25)] mb-6">
                 <Sparkles className="h-3.5 w-3.5" />
                 <span>Next-Gen Earth Observation SaaS</span>
@@ -217,17 +186,23 @@ export default function Home() {
                   25 Districts mapped
                 </span>
               </div>
-            </motion.div>
-
-            <div className="relative h-[420px] md:h-full flex items-center justify-center">
-              <Globe progress={progress} />
-              <div className="absolute -bottom-2 right-0 hidden xl:block">
-                <SourceStatus />
-              </div>
-            </div>
           </div>
-        </section>
-      </div>
+          <Link href="/experience" className="group relative overflow-hidden rounded-3xl border border-cyan/30 bg-gradient-to-br from-cyan/10 via-panel to-emerald/10 p-8 shadow-[0_0_60px_rgba(34,211,238,0.12)] transition hover:border-cyan/60">
+            <div className="absolute -right-20 -top-20 h-56 w-56 rounded-full bg-cyan/20 blur-3xl transition group-hover:bg-cyan/30" />
+            <div className="absolute -bottom-20 -left-20 h-56 w-56 rounded-full bg-emerald/20 blur-3xl transition group-hover:bg-emerald/30" />
+            <div className="relative">
+              <span className="text-xs font-bold uppercase tracking-wider text-cyan">New interactive experience</span>
+              <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-snow">Explore Sri Lanka from space.</h2>
+              <p className="mt-4 text-sm leading-relaxed text-muted">
+                Open the dedicated map and animated earth-observation workspace to move from regional signals to district-level decisions.
+              </p>
+              <span className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-cyan">
+                Open intelligence experience <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+              </span>
+            </div>
+          </Link>
+        </div>
+      </section>
 
       {/* Feature Modules Grid */}
       <section className="relative mx-auto max-w-7xl px-5 py-28">

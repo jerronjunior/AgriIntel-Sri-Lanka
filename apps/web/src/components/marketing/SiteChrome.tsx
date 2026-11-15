@@ -8,7 +8,8 @@ import { useAuth } from "@/lib/auth-store";
 const NAV = [
   { href: "/platform", label: "Platform" },
   { href: "/industries", label: "Industries" },
-  { href: "/pricing", label: "Pricing" },
+  { href: "/agrisphere", label: "AgriSphere" },
+  { href: "/experience", label: "Explore" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
@@ -63,15 +64,10 @@ export function SiteHeader() {
               <ArrowUpRight className="h-3.5 w-3.5" />
             </Link>
           ) : (
-            <>
-              <Link href="/login" className="px-3 py-1.5 text-xs font-semibold text-muted transition-colors hover:text-snow">
-                Sign in
-              </Link>
-              <Link href="/contact?kind=demo" className="btn btn-primary !py-2 !px-4 !text-xs shadow-md">
-                <span>Request Demo</span>
-                <Sparkles className="h-3.5 w-3.5" />
-              </Link>
-            </>
+            <Link href="/contact?kind=demo" className="btn btn-primary !py-2 !px-4 !text-xs shadow-md">
+              <span>Request Demo</span>
+              <Sparkles className="h-3.5 w-3.5" />
+            </Link>
           )}
         </div>
 
@@ -100,15 +96,17 @@ export function SiteHeader() {
                 {n.label}
               </Link>
             ))}
-            <div className="mt-3 border-t border-line/60 pt-3">
-              <Link
-                href={signedIn ? "/app" : "/login"}
-                onClick={() => setOpen(false)}
-                className="btn btn-primary w-full !py-2.5 text-xs"
-              >
-                {signedIn ? "Open Console" : "Sign In to Terminal"}
-              </Link>
-            </div>
+            {signedIn && (
+              <div className="mt-3 border-t border-line/60 pt-3">
+                <Link
+                  href="/app"
+                  onClick={() => setOpen(false)}
+                  className="btn btn-primary w-full !py-2.5 text-xs"
+                >
+                  Open Console
+                </Link>
+              </div>
+            )}
           </nav>
         </div>
       )}
@@ -156,9 +154,6 @@ export function SiteFooter() {
                 {n.label}
               </Link>
             ))}
-            <Link href="/login" className="block text-muted transition-colors hover:text-snow">
-              Operator Sign in
-            </Link>
           </div>
         </div>
       </div>

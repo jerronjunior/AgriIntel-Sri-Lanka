@@ -1,0 +1,2923 @@
+{
+ "demo": true,
+ "demo_note": "SAMPLE ONLY — produced by the kit's test server, not by NASA. Replace with your own output/sri_lanka_nasa.json.",
+ "generated_at": "2026-11-15T04:06:20+00:00",
+ "kit_version": "1.0.0",
+ "country": "Sri Lanka",
+ "attribution": "NASA POWER (LaRC), GPM IMERG (GES DISC), SMAP (NSIDC), MODIS/Landsat HLS/ECOSTRESS/SRTM (LP DAAC via AppEEARS). District boundaries: Dept. of Census & Statistics / HDX via lk_admin_regions (MIT).",
+ "weights": {
+  "crop_suitability": {
+   "water (NASA POWER rainfall normal)": 0.35,
+   "temperature (NASA POWER)": 0.3,
+   "soil_moisture (SMAP L4)": 0.15,
+   "elevation (SRTM)": 0.1,
+   "terrain (SRTM ruggedness)": 0.1
+  },
+  "crop_condition": {
+   "vegetation": 0.3,
+   "heat_water": 0.25,
+   "soil_water": 0.25,
+   "rainfall": 0.2
+  }
+ },
+ "sources": {
+  "nasa_power": {
+   "title": "NASA POWER daily weather + 2001–2020 normals",
+   "mission": "MERRA-2 / CERES",
+   "resolution": "~50 km (0.5° × 0.625°)",
+   "cadence": "daily",
+   "needs": "none",
+   "values_stored": 20250,
+   "latest_observation": "2026-11-10",
+   "last_success_at": "2026-11-15T04:06:01+00:00",
+   "last_error": null,
+   "status": "loaded"
+  },
+  "gpm_imerg_late": {
+   "title": "GPM IMERG Late daily rainfall",
+   "mission": "GPM (NASA/JAXA)",
+   "resolution": "0.1° (~11 km)",
+   "cadence": "daily, ~1–2 day delay",
+   "needs": "EARTHDATA_TOKEN",
+   "values_stored": 875,
+   "latest_observation": "2026-11-13",
+   "last_success_at": "2026-11-15T04:06:03+00:00",
+   "last_error": null,
+   "status": "loaded"
+  },
+  "gpm_imerg_final": {
+   "title": "GPM IMERG Final daily rainfall",
+   "mission": "GPM (NASA/JAXA)",
+   "resolution": "0.1° (~11 km)",
+   "cadence": "daily, ~3.5 month delay",
+   "needs": "EARTHDATA_TOKEN",
+   "values_stored": 0,
+   "latest_observation": null,
+   "last_success_at": null,
+   "last_error": null,
+   "status": "not loaded"
+  },
+  "smap_l4_rootzone": {
+   "title": "SMAP L4 root-zone soil wetness",
+   "mission": "SMAP",
+   "resolution": "9 km",
+   "cadence": "3-hourly → daily mean",
+   "needs": "EARTHDATA_USERNAME/PASSWORD",
+   "values_stored": 275,
+   "latest_observation": "2026-11-12",
+   "last_success_at": "2026-11-15T04:06:04+00:00",
+   "last_error": null,
+   "status": "loaded"
+  },
+  "smap_l3_surface": {
+   "title": "SMAP L3 surface soil moisture",
+   "mission": "SMAP",
+   "resolution": "9 km",
+   "cadence": "daily",
+   "needs": "EARTHDATA_USERNAME/PASSWORD",
+   "values_stored": 275,
+   "latest_observation": "2026-11-12",
+   "last_success_at": "2026-11-15T04:06:04+00:00",
+   "last_error": null,
+   "status": "loaded"
+  },
+  "modis_ndvi": {
+   "title": "MODIS NDVI (MOD13Q1)",
+   "mission": "Terra MODIS",
+   "resolution": "250 m",
+   "cadence": "16-day composite",
+   "needs": "EARTHDATA_USERNAME/PASSWORD",
+   "values_stored": 2800,
+   "latest_observation": "2026-11-12",
+   "last_success_at": "2026-11-15T04:06:05+00:00",
+   "last_error": null,
+   "status": "loaded"
+  },
+  "landsat_ndvi": {
+   "title": "Landsat NDVI (HLS L30 Vegetation Indices)",
+   "mission": "Landsat 8/9",
+   "resolution": "30 m",
+   "cadence": "2–4 days, cloud permitting",
+   "needs": "EARTHDATA_USERNAME/PASSWORD",
+   "values_stored": 10,
+   "latest_observation": "2026-11-12",
+   "last_success_at": "2026-11-15T04:06:20+00:00",
+   "last_error": null,
+   "status": "loaded"
+  },
+  "ecostress_lst": {
+   "title": "ECOSTRESS land surface temperature",
+   "mission": "ECOSTRESS (ISS)",
+   "resolution": "70 m",
+   "cadence": "irregular overpasses",
+   "needs": "EARTHDATA_USERNAME/PASSWORD",
+   "values_stored": 125,
+   "latest_observation": "2026-11-12",
+   "last_success_at": "2026-11-15T04:06:05+00:00",
+   "last_error": null,
+   "status": "loaded"
+  },
+  "ecostress_et": {
+   "title": "ECOSTRESS daily evapotranspiration",
+   "mission": "ECOSTRESS (ISS)",
+   "resolution": "70 m",
+   "cadence": "irregular overpasses",
+   "needs": "EARTHDATA_USERNAME/PASSWORD",
+   "values_stored": 125,
+   "latest_observation": "2026-11-12",
+   "last_success_at": "2026-11-15T04:06:05+00:00",
+   "last_error": null,
+   "status": "loaded"
+  },
+  "srtm": {
+   "title": "SRTM elevation",
+   "mission": "Shuttle Radar Topography Mission",
+   "resolution": "90 m / 30 m",
+   "cadence": "static (2000)",
+   "needs": "EARTHDATA_USERNAME/PASSWORD",
+   "values_stored": 100,
+   "latest_observation": "2000-02-11",
+   "last_success_at": "2026-11-15T04:06:05+00:00",
+   "last_error": null,
+   "status": "loaded"
+  }
+ },
+ "districts": {
+  "Colombo": {
+   "name": "Colombo",
+   "code": "LK-11",
+   "province": "Western",
+   "lat": 6.847,
+   "lon": 80.029,
+   "nasa_power": {
+    "last_30_days": {
+     "days": 30,
+     "end": "2026-11-10",
+     "mean_temp_c": 27.5,
+     "max_temp_c": 32.5,
+     "rain_mm": 93.9,
+     "humidity_pct": 80.0,
+     "solar_kwh_m2": 5.2,
+     "wind_ms": 2.1
+    },
+    "season_normals_2001_2020": {
+     "maha": {
+      "mean_temp_c": 27.5,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.5,
+      "rainfall_mm": 688.0
+     }
+    },
+    "grid_elevation_m": 120.0
+   },
+   "gpm_imerg": {
+    "rain_30_days": {
+     "available": true,
+     "start": "2026-10-15",
+     "end": "2026-11-13",
+     "total_mm": 233.6,
+     "heavy_rain_days_50mm": 1,
+     "wettest_day_mm": 55.8,
+     "normal_mm": 135.0,
+     "anomaly_pct": 73.1,
+     "sources": [
+      "gpm_imerg_late"
+     ]
+    }
+   },
+   "smap": {
+    "root_zone_wetness": 0.474,
+    "root_zone_date": "2026-11-12",
+    "surface_soil_moisture_m3m3": 0.247,
+    "water_stress": "low",
+    "fallback_merra2_root_zone": null
+   },
+   "modis": {
+    "ndvi": {
+     "ndvi": 0.608,
+     "date": "2026-11-12",
+     "baseline_years": 4,
+     "normal": 0.648,
+     "anomaly": -0.04
+    }
+   },
+   "ecostress": {
+    "surface_temp_c": 32.5,
+    "surface_temp_date": "2026-11-12",
+    "heat_stress": "low",
+    "evapotranspiration": {
+     "et": 4.13,
+     "date": "2026-11-12",
+     "relative_to_usual_high": null
+    }
+   },
+   "srtm": {
+    "elevation_mean": 40.0,
+    "elevation_std": 35.0,
+    "elevation_max": 75.0,
+    "elevation_min": 5.0
+   },
+   "crop_suitability_inputs": {
+    "rainfall_normal_mm": {
+     "maha": {
+      "mean_temp_c": 27.5,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.5,
+      "rainfall_mm": 688.0
+     }
+    },
+    "soil_moisture_root": 0.474,
+    "soil_moisture_source": "SMAP L4",
+    "elevation_m": 40.0,
+    "elevation_source": "SRTM",
+    "terrain_std_m": 35.0
+   },
+   "crop_condition": {
+    "score": 73.3,
+    "level": "good",
+    "components": {
+     "vegetation": 40.0,
+     "soil_water": 100.0,
+     "rainfall": 76.9,
+     "heat_water": 83.5
+    },
+    "weights_used": {
+     "vegetation": 0.3,
+     "soil_water": 0.25,
+     "rainfall": 0.2,
+     "heat_water": 0.25
+    },
+    "missing": []
+   }
+  },
+  "Gampaha": {
+   "name": "Gampaha",
+   "code": "LK-12",
+   "province": "Western",
+   "lat": 7.118,
+   "lon": 80.021,
+   "nasa_power": {
+    "last_30_days": {
+     "days": 30,
+     "end": "2026-11-10",
+     "mean_temp_c": 27.6,
+     "max_temp_c": 32.5,
+     "rain_mm": 93.4,
+     "humidity_pct": 80.0,
+     "solar_kwh_m2": 5.2,
+     "wind_ms": 2.1
+    },
+    "season_normals_2001_2020": {
+     "maha": {
+      "mean_temp_c": 27.5,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.5,
+      "rainfall_mm": 688.0
+     }
+    },
+    "grid_elevation_m": 120.0
+   },
+   "gpm_imerg": {
+    "rain_30_days": {
+     "available": true,
+     "start": "2026-10-15",
+     "end": "2026-11-13",
+     "total_mm": 229.9,
+     "heavy_rain_days_50mm": 1,
+     "wettest_day_mm": 55.1,
+     "normal_mm": 135.0,
+     "anomaly_pct": 70.3,
+     "sources": [
+      "gpm_imerg_late"
+     ]
+    }
+   },
+   "smap": {
+    "root_zone_wetness": 0.359,
+    "root_zone_date": "2026-11-12",
+    "surface_soil_moisture_m3m3": 0.199,
+    "water_stress": "moderate",
+    "fallback_merra2_root_zone": null
+   },
+   "modis": {
+    "ndvi": {
+     "ndvi": 0.522,
+     "date": "2026-11-12",
+     "baseline_years": 4,
+     "normal": 0.563,
+     "anomaly": -0.041
+    }
+   },
+   "ecostress": {
+    "surface_temp_c": 28.6,
+    "surface_temp_date": "2026-11-12",
+    "heat_stress": "low",
+    "evapotranspiration": {
+     "et": 3.17,
+     "date": "2026-11-12",
+     "relative_to_usual_high": null
+    }
+   },
+   "srtm": {
+    "elevation_mean": 43.0,
+    "elevation_std": 35.0,
+    "elevation_max": 78.0,
+    "elevation_min": 8.0
+   },
+   "crop_suitability_inputs": {
+    "rainfall_normal_mm": {
+     "maha": {
+      "mean_temp_c": 27.5,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.5,
+      "rainfall_mm": 688.0
+     }
+    },
+    "soil_moisture_root": 0.359,
+    "soil_moisture_source": "SMAP L4",
+    "elevation_m": 43.0,
+    "elevation_source": "SRTM",
+    "terrain_std_m": 35.0
+   },
+   "crop_condition": {
+    "score": 70.3,
+    "level": "good",
+    "components": {
+     "vegetation": 39.8,
+     "soil_water": 69.7,
+     "rainfall": 79.7,
+     "heat_water": 100.0
+    },
+    "weights_used": {
+     "vegetation": 0.3,
+     "soil_water": 0.25,
+     "rainfall": 0.2,
+     "heat_water": 0.25
+    },
+    "missing": []
+   }
+  },
+  "Kalutara": {
+   "name": "Kalutara",
+   "code": "LK-13",
+   "province": "Western",
+   "lat": 6.579,
+   "lon": 80.133,
+   "nasa_power": {
+    "last_30_days": {
+     "days": 30,
+     "end": "2026-11-10",
+     "mean_temp_c": 27.5,
+     "max_temp_c": 32.4,
+     "rain_mm": 94.1,
+     "humidity_pct": 80.0,
+     "solar_kwh_m2": 5.2,
+     "wind_ms": 2.1
+    },
+    "season_normals_2001_2020": {
+     "maha": {
+      "mean_temp_c": 27.4,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.4,
+      "rainfall_mm": 688.0
+     }
+    },
+    "grid_elevation_m": 120.0
+   },
+   "gpm_imerg": {
+    "rain_30_days": {
+     "available": true,
+     "start": "2026-10-15",
+     "end": "2026-11-13",
+     "total_mm": 238.2,
+     "heavy_rain_days_50mm": 1,
+     "wettest_day_mm": 58.2,
+     "normal_mm": 135.0,
+     "anomaly_pct": 76.5,
+     "sources": [
+      "gpm_imerg_late"
+     ]
+    }
+   },
+   "smap": {
+    "root_zone_wetness": 0.291,
+    "root_zone_date": "2026-11-12",
+    "surface_soil_moisture_m3m3": 0.17,
+    "water_stress": "moderate",
+    "fallback_merra2_root_zone": null
+   },
+   "modis": {
+    "ndvi": {
+     "ndvi": 0.471,
+     "date": "2026-11-12",
+     "baseline_years": 4,
+     "normal": 0.512,
+     "anomaly": -0.041
+    }
+   },
+   "ecostress": {
+    "surface_temp_c": 26.4,
+    "surface_temp_date": "2026-11-12",
+    "heat_stress": "low",
+    "evapotranspiration": {
+     "et": 2.61,
+     "date": "2026-11-12",
+     "relative_to_usual_high": null
+    }
+   },
+   "srtm": {
+    "elevation_mean": 46.0,
+    "elevation_std": 35.0,
+    "elevation_max": 81.0,
+    "elevation_min": 11.0
+   },
+   "crop_suitability_inputs": {
+    "rainfall_normal_mm": {
+     "maha": {
+      "mean_temp_c": 27.4,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.4,
+      "rainfall_mm": 688.0
+     }
+    },
+    "soil_moisture_root": 0.291,
+    "soil_moisture_source": "SMAP L4",
+    "elevation_m": 46.0,
+    "elevation_source": "SRTM",
+    "terrain_std_m": 35.0
+   },
+   "crop_condition": {
+    "score": 63.4,
+    "level": "fair",
+    "components": {
+     "vegetation": 39.8,
+     "soil_water": 47.0,
+     "rainfall": 73.5,
+     "heat_water": 100.0
+    },
+    "weights_used": {
+     "vegetation": 0.3,
+     "soil_water": 0.25,
+     "rainfall": 0.2,
+     "heat_water": 0.25
+    },
+    "missing": []
+   }
+  },
+  "Kandy": {
+   "name": "Kandy",
+   "code": "LK-21",
+   "province": "Central",
+   "lat": 7.215,
+   "lon": 80.64,
+   "nasa_power": {
+    "last_30_days": {
+     "days": 30,
+     "end": "2026-11-10",
+     "mean_temp_c": 27.6,
+     "max_temp_c": 32.5,
+     "rain_mm": 93.2,
+     "humidity_pct": 80.0,
+     "solar_kwh_m2": 5.2,
+     "wind_ms": 2.1
+    },
+    "season_normals_2001_2020": {
+     "maha": {
+      "mean_temp_c": 27.5,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.5,
+      "rainfall_mm": 688.0
+     }
+    },
+    "grid_elevation_m": 120.0
+   },
+   "gpm_imerg": {
+    "rain_30_days": {
+     "available": true,
+     "start": "2026-10-15",
+     "end": "2026-11-13",
+     "total_mm": 228.2,
+     "heavy_rain_days_50mm": 1,
+     "wettest_day_mm": 55.5,
+     "normal_mm": 135.0,
+     "anomaly_pct": 69.0,
+     "sources": [
+      "gpm_imerg_late"
+     ]
+    }
+   },
+   "smap": {
+    "root_zone_wetness": 0.333,
+    "root_zone_date": "2026-11-12",
+    "surface_soil_moisture_m3m3": 0.188,
+    "water_stress": "moderate",
+    "fallback_merra2_root_zone": null
+   },
+   "modis": {
+    "ndvi": {
+     "ndvi": 0.502,
+     "date": "2026-11-12",
+     "baseline_years": 4,
+     "normal": 0.542,
+     "anomaly": -0.04
+    }
+   },
+   "ecostress": {
+    "surface_temp_c": 27.8,
+    "surface_temp_date": "2026-11-12",
+    "heat_stress": "low",
+    "evapotranspiration": {
+     "et": 2.95,
+     "date": "2026-11-12",
+     "relative_to_usual_high": null
+    }
+   },
+   "srtm": {
+    "elevation_mean": 700.0,
+    "elevation_std": 35.0,
+    "elevation_max": 735.0,
+    "elevation_min": 665.0
+   },
+   "crop_suitability_inputs": {
+    "rainfall_normal_mm": {
+     "maha": {
+      "mean_temp_c": 27.5,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.5,
+      "rainfall_mm": 688.0
+     }
+    },
+    "soil_moisture_root": 0.333,
+    "soil_moisture_source": "SMAP L4",
+    "elevation_m": 700.0,
+    "elevation_source": "SRTM",
+    "terrain_std_m": 35.0
+   },
+   "crop_condition": {
+    "score": 68.5,
+    "level": "fair",
+    "components": {
+     "vegetation": 40.0,
+     "soil_water": 61.0,
+     "rainfall": 81.0,
+     "heat_water": 100.0
+    },
+    "weights_used": {
+     "vegetation": 0.3,
+     "soil_water": 0.25,
+     "rainfall": 0.2,
+     "heat_water": 0.25
+    },
+    "missing": []
+   }
+  },
+  "Matale": {
+   "name": "Matale",
+   "code": "LK-22",
+   "province": "Central",
+   "lat": 7.698,
+   "lon": 80.66,
+   "nasa_power": {
+    "last_30_days": {
+     "days": 30,
+     "end": "2026-11-10",
+     "mean_temp_c": 27.7,
+     "max_temp_c": 32.6,
+     "rain_mm": 91.6,
+     "humidity_pct": 80.0,
+     "solar_kwh_m2": 5.2,
+     "wind_ms": 2.1
+    },
+    "season_normals_2001_2020": {
+     "maha": {
+      "mean_temp_c": 27.6,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.6,
+      "rainfall_mm": 688.0
+     }
+    },
+    "grid_elevation_m": 120.0
+   },
+   "gpm_imerg": {
+    "rain_30_days": {
+     "available": true,
+     "start": "2026-10-15",
+     "end": "2026-11-13",
+     "total_mm": 175.4,
+     "heavy_rain_days_50mm": 0,
+     "wettest_day_mm": 11.8,
+     "normal_mm": 135.0,
+     "anomaly_pct": 29.9,
+     "sources": [
+      "gpm_imerg_late"
+     ]
+    }
+   },
+   "smap": {
+    "root_zone_wetness": 0.445,
+    "root_zone_date": "2026-11-12",
+    "surface_soil_moisture_m3m3": 0.235,
+    "water_stress": "low",
+    "fallback_merra2_root_zone": null
+   },
+   "modis": {
+    "ndvi": {
+     "ndvi": 0.587,
+     "date": "2026-11-12",
+     "baseline_years": 4,
+     "normal": 0.625,
+     "anomaly": -0.038
+    }
+   },
+   "ecostress": {
+    "surface_temp_c": 31.5,
+    "surface_temp_date": "2026-11-12",
+    "heat_stress": "low",
+    "evapotranspiration": {
+     "et": 3.89,
+     "date": "2026-11-12",
+     "relative_to_usual_high": null
+    }
+   },
+   "srtm": {
+    "elevation_mean": 450.0,
+    "elevation_std": 35.0,
+    "elevation_max": 485.0,
+    "elevation_min": 415.0
+   },
+   "crop_suitability_inputs": {
+    "rainfall_normal_mm": {
+     "maha": {
+      "mean_temp_c": 27.6,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.6,
+      "rainfall_mm": 688.0
+     }
+    },
+    "soil_moisture_root": 0.445,
+    "soil_moisture_source": "SMAP L4",
+    "elevation_m": 450.0,
+    "elevation_source": "SRTM",
+    "terrain_std_m": 35.0
+   },
+   "crop_condition": {
+    "score": 79.2,
+    "level": "good",
+    "components": {
+     "vegetation": 40.5,
+     "soil_water": 98.3,
+     "rainfall": 100.0,
+     "heat_water": 89.8
+    },
+    "weights_used": {
+     "vegetation": 0.3,
+     "soil_water": 0.25,
+     "rainfall": 0.2,
+     "heat_water": 0.25
+    },
+    "missing": []
+   }
+  },
+  "Nuwara Eliya": {
+   "name": "Nuwara Eliya",
+   "code": "LK-23",
+   "province": "Central",
+   "lat": 7.012,
+   "lon": 80.757,
+   "nasa_power": {
+    "last_30_days": {
+     "days": 30,
+     "end": "2026-11-10",
+     "mean_temp_c": 18.0,
+     "max_temp_c": 23.0,
+     "rain_mm": 93.6,
+     "humidity_pct": 80.0,
+     "solar_kwh_m2": 5.2,
+     "wind_ms": 2.1
+    },
+    "season_normals_2001_2020": {
+     "maha": {
+      "mean_temp_c": 18.0,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 18.0,
+      "rainfall_mm": 688.0
+     }
+    },
+    "grid_elevation_m": 120.0
+   },
+   "gpm_imerg": {
+    "rain_30_days": {
+     "available": true,
+     "start": "2026-10-15",
+     "end": "2026-11-13",
+     "total_mm": 231.7,
+     "heavy_rain_days_50mm": 1,
+     "wettest_day_mm": 55.3,
+     "normal_mm": 135.0,
+     "anomaly_pct": 71.6,
+     "sources": [
+      "gpm_imerg_late"
+     ]
+    }
+   },
+   "smap": {
+    "root_zone_wetness": 0.526,
+    "root_zone_date": "2026-11-12",
+    "surface_soil_moisture_m3m3": 0.268,
+    "water_stress": "low",
+    "fallback_merra2_root_zone": null
+   },
+   "modis": {
+    "ndvi": {
+     "ndvi": 0.647,
+     "date": "2026-11-12",
+     "baseline_years": 4,
+     "normal": 0.685,
+     "anomaly": -0.038
+    }
+   },
+   "ecostress": {
+    "surface_temp_c": 34.2,
+    "surface_temp_date": "2026-11-12",
+    "heat_stress": "low",
+    "evapotranspiration": {
+     "et": 4.56,
+     "date": "2026-11-12",
+     "relative_to_usual_high": null
+    }
+   },
+   "srtm": {
+    "elevation_mean": 1650.0,
+    "elevation_std": 300.0,
+    "elevation_max": 1950.0,
+    "elevation_min": 1350.0
+   },
+   "crop_suitability_inputs": {
+    "rainfall_normal_mm": {
+     "maha": {
+      "mean_temp_c": 18.0,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 18.0,
+      "rainfall_mm": 688.0
+     }
+    },
+    "soil_moisture_root": 0.526,
+    "soil_moisture_source": "SMAP L4",
+    "elevation_m": 1650.0,
+    "elevation_source": "SRTM",
+    "terrain_std_m": 300.0
+   },
+   "crop_condition": {
+    "score": 70.8,
+    "level": "good",
+    "components": {
+     "vegetation": 40.5,
+     "soil_water": 100.0,
+     "rainfall": 78.4,
+     "heat_water": 72.0
+    },
+    "weights_used": {
+     "vegetation": 0.3,
+     "soil_water": 0.25,
+     "rainfall": 0.2,
+     "heat_water": 0.25
+    },
+    "missing": []
+   }
+  },
+  "Galle": {
+   "name": "Galle",
+   "code": "LK-31",
+   "province": "Southern",
+   "lat": 6.204,
+   "lon": 80.231,
+   "nasa_power": {
+    "last_30_days": {
+     "days": 30,
+     "end": "2026-11-10",
+     "mean_temp_c": 27.4,
+     "max_temp_c": 32.3,
+     "rain_mm": 93.8,
+     "humidity_pct": 80.0,
+     "solar_kwh_m2": 5.2,
+     "wind_ms": 2.1
+    },
+    "season_normals_2001_2020": {
+     "maha": {
+      "mean_temp_c": 27.3,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.3,
+      "rainfall_mm": 688.0
+     }
+    },
+    "grid_elevation_m": 120.0
+   },
+   "gpm_imerg": {
+    "rain_30_days": {
+     "available": true,
+     "start": "2026-10-15",
+     "end": "2026-11-13",
+     "total_mm": 242.4,
+     "heavy_rain_days_50mm": 1,
+     "wettest_day_mm": 62.3,
+     "normal_mm": 135.0,
+     "anomaly_pct": 79.6,
+     "sources": [
+      "gpm_imerg_late"
+     ]
+    }
+   },
+   "smap": {
+    "root_zone_wetness": 0.5,
+    "root_zone_date": "2026-11-12",
+    "surface_soil_moisture_m3m3": 0.257,
+    "water_stress": "low",
+    "fallback_merra2_root_zone": null
+   },
+   "modis": {
+    "ndvi": {
+     "ndvi": 0.627,
+     "date": "2026-11-12",
+     "baseline_years": 4,
+     "normal": 0.667,
+     "anomaly": -0.04
+    }
+   },
+   "ecostress": {
+    "surface_temp_c": 33.3,
+    "surface_temp_date": "2026-11-12",
+    "heat_stress": "low",
+    "evapotranspiration": {
+     "et": 4.35,
+     "date": "2026-11-12",
+     "relative_to_usual_high": null
+    }
+   },
+   "srtm": {
+    "elevation_mean": 58.0,
+    "elevation_std": 35.0,
+    "elevation_max": 93.0,
+    "elevation_min": 23.0
+   },
+   "crop_suitability_inputs": {
+    "rainfall_normal_mm": {
+     "maha": {
+      "mean_temp_c": 27.3,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.3,
+      "rainfall_mm": 688.0
+     }
+    },
+    "soil_moisture_root": 0.5,
+    "soil_moisture_source": "SMAP L4",
+    "elevation_m": 58.0,
+    "elevation_source": "SRTM",
+    "terrain_std_m": 35.0
+   },
+   "crop_condition": {
+    "score": 70.5,
+    "level": "good",
+    "components": {
+     "vegetation": 40.0,
+     "soil_water": 100.0,
+     "rainfall": 70.4,
+     "heat_water": 77.7
+    },
+    "weights_used": {
+     "vegetation": 0.3,
+     "soil_water": 0.25,
+     "rainfall": 0.2,
+     "heat_water": 0.25
+    },
+    "missing": []
+   }
+  },
+  "Matara": {
+   "name": "Matara",
+   "code": "LK-32",
+   "province": "Southern",
+   "lat": 6.161,
+   "lon": 80.521,
+   "nasa_power": {
+    "last_30_days": {
+     "days": 30,
+     "end": "2026-11-10",
+     "mean_temp_c": 27.4,
+     "max_temp_c": 32.3,
+     "rain_mm": 93.8,
+     "humidity_pct": 80.0,
+     "solar_kwh_m2": 5.2,
+     "wind_ms": 2.1
+    },
+    "season_normals_2001_2020": {
+     "maha": {
+      "mean_temp_c": 27.3,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.3,
+      "rainfall_mm": 688.0
+     }
+    },
+    "grid_elevation_m": 120.0
+   },
+   "gpm_imerg": {
+    "rain_30_days": {
+     "available": true,
+     "start": "2026-10-15",
+     "end": "2026-11-13",
+     "total_mm": 242.9,
+     "heavy_rain_days_50mm": 1,
+     "wettest_day_mm": 63.1,
+     "normal_mm": 135.0,
+     "anomaly_pct": 79.9,
+     "sources": [
+      "gpm_imerg_late"
+     ]
+    }
+   },
+   "smap": {
+    "root_zone_wetness": 0.391,
+    "root_zone_date": "2026-11-12",
+    "surface_soil_moisture_m3m3": 0.212,
+    "water_stress": "moderate",
+    "fallback_merra2_root_zone": null
+   },
+   "modis": {
+    "ndvi": {
+     "ndvi": 0.546,
+     "date": "2026-11-12",
+     "baseline_years": 4,
+     "normal": 0.587,
+     "anomaly": -0.041
+    }
+   },
+   "ecostress": {
+    "surface_temp_c": 29.7,
+    "surface_temp_date": "2026-11-12",
+    "heat_stress": "low",
+    "evapotranspiration": {
+     "et": 3.44,
+     "date": "2026-11-12",
+     "relative_to_usual_high": null
+    }
+   },
+   "srtm": {
+    "elevation_mean": 61.0,
+    "elevation_std": 35.0,
+    "elevation_max": 96.0,
+    "elevation_min": 26.0
+   },
+   "crop_suitability_inputs": {
+    "rainfall_normal_mm": {
+     "maha": {
+      "mean_temp_c": 27.3,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.3,
+      "rainfall_mm": 688.0
+     }
+    },
+    "soil_moisture_root": 0.391,
+    "soil_moisture_source": "SMAP L4",
+    "elevation_m": 61.0,
+    "elevation_source": "SRTM",
+    "terrain_std_m": 35.0
+   },
+   "crop_condition": {
+    "score": 71.0,
+    "level": "good",
+    "components": {
+     "vegetation": 39.8,
+     "soil_water": 80.3,
+     "rainfall": 70.1,
+     "heat_water": 100.0
+    },
+    "weights_used": {
+     "vegetation": 0.3,
+     "soil_water": 0.25,
+     "rainfall": 0.2,
+     "heat_water": 0.25
+    },
+    "missing": []
+   }
+  },
+  "Hambantota": {
+   "name": "Hambantota",
+   "code": "LK-33",
+   "province": "Southern",
+   "lat": 6.276,
+   "lon": 81.179,
+   "nasa_power": {
+    "last_30_days": {
+     "days": 30,
+     "end": "2026-11-10",
+     "mean_temp_c": 27.4,
+     "max_temp_c": 32.4,
+     "rain_mm": 93.9,
+     "humidity_pct": 80.0,
+     "solar_kwh_m2": 5.2,
+     "wind_ms": 2.1
+    },
+    "season_normals_2001_2020": {
+     "maha": {
+      "mean_temp_c": 27.4,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.4,
+      "rainfall_mm": 688.0
+     }
+    },
+    "grid_elevation_m": 120.0
+   },
+   "gpm_imerg": {
+    "rain_30_days": {
+     "available": true,
+     "start": "2026-10-15",
+     "end": "2026-11-13",
+     "total_mm": 242.4,
+     "heavy_rain_days_50mm": 1,
+     "wettest_day_mm": 62.2,
+     "normal_mm": 135.0,
+     "anomaly_pct": 79.5,
+     "sources": [
+      "gpm_imerg_late"
+     ]
+    }
+   },
+   "smap": {
+    "root_zone_wetness": 0.3,
+    "root_zone_date": "2026-11-12",
+    "surface_soil_moisture_m3m3": 0.174,
+    "water_stress": "moderate",
+    "fallback_merra2_root_zone": null
+   },
+   "modis": {
+    "ndvi": {
+     "ndvi": 0.478,
+     "date": "2026-11-12",
+     "baseline_years": 4,
+     "normal": 0.519,
+     "anomaly": -0.041
+    }
+   },
+   "ecostress": {
+    "surface_temp_c": 26.7,
+    "surface_temp_date": "2026-11-12",
+    "heat_stress": "low",
+    "evapotranspiration": {
+     "et": 2.68,
+     "date": "2026-11-12",
+     "relative_to_usual_high": null
+    }
+   },
+   "srtm": {
+    "elevation_mean": 64.0,
+    "elevation_std": 35.0,
+    "elevation_max": 99.0,
+    "elevation_min": 29.0
+   },
+   "crop_suitability_inputs": {
+    "rainfall_normal_mm": {
+     "maha": {
+      "mean_temp_c": 27.4,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.4,
+      "rainfall_mm": 688.0
+     }
+    },
+    "soil_moisture_root": 0.3,
+    "soil_moisture_source": "SMAP L4",
+    "elevation_m": 64.0,
+    "elevation_source": "SRTM",
+    "terrain_std_m": 35.0
+   },
+   "crop_condition": {
+    "score": 63.5,
+    "level": "fair",
+    "components": {
+     "vegetation": 39.8,
+     "soil_water": 50.0,
+     "rainfall": 70.5,
+     "heat_water": 100.0
+    },
+    "weights_used": {
+     "vegetation": 0.3,
+     "soil_water": 0.25,
+     "rainfall": 0.2,
+     "heat_water": 0.25
+    },
+    "missing": []
+   }
+  },
+  "Jaffna": {
+   "name": "Jaffna",
+   "code": "LK-41",
+   "province": "Northern",
+   "lat": 9.644,
+   "lon": 79.908,
+   "nasa_power": {
+    "last_30_days": {
+     "days": 30,
+     "end": "2026-11-10",
+     "mean_temp_c": 28.1,
+     "max_temp_c": 33.0,
+     "rain_mm": 86.0,
+     "humidity_pct": 80.0,
+     "solar_kwh_m2": 5.2,
+     "wind_ms": 2.1
+    },
+    "season_normals_2001_2020": {
+     "maha": {
+      "mean_temp_c": 28.0,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 28.0,
+      "rainfall_mm": 688.0
+     }
+    },
+    "grid_elevation_m": 120.0
+   },
+   "gpm_imerg": {
+    "rain_30_days": {
+     "available": true,
+     "start": "2026-10-15",
+     "end": "2026-11-13",
+     "total_mm": 184.1,
+     "heavy_rain_days_50mm": 0,
+     "wettest_day_mm": 11.9,
+     "normal_mm": 135.0,
+     "anomaly_pct": 36.3,
+     "sources": [
+      "gpm_imerg_late"
+     ]
+    }
+   },
+   "smap": {
+    "root_zone_wetness": 0.31,
+    "root_zone_date": "2026-11-12",
+    "surface_soil_moisture_m3m3": 0.178,
+    "water_stress": "moderate",
+    "fallback_merra2_root_zone": null
+   },
+   "modis": {
+    "ndvi": {
+     "ndvi": 0.485,
+     "date": "2026-11-12",
+     "baseline_years": 4,
+     "normal": 0.525,
+     "anomaly": -0.04
+    }
+   },
+   "ecostress": {
+    "surface_temp_c": 27.0,
+    "surface_temp_date": "2026-11-12",
+    "heat_stress": "low",
+    "evapotranspiration": {
+     "et": 2.77,
+     "date": "2026-11-12",
+     "relative_to_usual_high": null
+    }
+   },
+   "srtm": {
+    "elevation_mean": 67.0,
+    "elevation_std": 35.0,
+    "elevation_max": 102.0,
+    "elevation_min": 32.0
+   },
+   "crop_suitability_inputs": {
+    "rainfall_normal_mm": {
+     "maha": {
+      "mean_temp_c": 28.0,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 28.0,
+      "rainfall_mm": 688.0
+     }
+    },
+    "soil_moisture_root": 0.31,
+    "soil_moisture_source": "SMAP L4",
+    "elevation_m": 67.0,
+    "elevation_source": "SRTM",
+    "terrain_std_m": 35.0
+   },
+   "crop_condition": {
+    "score": 70.3,
+    "level": "good",
+    "components": {
+     "vegetation": 40.0,
+     "soil_water": 53.3,
+     "rainfall": 100.0,
+     "heat_water": 100.0
+    },
+    "weights_used": {
+     "vegetation": 0.3,
+     "soil_water": 0.25,
+     "rainfall": 0.2,
+     "heat_water": 0.25
+    },
+    "missing": []
+   }
+  },
+  "Mannar": {
+   "name": "Mannar",
+   "code": "LK-42",
+   "province": "Northern",
+   "lat": 8.882,
+   "lon": 80.163,
+   "nasa_power": {
+    "last_30_days": {
+     "days": 30,
+     "end": "2026-11-10",
+     "mean_temp_c": 27.9,
+     "max_temp_c": 32.9,
+     "rain_mm": 87.2,
+     "humidity_pct": 80.0,
+     "solar_kwh_m2": 5.2,
+     "wind_ms": 2.1
+    },
+    "season_normals_2001_2020": {
+     "maha": {
+      "mean_temp_c": 27.9,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.9,
+      "rainfall_mm": 688.0
+     }
+    },
+    "grid_elevation_m": 120.0
+   },
+   "gpm_imerg": {
+    "rain_30_days": {
+     "available": true,
+     "start": "2026-10-15",
+     "end": "2026-11-13",
+     "total_mm": 186.7,
+     "heavy_rain_days_50mm": 0,
+     "wettest_day_mm": 11.7,
+     "normal_mm": 135.0,
+     "anomaly_pct": 38.3,
+     "sources": [
+      "gpm_imerg_late"
+     ]
+    }
+   },
+   "smap": {
+    "root_zone_wetness": 0.412,
+    "root_zone_date": "2026-11-12",
+    "surface_soil_moisture_m3m3": 0.221,
+    "water_stress": "low",
+    "fallback_merra2_root_zone": null
+   },
+   "modis": {
+    "ndvi": {
+     "ndvi": 0.561,
+     "date": "2026-11-12",
+     "baseline_years": 4,
+     "normal": 0.6,
+     "anomaly": -0.039
+    }
+   },
+   "ecostress": {
+    "surface_temp_c": 30.4,
+    "surface_temp_date": "2026-11-12",
+    "heat_stress": "low",
+    "evapotranspiration": {
+     "et": 3.62,
+     "date": "2026-11-12",
+     "relative_to_usual_high": null
+    }
+   },
+   "srtm": {
+    "elevation_mean": 70.0,
+    "elevation_std": 35.0,
+    "elevation_max": 105.0,
+    "elevation_min": 35.0
+   },
+   "crop_suitability_inputs": {
+    "rainfall_normal_mm": {
+     "maha": {
+      "mean_temp_c": 27.9,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.9,
+      "rainfall_mm": 688.0
+     }
+    },
+    "soil_moisture_root": 0.412,
+    "soil_moisture_source": "SMAP L4",
+    "elevation_m": 70.0,
+    "elevation_source": "SRTM",
+    "terrain_std_m": 35.0
+   },
+   "crop_condition": {
+    "score": 78.2,
+    "level": "good",
+    "components": {
+     "vegetation": 40.2,
+     "soil_water": 87.3,
+     "rainfall": 100.0,
+     "heat_water": 97.3
+    },
+    "weights_used": {
+     "vegetation": 0.3,
+     "soil_water": 0.25,
+     "rainfall": 0.2,
+     "heat_water": 0.25
+    },
+    "missing": []
+   }
+  },
+  "Vavuniya": {
+   "name": "Vavuniya",
+   "code": "LK-43",
+   "province": "Northern",
+   "lat": 8.835,
+   "lon": 80.485,
+   "nasa_power": {
+    "last_30_days": {
+     "days": 30,
+     "end": "2026-11-10",
+     "mean_temp_c": 27.9,
+     "max_temp_c": 32.9,
+     "rain_mm": 87.3,
+     "humidity_pct": 80.0,
+     "solar_kwh_m2": 5.2,
+     "wind_ms": 2.1
+    },
+    "season_normals_2001_2020": {
+     "maha": {
+      "mean_temp_c": 27.9,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.9,
+      "rainfall_mm": 688.0
+     }
+    },
+    "grid_elevation_m": 120.0
+   },
+   "gpm_imerg": {
+    "rain_30_days": {
+     "available": true,
+     "start": "2026-10-15",
+     "end": "2026-11-13",
+     "total_mm": 186.8,
+     "heavy_rain_days_50mm": 0,
+     "wettest_day_mm": 11.8,
+     "normal_mm": 135.0,
+     "anomaly_pct": 38.4,
+     "sources": [
+      "gpm_imerg_late"
+     ]
+    }
+   },
+   "smap": {
+    "root_zone_wetness": 0.512,
+    "root_zone_date": "2026-11-12",
+    "surface_soil_moisture_m3m3": 0.262,
+    "water_stress": "low",
+    "fallback_merra2_root_zone": null
+   },
+   "modis": {
+    "ndvi": {
+     "ndvi": 0.636,
+     "date": "2026-11-12",
+     "baseline_years": 4,
+     "normal": 0.675,
+     "anomaly": -0.039
+    }
+   },
+   "ecostress": {
+    "surface_temp_c": 33.8,
+    "surface_temp_date": "2026-11-12",
+    "heat_stress": "low",
+    "evapotranspiration": {
+     "et": 4.45,
+     "date": "2026-11-12",
+     "relative_to_usual_high": null
+    }
+   },
+   "srtm": {
+    "elevation_mean": 73.0,
+    "elevation_std": 35.0,
+    "elevation_max": 108.0,
+    "elevation_min": 38.0
+   },
+   "crop_suitability_inputs": {
+    "rainfall_normal_mm": {
+     "maha": {
+      "mean_temp_c": 27.9,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.9,
+      "rainfall_mm": 688.0
+     }
+    },
+    "soil_moisture_root": 0.512,
+    "soil_moisture_source": "SMAP L4",
+    "elevation_m": 73.0,
+    "elevation_source": "SRTM",
+    "terrain_std_m": 35.0
+   },
+   "crop_condition": {
+    "score": 75.8,
+    "level": "good",
+    "components": {
+     "vegetation": 40.2,
+     "soil_water": 100.0,
+     "rainfall": 100.0,
+     "heat_water": 75.0
+    },
+    "weights_used": {
+     "vegetation": 0.3,
+     "soil_water": 0.25,
+     "rainfall": 0.2,
+     "heat_water": 0.25
+    },
+    "missing": []
+   }
+  },
+  "Mullaitivu": {
+   "name": "Mullaitivu",
+   "code": "LK-44",
+   "province": "Northern",
+   "lat": 9.179,
+   "lon": 80.527,
+   "nasa_power": {
+    "last_30_days": {
+     "days": 30,
+     "end": "2026-11-10",
+     "mean_temp_c": 28.0,
+     "max_temp_c": 32.9,
+     "rain_mm": 86.4,
+     "humidity_pct": 80.0,
+     "solar_kwh_m2": 5.2,
+     "wind_ms": 2.1
+    },
+    "season_normals_2001_2020": {
+     "maha": {
+      "mean_temp_c": 27.9,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.9,
+      "rainfall_mm": 688.0
+     }
+    },
+    "grid_elevation_m": 120.0
+   },
+   "gpm_imerg": {
+    "rain_30_days": {
+     "available": true,
+     "start": "2026-10-15",
+     "end": "2026-11-13",
+     "total_mm": 188.3,
+     "heavy_rain_days_50mm": 0,
+     "wettest_day_mm": 11.9,
+     "normal_mm": 135.0,
+     "anomaly_pct": 39.5,
+     "sources": [
+      "gpm_imerg_late"
+     ]
+    }
+   },
+   "smap": {
+    "root_zone_wetness": 0.518,
+    "root_zone_date": "2026-11-12",
+    "surface_soil_moisture_m3m3": 0.265,
+    "water_stress": "low",
+    "fallback_merra2_root_zone": null
+   },
+   "modis": {
+    "ndvi": {
+     "ndvi": 0.641,
+     "date": "2026-11-12",
+     "baseline_years": 4,
+     "normal": 0.681,
+     "anomaly": -0.04
+    }
+   },
+   "ecostress": {
+    "surface_temp_c": 34.0,
+    "surface_temp_date": "2026-11-12",
+    "heat_stress": "low",
+    "evapotranspiration": {
+     "et": 4.5,
+     "date": "2026-11-12",
+     "relative_to_usual_high": null
+    }
+   },
+   "srtm": {
+    "elevation_mean": 76.0,
+    "elevation_std": 35.0,
+    "elevation_max": 111.0,
+    "elevation_min": 41.0
+   },
+   "crop_suitability_inputs": {
+    "rainfall_normal_mm": {
+     "maha": {
+      "mean_temp_c": 27.9,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.9,
+      "rainfall_mm": 688.0
+     }
+    },
+    "soil_moisture_root": 0.518,
+    "soil_moisture_source": "SMAP L4",
+    "elevation_m": 76.0,
+    "elevation_source": "SRTM",
+    "terrain_std_m": 35.0
+   },
+   "crop_condition": {
+    "score": 75.4,
+    "level": "good",
+    "components": {
+     "vegetation": 40.0,
+     "soil_water": 100.0,
+     "rainfall": 100.0,
+     "heat_water": 73.6
+    },
+    "weights_used": {
+     "vegetation": 0.3,
+     "soil_water": 0.25,
+     "rainfall": 0.2,
+     "heat_water": 0.25
+    },
+    "missing": []
+   }
+  },
+  "Kilinochchi": {
+   "name": "Kilinochchi",
+   "code": "LK-45",
+   "province": "Northern",
+   "lat": 9.443,
+   "lon": 80.383,
+   "nasa_power": {
+    "last_30_days": {
+     "days": 30,
+     "end": "2026-11-10",
+     "mean_temp_c": 28.0,
+     "max_temp_c": 33.0,
+     "rain_mm": 86.0,
+     "humidity_pct": 80.0,
+     "solar_kwh_m2": 5.2,
+     "wind_ms": 2.1
+    },
+    "season_normals_2001_2020": {
+     "maha": {
+      "mean_temp_c": 28.0,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 28.0,
+      "rainfall_mm": 688.0
+     }
+    },
+    "grid_elevation_m": 120.0
+   },
+   "gpm_imerg": {
+    "rain_30_days": {
+     "available": true,
+     "start": "2026-10-15",
+     "end": "2026-11-13",
+     "total_mm": 187.3,
+     "heavy_rain_days_50mm": 0,
+     "wettest_day_mm": 11.9,
+     "normal_mm": 135.0,
+     "anomaly_pct": 38.8,
+     "sources": [
+      "gpm_imerg_late"
+     ]
+    }
+   },
+   "smap": {
+    "root_zone_wetness": 0.425,
+    "root_zone_date": "2026-11-12",
+    "surface_soil_moisture_m3m3": 0.226,
+    "water_stress": "low",
+    "fallback_merra2_root_zone": null
+   },
+   "modis": {
+    "ndvi": {
+     "ndvi": 0.571,
+     "date": "2026-11-12",
+     "baseline_years": 4,
+     "normal": 0.613,
+     "anomaly": -0.042
+    }
+   },
+   "ecostress": {
+    "surface_temp_c": 30.9,
+    "surface_temp_date": "2026-11-12",
+    "heat_stress": "low",
+    "evapotranspiration": {
+     "et": 3.73,
+     "date": "2026-11-12",
+     "relative_to_usual_high": null
+    }
+   },
+   "srtm": {
+    "elevation_mean": 79.0,
+    "elevation_std": 35.0,
+    "elevation_max": 114.0,
+    "elevation_min": 44.0
+   },
+   "crop_suitability_inputs": {
+    "rainfall_normal_mm": {
+     "maha": {
+      "mean_temp_c": 28.0,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 28.0,
+      "rainfall_mm": 688.0
+     }
+    },
+    "soil_moisture_root": 0.425,
+    "soil_moisture_source": "SMAP L4",
+    "elevation_m": 79.0,
+    "elevation_source": "SRTM",
+    "terrain_std_m": 35.0
+   },
+   "crop_condition": {
+    "score": 78.3,
+    "level": "good",
+    "components": {
+     "vegetation": 39.5,
+     "soil_water": 91.7,
+     "rainfall": 100.0,
+     "heat_water": 94.3
+    },
+    "weights_used": {
+     "vegetation": 0.3,
+     "soil_water": 0.25,
+     "rainfall": 0.2,
+     "heat_water": 0.25
+    },
+    "missing": []
+   }
+  },
+  "Batticaloa": {
+   "name": "Batticaloa",
+   "code": "LK-51",
+   "province": "Eastern",
+   "lat": 7.834,
+   "lon": 81.386,
+   "nasa_power": {
+    "last_30_days": {
+     "days": 30,
+     "end": "2026-11-10",
+     "mean_temp_c": 27.7,
+     "max_temp_c": 32.7,
+     "rain_mm": 91.1,
+     "humidity_pct": 80.0,
+     "solar_kwh_m2": 5.2,
+     "wind_ms": 2.1
+    },
+    "season_normals_2001_2020": {
+     "maha": {
+      "mean_temp_c": 27.7,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.7,
+      "rainfall_mm": 688.0
+     }
+    },
+    "grid_elevation_m": 120.0
+   },
+   "gpm_imerg": {
+    "rain_30_days": {
+     "available": true,
+     "start": "2026-10-15",
+     "end": "2026-11-13",
+     "total_mm": 172.8,
+     "heavy_rain_days_50mm": 0,
+     "wettest_day_mm": 11.6,
+     "normal_mm": 135.0,
+     "anomaly_pct": 28.0,
+     "sources": [
+      "gpm_imerg_late"
+     ]
+    }
+   },
+   "smap": {
+    "root_zone_wetness": 0.318,
+    "root_zone_date": "2026-11-12",
+    "surface_soil_moisture_m3m3": 0.182,
+    "water_stress": "moderate",
+    "fallback_merra2_root_zone": null
+   },
+   "modis": {
+    "ndvi": {
+     "ndvi": 0.491,
+     "date": "2026-11-12",
+     "baseline_years": 4,
+     "normal": 0.533,
+     "anomaly": -0.042
+    }
+   },
+   "ecostress": {
+    "surface_temp_c": 27.3,
+    "surface_temp_date": "2026-11-12",
+    "heat_stress": "low",
+    "evapotranspiration": {
+     "et": 2.83,
+     "date": "2026-11-12",
+     "relative_to_usual_high": null
+    }
+   },
+   "srtm": {
+    "elevation_mean": 82.0,
+    "elevation_std": 35.0,
+    "elevation_max": 117.0,
+    "elevation_min": 47.0
+   },
+   "crop_suitability_inputs": {
+    "rainfall_normal_mm": {
+     "maha": {
+      "mean_temp_c": 27.7,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.7,
+      "rainfall_mm": 688.0
+     }
+    },
+    "soil_moisture_root": 0.318,
+    "soil_moisture_source": "SMAP L4",
+    "elevation_m": 82.0,
+    "elevation_source": "SRTM",
+    "terrain_std_m": 35.0
+   },
+   "crop_condition": {
+    "score": 70.8,
+    "level": "good",
+    "components": {
+     "vegetation": 39.5,
+     "soil_water": 56.0,
+     "rainfall": 100.0,
+     "heat_water": 100.0
+    },
+    "weights_used": {
+     "vegetation": 0.3,
+     "soil_water": 0.25,
+     "rainfall": 0.2,
+     "heat_water": 0.25
+    },
+    "missing": []
+   }
+  },
+  "Ampara": {
+   "name": "Ampara",
+   "code": "LK-52",
+   "province": "Eastern",
+   "lat": 7.123,
+   "lon": 81.685,
+   "nasa_power": {
+    "last_30_days": {
+     "days": 30,
+     "end": "2026-11-10",
+     "mean_temp_c": 27.6,
+     "max_temp_c": 32.5,
+     "rain_mm": 93.4,
+     "humidity_pct": 80.0,
+     "solar_kwh_m2": 5.2,
+     "wind_ms": 2.1
+    },
+    "season_normals_2001_2020": {
+     "maha": {
+      "mean_temp_c": 27.5,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.5,
+      "rainfall_mm": 688.0
+     }
+    },
+    "grid_elevation_m": 120.0
+   },
+   "gpm_imerg": {
+    "rain_30_days": {
+     "available": true,
+     "start": "2026-10-15",
+     "end": "2026-11-13",
+     "total_mm": 221.1,
+     "heavy_rain_days_50mm": 0,
+     "wettest_day_mm": 47.4,
+     "normal_mm": 135.0,
+     "anomaly_pct": 63.8,
+     "sources": [
+      "gpm_imerg_late"
+     ]
+    }
+   },
+   "smap": {
+    "root_zone_wetness": 0.295,
+    "root_zone_date": "2026-11-12",
+    "surface_soil_moisture_m3m3": 0.172,
+    "water_stress": "moderate",
+    "fallback_merra2_root_zone": null
+   },
+   "modis": {
+    "ndvi": {
+     "ndvi": 0.474,
+     "date": "2026-11-12",
+     "baseline_years": 4,
+     "normal": 0.515,
+     "anomaly": -0.041
+    }
+   },
+   "ecostress": {
+    "surface_temp_c": 26.5,
+    "surface_temp_date": "2026-11-12",
+    "heat_stress": "low",
+    "evapotranspiration": {
+     "et": 2.65,
+     "date": "2026-11-12",
+     "relative_to_usual_high": null
+    }
+   },
+   "srtm": {
+    "elevation_mean": 85.0,
+    "elevation_std": 35.0,
+    "elevation_max": 120.0,
+    "elevation_min": 50.0
+   },
+   "crop_suitability_inputs": {
+    "rainfall_normal_mm": {
+     "maha": {
+      "mean_temp_c": 27.5,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.5,
+      "rainfall_mm": 688.0
+     }
+    },
+    "soil_moisture_root": 0.295,
+    "soil_moisture_source": "SMAP L4",
+    "elevation_m": 85.0,
+    "elevation_source": "SRTM",
+    "terrain_std_m": 35.0
+   },
+   "crop_condition": {
+    "score": 66.2,
+    "level": "fair",
+    "components": {
+     "vegetation": 39.8,
+     "soil_water": 48.3,
+     "rainfall": 86.2,
+     "heat_water": 100.0
+    },
+    "weights_used": {
+     "vegetation": 0.3,
+     "soil_water": 0.25,
+     "rainfall": 0.2,
+     "heat_water": 0.25
+    },
+    "missing": []
+   }
+  },
+  "Trincomalee": {
+   "name": "Trincomalee",
+   "code": "LK-53",
+   "province": "Eastern",
+   "lat": 8.569,
+   "lon": 81.063,
+   "nasa_power": {
+    "last_30_days": {
+     "days": 30,
+     "end": "2026-11-10",
+     "mean_temp_c": 27.9,
+     "max_temp_c": 32.8,
+     "rain_mm": 88.2,
+     "humidity_pct": 80.0,
+     "solar_kwh_m2": 5.2,
+     "wind_ms": 2.1
+    },
+    "season_normals_2001_2020": {
+     "maha": {
+      "mean_temp_c": 27.8,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.8,
+      "rainfall_mm": 688.0
+     }
+    },
+    "grid_elevation_m": 120.0
+   },
+   "gpm_imerg": {
+    "rain_30_days": {
+     "available": true,
+     "start": "2026-10-15",
+     "end": "2026-11-13",
+     "total_mm": 183.2,
+     "heavy_rain_days_50mm": 0,
+     "wettest_day_mm": 11.5,
+     "normal_mm": 135.0,
+     "anomaly_pct": 35.7,
+     "sources": [
+      "gpm_imerg_late"
+     ]
+    }
+   },
+   "smap": {
+    "root_zone_wetness": 0.378,
+    "root_zone_date": "2026-11-12",
+    "surface_soil_moisture_m3m3": 0.207,
+    "water_stress": "moderate",
+    "fallback_merra2_root_zone": null
+   },
+   "modis": {
+    "ndvi": {
+     "ndvi": 0.536,
+     "date": "2026-11-12",
+     "baseline_years": 4,
+     "normal": 0.575,
+     "anomaly": -0.039
+    }
+   },
+   "ecostress": {
+    "surface_temp_c": 29.3,
+    "surface_temp_date": "2026-11-12",
+    "heat_stress": "low",
+    "evapotranspiration": {
+     "et": 3.34,
+     "date": "2026-11-12",
+     "relative_to_usual_high": null
+    }
+   },
+   "srtm": {
+    "elevation_mean": 88.0,
+    "elevation_std": 35.0,
+    "elevation_max": 123.0,
+    "elevation_min": 53.0
+   },
+   "crop_suitability_inputs": {
+    "rainfall_normal_mm": {
+     "maha": {
+      "mean_temp_c": 27.8,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.8,
+      "rainfall_mm": 688.0
+     }
+    },
+    "soil_moisture_root": 0.378,
+    "soil_moisture_source": "SMAP L4",
+    "elevation_m": 88.0,
+    "elevation_source": "SRTM",
+    "terrain_std_m": 35.0
+   },
+   "crop_condition": {
+    "score": 76.1,
+    "level": "good",
+    "components": {
+     "vegetation": 40.2,
+     "soil_water": 76.0,
+     "rainfall": 100.0,
+     "heat_water": 100.0
+    },
+    "weights_used": {
+     "vegetation": 0.3,
+     "soil_water": 0.25,
+     "rainfall": 0.2,
+     "heat_water": 0.25
+    },
+    "missing": []
+   }
+  },
+  "Kurunegala": {
+   "name": "Kurunegala",
+   "code": "LK-61",
+   "province": "North Western",
+   "lat": 7.728,
+   "lon": 80.257,
+   "nasa_power": {
+    "last_30_days": {
+     "days": 30,
+     "end": "2026-11-10",
+     "mean_temp_c": 27.7,
+     "max_temp_c": 32.6,
+     "rain_mm": 91.5,
+     "humidity_pct": 80.0,
+     "solar_kwh_m2": 5.2,
+     "wind_ms": 2.1
+    },
+    "season_normals_2001_2020": {
+     "maha": {
+      "mean_temp_c": 27.6,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.6,
+      "rainfall_mm": 688.0
+     }
+    },
+    "grid_elevation_m": 120.0
+   },
+   "gpm_imerg": {
+    "rain_30_days": {
+     "available": true,
+     "start": "2026-10-15",
+     "end": "2026-11-13",
+     "total_mm": 185.9,
+     "heavy_rain_days_50mm": 0,
+     "wettest_day_mm": 16.9,
+     "normal_mm": 135.0,
+     "anomaly_pct": 37.7,
+     "sources": [
+      "gpm_imerg_late"
+     ]
+    }
+   },
+   "smap": {
+    "root_zone_wetness": 0.49,
+    "root_zone_date": "2026-11-12",
+    "surface_soil_moisture_m3m3": 0.253,
+    "water_stress": "low",
+    "fallback_merra2_root_zone": null
+   },
+   "modis": {
+    "ndvi": {
+     "ndvi": 0.62,
+     "date": "2026-11-12",
+     "baseline_years": 4,
+     "normal": 0.658,
+     "anomaly": -0.038
+    }
+   },
+   "ecostress": {
+    "surface_temp_c": 33.0,
+    "surface_temp_date": "2026-11-12",
+    "heat_stress": "low",
+    "evapotranspiration": {
+     "et": 4.27,
+     "date": "2026-11-12",
+     "relative_to_usual_high": null
+    }
+   },
+   "srtm": {
+    "elevation_mean": 91.0,
+    "elevation_std": 35.0,
+    "elevation_max": 126.0,
+    "elevation_min": 56.0
+   },
+   "crop_suitability_inputs": {
+    "rainfall_normal_mm": {
+     "maha": {
+      "mean_temp_c": 27.6,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.6,
+      "rainfall_mm": 688.0
+     }
+    },
+    "soil_moisture_root": 0.49,
+    "soil_moisture_source": "SMAP L4",
+    "elevation_m": 91.0,
+    "elevation_source": "SRTM",
+    "terrain_std_m": 35.0
+   },
+   "crop_condition": {
+    "score": 77.1,
+    "level": "good",
+    "components": {
+     "vegetation": 40.5,
+     "soil_water": 100.0,
+     "rainfall": 100.0,
+     "heat_water": 79.8
+    },
+    "weights_used": {
+     "vegetation": 0.3,
+     "soil_water": 0.25,
+     "rainfall": 0.2,
+     "heat_water": 0.25
+    },
+    "missing": []
+   }
+  },
+  "Puttalam": {
+   "name": "Puttalam",
+   "code": "LK-62",
+   "province": "North Western",
+   "lat": 7.915,
+   "lon": 79.912,
+   "nasa_power": {
+    "last_30_days": {
+     "days": 30,
+     "end": "2026-11-10",
+     "mean_temp_c": 27.7,
+     "max_temp_c": 32.7,
+     "rain_mm": 90.8,
+     "humidity_pct": 80.0,
+     "solar_kwh_m2": 5.2,
+     "wind_ms": 2.1
+    },
+    "season_normals_2001_2020": {
+     "maha": {
+      "mean_temp_c": 27.7,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.7,
+      "rainfall_mm": 688.0
+     }
+    },
+    "grid_elevation_m": 120.0
+   },
+   "gpm_imerg": {
+    "rain_30_days": {
+     "available": true,
+     "start": "2026-10-15",
+     "end": "2026-11-13",
+     "total_mm": 179.8,
+     "heavy_rain_days_50mm": 0,
+     "wettest_day_mm": 11.3,
+     "normal_mm": 135.0,
+     "anomaly_pct": 33.2,
+     "sources": [
+      "gpm_imerg_late"
+     ]
+    }
+   },
+   "smap": {
+    "root_zone_wetness": 0.528,
+    "root_zone_date": "2026-11-12",
+    "surface_soil_moisture_m3m3": 0.269,
+    "water_stress": "low",
+    "fallback_merra2_root_zone": null
+   },
+   "modis": {
+    "ndvi": {
+     "ndvi": 0.649,
+     "date": "2026-11-12",
+     "baseline_years": 4,
+     "normal": 0.688,
+     "anomaly": -0.039
+    }
+   },
+   "ecostress": {
+    "surface_temp_c": 34.3,
+    "surface_temp_date": "2026-11-12",
+    "heat_stress": "low",
+    "evapotranspiration": {
+     "et": 4.59,
+     "date": "2026-11-12",
+     "relative_to_usual_high": null
+    }
+   },
+   "srtm": {
+    "elevation_mean": 94.0,
+    "elevation_std": 35.0,
+    "elevation_max": 129.0,
+    "elevation_min": 59.0
+   },
+   "crop_suitability_inputs": {
+    "rainfall_normal_mm": {
+     "maha": {
+      "mean_temp_c": 27.7,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.7,
+      "rainfall_mm": 688.0
+     }
+    },
+    "soil_moisture_root": 0.528,
+    "soil_moisture_source": "SMAP L4",
+    "elevation_m": 94.0,
+    "elevation_source": "SRTM",
+    "terrain_std_m": 35.0
+   },
+   "crop_condition": {
+    "score": 74.9,
+    "level": "good",
+    "components": {
+     "vegetation": 40.2,
+     "soil_water": 100.0,
+     "rainfall": 100.0,
+     "heat_water": 71.3
+    },
+    "weights_used": {
+     "vegetation": 0.3,
+     "soil_water": 0.25,
+     "rainfall": 0.2,
+     "heat_water": 0.25
+    },
+    "missing": []
+   }
+  },
+  "Anuradhapura": {
+   "name": "Anuradhapura",
+   "code": "LK-71",
+   "province": "North Central",
+   "lat": 8.368,
+   "lon": 80.44,
+   "nasa_power": {
+    "last_30_days": {
+     "days": 30,
+     "end": "2026-11-10",
+     "mean_temp_c": 27.8,
+     "max_temp_c": 32.8,
+     "rain_mm": 89.0,
+     "humidity_pct": 80.0,
+     "solar_kwh_m2": 5.2,
+     "wind_ms": 2.1
+    },
+    "season_normals_2001_2020": {
+     "maha": {
+      "mean_temp_c": 27.8,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.8,
+      "rainfall_mm": 688.0
+     }
+    },
+    "grid_elevation_m": 120.0
+   },
+   "gpm_imerg": {
+    "rain_30_days": {
+     "available": true,
+     "start": "2026-10-15",
+     "end": "2026-11-13",
+     "total_mm": 180.4,
+     "heavy_rain_days_50mm": 0,
+     "wettest_day_mm": 11.4,
+     "normal_mm": 135.0,
+     "anomaly_pct": 33.7,
+     "sources": [
+      "gpm_imerg_late"
+     ]
+    }
+   },
+   "smap": {
+    "root_zone_wetness": 0.458,
+    "root_zone_date": "2026-11-12",
+    "surface_soil_moisture_m3m3": 0.24,
+    "water_stress": "low",
+    "fallback_merra2_root_zone": null
+   },
+   "modis": {
+    "ndvi": {
+     "ndvi": 0.596,
+     "date": "2026-11-12",
+     "baseline_years": 4,
+     "normal": 0.637,
+     "anomaly": -0.041
+    }
+   },
+   "ecostress": {
+    "surface_temp_c": 31.9,
+    "surface_temp_date": "2026-11-12",
+    "heat_stress": "low",
+    "evapotranspiration": {
+     "et": 4.0,
+     "date": "2026-11-12",
+     "relative_to_usual_high": null
+    }
+   },
+   "srtm": {
+    "elevation_mean": 97.0,
+    "elevation_std": 35.0,
+    "elevation_max": 132.0,
+    "elevation_min": 62.0
+   },
+   "crop_suitability_inputs": {
+    "rainfall_normal_mm": {
+     "maha": {
+      "mean_temp_c": 27.8,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.8,
+      "rainfall_mm": 688.0
+     }
+    },
+    "soil_moisture_root": 0.458,
+    "soil_moisture_source": "SMAP L4",
+    "elevation_m": 97.0,
+    "elevation_source": "SRTM",
+    "terrain_std_m": 35.0
+   },
+   "crop_condition": {
+    "score": 78.7,
+    "level": "good",
+    "components": {
+     "vegetation": 39.8,
+     "soil_water": 100.0,
+     "rainfall": 100.0,
+     "heat_water": 87.1
+    },
+    "weights_used": {
+     "vegetation": 0.3,
+     "soil_water": 0.25,
+     "rainfall": 0.2,
+     "heat_water": 0.25
+    },
+    "missing": []
+   }
+  },
+  "Polonnaruwa": {
+   "name": "Polonnaruwa",
+   "code": "LK-72",
+   "province": "North Central",
+   "lat": 7.993,
+   "lon": 81.051,
+   "nasa_power": {
+    "last_30_days": {
+     "days": 30,
+     "end": "2026-11-10",
+     "mean_temp_c": 27.7,
+     "max_temp_c": 32.7,
+     "rain_mm": 90.5,
+     "humidity_pct": 80.0,
+     "solar_kwh_m2": 5.2,
+     "wind_ms": 2.1
+    },
+    "season_normals_2001_2020": {
+     "maha": {
+      "mean_temp_c": 27.7,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.7,
+      "rainfall_mm": 688.0
+     }
+    },
+    "grid_elevation_m": 120.0
+   },
+   "gpm_imerg": {
+    "rain_30_days": {
+     "available": true,
+     "start": "2026-10-15",
+     "end": "2026-11-13",
+     "total_mm": 174.6,
+     "heavy_rain_days_50mm": 0,
+     "wettest_day_mm": 11.6,
+     "normal_mm": 135.0,
+     "anomaly_pct": 29.3,
+     "sources": [
+      "gpm_imerg_late"
+     ]
+    }
+   },
+   "smap": {
+    "root_zone_wetness": 0.343,
+    "root_zone_date": "2026-11-12",
+    "surface_soil_moisture_m3m3": 0.192,
+    "water_stress": "moderate",
+    "fallback_merra2_root_zone": null
+   },
+   "modis": {
+    "ndvi": {
+     "ndvi": 0.51,
+     "date": "2026-11-12",
+     "baseline_years": 4,
+     "normal": 0.552,
+     "anomaly": -0.042
+    }
+   },
+   "ecostress": {
+    "surface_temp_c": 28.1,
+    "surface_temp_date": "2026-11-12",
+    "heat_stress": "low",
+    "evapotranspiration": {
+     "et": 3.04,
+     "date": "2026-11-12",
+     "relative_to_usual_high": null
+    }
+   },
+   "srtm": {
+    "elevation_mean": 100.0,
+    "elevation_std": 35.0,
+    "elevation_max": 135.0,
+    "elevation_min": 65.0
+   },
+   "crop_suitability_inputs": {
+    "rainfall_normal_mm": {
+     "maha": {
+      "mean_temp_c": 27.7,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.7,
+      "rainfall_mm": 688.0
+     }
+    },
+    "soil_moisture_root": 0.343,
+    "soil_moisture_source": "SMAP L4",
+    "elevation_m": 100.0,
+    "elevation_source": "SRTM",
+    "terrain_std_m": 35.0
+   },
+   "crop_condition": {
+    "score": 72.9,
+    "level": "good",
+    "components": {
+     "vegetation": 39.5,
+     "soil_water": 64.3,
+     "rainfall": 100.0,
+     "heat_water": 100.0
+    },
+    "weights_used": {
+     "vegetation": 0.3,
+     "soil_water": 0.25,
+     "rainfall": 0.2,
+     "heat_water": 0.25
+    },
+    "missing": []
+   }
+  },
+  "Badulla": {
+   "name": "Badulla",
+   "code": "LK-81",
+   "province": "Uva",
+   "lat": 7.083,
+   "lon": 81.088,
+   "nasa_power": {
+    "last_30_days": {
+     "days": 30,
+     "end": "2026-11-10",
+     "mean_temp_c": 27.6,
+     "max_temp_c": 32.5,
+     "rain_mm": 93.5,
+     "humidity_pct": 80.0,
+     "solar_kwh_m2": 5.2,
+     "wind_ms": 2.1
+    },
+    "season_normals_2001_2020": {
+     "maha": {
+      "mean_temp_c": 27.5,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.5,
+      "rainfall_mm": 688.0
+     }
+    },
+    "grid_elevation_m": 120.0
+   },
+   "gpm_imerg": {
+    "rain_30_days": {
+     "available": true,
+     "start": "2026-10-15",
+     "end": "2026-11-13",
+     "total_mm": 228.9,
+     "heavy_rain_days_50mm": 1,
+     "wettest_day_mm": 53.3,
+     "normal_mm": 135.0,
+     "anomaly_pct": 69.5,
+     "sources": [
+      "gpm_imerg_late"
+     ]
+    }
+   },
+   "smap": {
+    "root_zone_wetness": 0.29,
+    "root_zone_date": "2026-11-12",
+    "surface_soil_moisture_m3m3": 0.17,
+    "water_stress": "moderate",
+    "fallback_merra2_root_zone": null
+   },
+   "modis": {
+    "ndvi": {
+     "ndvi": 0.47,
+     "date": "2026-11-12",
+     "baseline_years": 4,
+     "normal": 0.511,
+     "anomaly": -0.041
+    }
+   },
+   "ecostress": {
+    "surface_temp_c": 26.4,
+    "surface_temp_date": "2026-11-12",
+    "heat_stress": "low",
+    "evapotranspiration": {
+     "et": 2.6,
+     "date": "2026-11-12",
+     "relative_to_usual_high": null
+    }
+   },
+   "srtm": {
+    "elevation_mean": 900.0,
+    "elevation_std": 35.0,
+    "elevation_max": 935.0,
+    "elevation_min": 865.0
+   },
+   "crop_suitability_inputs": {
+    "rainfall_normal_mm": {
+     "maha": {
+      "mean_temp_c": 27.5,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.5,
+      "rainfall_mm": 688.0
+     }
+    },
+    "soil_moisture_root": 0.29,
+    "soil_moisture_source": "SMAP L4",
+    "elevation_m": 900.0,
+    "elevation_source": "SRTM",
+    "terrain_std_m": 35.0
+   },
+   "crop_condition": {
+    "score": 64.7,
+    "level": "fair",
+    "components": {
+     "vegetation": 39.8,
+     "soil_water": 46.7,
+     "rainfall": 80.5,
+     "heat_water": 100.0
+    },
+    "weights_used": {
+     "vegetation": 0.3,
+     "soil_water": 0.25,
+     "rainfall": 0.2,
+     "heat_water": 0.25
+    },
+    "missing": []
+   }
+  },
+  "Monaragala": {
+   "name": "Monaragala",
+   "code": "LK-82",
+   "province": "Uva",
+   "lat": 6.873,
+   "lon": 81.372,
+   "nasa_power": {
+    "last_30_days": {
+     "days": 30,
+     "end": "2026-11-10",
+     "mean_temp_c": 27.5,
+     "max_temp_c": 32.5,
+     "rain_mm": 93.8,
+     "humidity_pct": 80.0,
+     "solar_kwh_m2": 5.2,
+     "wind_ms": 2.1
+    },
+    "season_normals_2001_2020": {
+     "maha": {
+      "mean_temp_c": 27.5,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.5,
+      "rainfall_mm": 688.0
+     }
+    },
+    "grid_elevation_m": 120.0
+   },
+   "gpm_imerg": {
+    "rain_30_days": {
+     "available": true,
+     "start": "2026-10-15",
+     "end": "2026-11-13",
+     "total_mm": 235.1,
+     "heavy_rain_days_50mm": 1,
+     "wettest_day_mm": 57.1,
+     "normal_mm": 135.0,
+     "anomaly_pct": 74.2,
+     "sources": [
+      "gpm_imerg_late"
+     ]
+    }
+   },
+   "smap": {
+    "root_zone_wetness": 0.347,
+    "root_zone_date": "2026-11-12",
+    "surface_soil_moisture_m3m3": 0.194,
+    "water_stress": "moderate",
+    "fallback_merra2_root_zone": null
+   },
+   "modis": {
+    "ndvi": {
+     "ndvi": 0.513,
+     "date": "2026-11-12",
+     "baseline_years": 4,
+     "normal": 0.552,
+     "anomaly": -0.039
+    }
+   },
+   "ecostress": {
+    "surface_temp_c": 28.3,
+    "surface_temp_date": "2026-11-12",
+    "heat_stress": "low",
+    "evapotranspiration": {
+     "et": 3.08,
+     "date": "2026-11-12",
+     "relative_to_usual_high": null
+    }
+   },
+   "srtm": {
+    "elevation_mean": 260.0,
+    "elevation_std": 35.0,
+    "elevation_max": 295.0,
+    "elevation_min": 225.0
+   },
+   "crop_suitability_inputs": {
+    "rainfall_normal_mm": {
+     "maha": {
+      "mean_temp_c": 27.5,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.5,
+      "rainfall_mm": 688.0
+     }
+    },
+    "soil_moisture_root": 0.347,
+    "soil_moisture_source": "SMAP L4",
+    "elevation_m": 260.0,
+    "elevation_source": "SRTM",
+    "terrain_std_m": 35.0
+   },
+   "crop_condition": {
+    "score": 68.7,
+    "level": "fair",
+    "components": {
+     "vegetation": 40.2,
+     "soil_water": 65.7,
+     "rainfall": 75.8,
+     "heat_water": 100.0
+    },
+    "weights_used": {
+     "vegetation": 0.3,
+     "soil_water": 0.25,
+     "rainfall": 0.2,
+     "heat_water": 0.25
+    },
+    "missing": []
+   }
+  },
+  "Ratnapura": {
+   "name": "Ratnapura",
+   "code": "LK-91",
+   "province": "Sabaragamuwa",
+   "lat": 6.58,
+   "lon": 80.589,
+   "nasa_power": {
+    "last_30_days": {
+     "days": 30,
+     "end": "2026-11-10",
+     "mean_temp_c": 27.5,
+     "max_temp_c": 32.4,
+     "rain_mm": 94.0,
+     "humidity_pct": 80.0,
+     "solar_kwh_m2": 5.2,
+     "wind_ms": 2.1
+    },
+    "season_normals_2001_2020": {
+     "maha": {
+      "mean_temp_c": 27.4,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.4,
+      "rainfall_mm": 688.0
+     }
+    },
+    "grid_elevation_m": 120.0
+   },
+   "gpm_imerg": {
+    "rain_30_days": {
+     "available": true,
+     "start": "2026-10-15",
+     "end": "2026-11-13",
+     "total_mm": 238.1,
+     "heavy_rain_days_50mm": 1,
+     "wettest_day_mm": 58.1,
+     "normal_mm": 135.0,
+     "anomaly_pct": 76.3,
+     "sources": [
+      "gpm_imerg_late"
+     ]
+    }
+   },
+   "smap": {
+    "root_zone_wetness": 0.462,
+    "root_zone_date": "2026-11-12",
+    "surface_soil_moisture_m3m3": 0.242,
+    "water_stress": "low",
+    "fallback_merra2_root_zone": null
+   },
+   "modis": {
+    "ndvi": {
+     "ndvi": 0.599,
+     "date": "2026-11-12",
+     "baseline_years": 4,
+     "normal": 0.637,
+     "anomaly": -0.038
+    }
+   },
+   "ecostress": {
+    "surface_temp_c": 32.1,
+    "surface_temp_date": "2026-11-12",
+    "heat_stress": "low",
+    "evapotranspiration": {
+     "et": 4.03,
+     "date": "2026-11-12",
+     "relative_to_usual_high": null
+    }
+   },
+   "srtm": {
+    "elevation_mean": 520.0,
+    "elevation_std": 35.0,
+    "elevation_max": 555.0,
+    "elevation_min": 485.0
+   },
+   "crop_suitability_inputs": {
+    "rainfall_normal_mm": {
+     "maha": {
+      "mean_temp_c": 27.4,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.4,
+      "rainfall_mm": 688.0
+     }
+    },
+    "soil_moisture_root": 0.462,
+    "soil_moisture_source": "SMAP L4",
+    "elevation_m": 520.0,
+    "elevation_source": "SRTM",
+    "terrain_std_m": 35.0
+   },
+   "crop_condition": {
+    "score": 73.4,
+    "level": "good",
+    "components": {
+     "vegetation": 40.5,
+     "soil_water": 100.0,
+     "rainfall": 73.7,
+     "heat_water": 86.1
+    },
+    "weights_used": {
+     "vegetation": 0.3,
+     "soil_water": 0.25,
+     "rainfall": 0.2,
+     "heat_water": 0.25
+    },
+    "missing": []
+   }
+  },
+  "Kegalle": {
+   "name": "Kegalle",
+   "code": "LK-92",
+   "province": "Sabaragamuwa",
+   "lat": 7.114,
+   "lon": 80.322,
+   "nasa_power": {
+    "last_30_days": {
+     "days": 30,
+     "end": "2026-11-10",
+     "mean_temp_c": 27.6,
+     "max_temp_c": 32.5,
+     "rain_mm": 93.4,
+     "humidity_pct": 80.0,
+     "solar_kwh_m2": 5.2,
+     "wind_ms": 2.1
+    },
+    "season_normals_2001_2020": {
+     "maha": {
+      "mean_temp_c": 27.5,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.5,
+      "rainfall_mm": 688.0
+     }
+    },
+    "grid_elevation_m": 120.0
+   },
+   "gpm_imerg": {
+    "rain_30_days": {
+     "available": true,
+     "start": "2026-10-15",
+     "end": "2026-11-13",
+     "total_mm": 230.4,
+     "heavy_rain_days_50mm": 1,
+     "wettest_day_mm": 55.3,
+     "normal_mm": 135.0,
+     "anomaly_pct": 70.7,
+     "sources": [
+      "gpm_imerg_late"
+     ]
+    }
+   },
+   "smap": {
+    "root_zone_wetness": 0.529,
+    "root_zone_date": "2026-11-12",
+    "surface_soil_moisture_m3m3": 0.27,
+    "water_stress": "low",
+    "fallback_merra2_root_zone": null
+   },
+   "modis": {
+    "ndvi": {
+     "ndvi": 0.649,
+     "date": "2026-11-12",
+     "baseline_years": 4,
+     "normal": 0.688,
+     "anomaly": -0.039
+    }
+   },
+   "ecostress": {
+    "surface_temp_c": 34.3,
+    "surface_temp_date": "2026-11-12",
+    "heat_stress": "low",
+    "evapotranspiration": {
+     "et": 4.59,
+     "date": "2026-11-12",
+     "relative_to_usual_high": null
+    }
+   },
+   "srtm": {
+    "elevation_mean": 300.0,
+    "elevation_std": 35.0,
+    "elevation_max": 335.0,
+    "elevation_min": 265.0
+   },
+   "crop_suitability_inputs": {
+    "rainfall_normal_mm": {
+     "maha": {
+      "mean_temp_c": 27.5,
+      "rainfall_mm": 681.0
+     },
+     "yala": {
+      "mean_temp_c": 27.5,
+      "rainfall_mm": 688.0
+     }
+    },
+    "soil_moisture_root": 0.529,
+    "soil_moisture_source": "SMAP L4",
+    "elevation_m": 300.0,
+    "elevation_source": "SRTM",
+    "terrain_std_m": 35.0
+   },
+   "crop_condition": {
+    "score": 70.7,
+    "level": "good",
+    "components": {
+     "vegetation": 40.2,
+     "soil_water": 100.0,
+     "rainfall": 79.3,
+     "heat_water": 71.2
+    },
+    "weights_used": {
+     "vegetation": 0.3,
+     "soil_water": 0.25,
+     "rainfall": 0.2,
+     "heat_water": 0.25
+    },
+    "missing": []
+   }
+  }
+ },
+ "farms": {}
+}
