@@ -140,7 +140,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
   const { accessToken, orgId, setOrg, logout } = useAuth();
   const [hydrated, setHydrated] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [theme, setTheme] = useState<"dark" | "light">("light");
   const me = useMe();
   const qc = useQueryClient();
 
@@ -148,7 +148,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
     setHydrated(true);
     try {
       const t = localStorage.getItem("agriintel-theme");
-      if (t === "light") setTheme("light");
+      if (t === "dark") setTheme("dark");
     } catch {
       /* storage blocked */
     }

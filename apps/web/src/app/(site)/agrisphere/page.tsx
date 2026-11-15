@@ -79,27 +79,27 @@ export default function AgriSpherePage() {
               <div key={title}>
                 <h3 className="text-xl font-semibold">{title}</h3>
                 {title === "Earth observation layer" ? (
-                  <div className="mt-4 overflow-hidden rounded-2xl border border-cyan/20 bg-[#071b2b] shadow-[0_18px_50px_rgba(2,12,24,0.2)]">
-                    <div className="grid grid-cols-[1.05fr_.8fr_.75fr] gap-3 border-b border-white/10 px-4 py-3 text-[10px] font-bold uppercase tracking-[0.16em] text-cyan/80 sm:grid-cols-[1fr_.8fr_.7fr_1.7fr]">
+                  <div className="mt-4 overflow-hidden rounded-2xl border border-cyan/20 bg-panel shadow-[0_18px_50px_rgba(47,92,48,0.14)]">
+                    <div className="grid grid-cols-[1.05fr_.8fr_.75fr] gap-3 border-b border-line px-4 py-3 text-[10px] font-bold uppercase tracking-[0.16em] text-cyan/80 sm:grid-cols-[1fr_.8fr_.7fr_1.7fr]">
                       <span>NASA data</span><span>Used</span><span>Share</span><span className="hidden sm:block">What it&apos;s used for</span>
                     </div>
-                    <ul className="divide-y divide-white/10">
+                    <ul className="divide-y divide-line">
                       {(rows as [string, string, string, string][]).map(([name, used, share, purpose]) => (
                         <li key={name} className="grid grid-cols-[1.05fr_.8fr_.75fr] gap-3 px-4 py-4 sm:grid-cols-[1fr_.8fr_.7fr_1.7fr]">
                           <div>
-                            <span className="font-semibold text-white">{name}</span>
-                            <div className="mt-2 h-1.5 w-full max-w-[110px] overflow-hidden rounded-full bg-white/10">
+                            <span className="font-semibold text-ink">{name}</span>
+                            <div className="mt-2 h-1.5 w-full max-w-[110px] overflow-hidden rounded-full bg-line/30">
                               <span className="block h-full rounded-full bg-gradient-to-r from-cyan to-emerald" style={{ width: share.startsWith("0") ? "8%" : share }} />
                             </div>
                           </div>
                           <span className="text-sm font-semibold text-emerald">{used}</span>
                           <span className="text-sm font-semibold text-cyan">{share}</span>
-                          <span className="col-span-3 text-xs leading-relaxed text-[#a8bfd0] sm:col-span-1 sm:text-sm">{purpose}</span>
+                          <span className="col-span-3 text-xs leading-relaxed text-muted sm:col-span-1 sm:text-sm">{purpose}</span>
                         </li>
                       ))}
                     </ul>
                     <div className="flex items-center justify-between border-t border-cyan/20 bg-cyan/5 px-4 py-3 text-sm font-bold">
-                      <span className="text-white">Total district-score contribution</span>
+                      <span className="text-ink">Total district-score contribution</span>
                       <span className="text-cyan">100%</span>
                     </div>
                   </div>
