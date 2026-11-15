@@ -14,17 +14,17 @@ const QUESTIONS = [
   "Which crops will generate the highest ROI?",
 ];
 
-type Status = "Connected" | "Discovery built" | "CSV import" | "Planned";
+type Status = "Connected" | "Not connected" | "CSV import" | "Planned";
 const EO: [string, string, Status][] = [
   ["NASA POWER", "Temperature, solar radiation, humidity, wind, rainfall normals", "Connected"],
-  ["NASA GPM IMERG", "Rainfall, anomalies, accumulated precipitation", "Discovery built"],
-  ["NASA SMAP", "Surface and root-zone soil moisture, drought conditions", "Discovery built"],
-  ["NASA ECOSTRESS", "Evapotranspiration, surface temperature", "Planned"],
-  ["Landsat", "Reflectance, NDVI, historical crop performance", "Planned"],
-  ["MODIS / VIIRS", "Regional vegetation and seasonal crop development", "Planned"],
-  ["Sentinel-2 (EU Copernicus)", "Field-level crop monitoring and vegetation indices", "Planned"],
-  ["NASA GLDAS", "Soil moisture, runoff, drought indicators", "Planned"],
-  ["SRTM", "Elevation, slope, drainage", "Planned"],
+  ["NASA GPM IMERG", "Rainfall, anomalies, accumulated precipitation", "Not connected"],
+  ["NASA SMAP", "Surface and root-zone soil moisture, drought conditions", "Not connected"],
+  ["NASA ECOSTRESS", "Evapotranspiration, surface temperature", "Not connected"],
+  ["Landsat", "Reflectance, NDVI, historical crop performance", "Not connected"],
+  ["MODIS / VIIRS", "Regional vegetation and seasonal crop development", "Not connected"],
+  ["Sentinel-2 (EU Copernicus)", "Field-level crop monitoring and vegetation indices", "Not connected"],
+  ["NASA GLDAS", "Soil moisture, runoff, drought indicators", "Not connected"],
+  ["SRTM", "Elevation, slope, drainage", "Not connected"],
 ];
 const LK: [string, string, Status][] = [
   ["Department of Agriculture", "Crop calendars, crop suitability, crop forecasts, agro-met advisories", "Planned"],
@@ -35,7 +35,7 @@ const LK: [string, string, Status][] = [
   ["Sri Lanka Open Data Portal", "Crop forecasts, agricultural statistics", "Planned"],
 ];
 const STATUS_CLS: Record<Status, string> = {
-  Connected: "border-emerald/50 text-emerald", "Discovery built": "border-cyan/50 text-cyan", "CSV import": "border-amber/50 text-amber", Planned: "border-line text-muted",
+  Connected: "border-emerald/50 text-emerald", "Not connected": "border-line text-muted", "CSV import": "border-amber/50 text-amber", Planned: "border-line text-muted",
 };
 
 const MODULES: [string, string][] = [
@@ -75,7 +75,7 @@ export default function AgriSpherePage() {
       <section className="border-y border-line bg-navy">
         <div className="mx-auto max-w-7xl px-5 py-20">
           <h2 className="text-4xl font-semibold">Two data layers, one answer</h2>
-          <p className="mt-3 max-w-2xl text-muted">Each source shows how far along its connection is, so you always know what&apos;s observed and what&apos;s still illustrative.</p>
+          <p className="mt-3 max-w-2xl text-muted">Statuses reflect whether each source is connected to live application data. Demo and discovery-only values are not marked as connected.</p>
           <div className="mt-10 grid gap-10 lg:grid-cols-2">
             {([["Earth observation layer", EO], ["Sri Lankan agricultural intelligence layer", LK]] as const).map(([title, rows]) => (
               <div key={title}>

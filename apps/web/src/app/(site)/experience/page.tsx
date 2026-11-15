@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Sparkles } from "lucide-react";
 import { useEffect, useRef } from "react";
-import Explorer from "@/components/agrisphere/Explorer";
 import Globe from "@/components/globe/Globe";
 
 export default function ExperiencePage() {
@@ -60,16 +59,6 @@ export default function ExperiencePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-5 py-20">
-        <div className="mb-10 max-w-2xl">
-          <span className="text-xs font-bold uppercase tracking-wider text-cyan">District intelligence</span>
-          <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-snow sm:text-4xl">Sri Lanka, down to the district</h2>
-          <p className="mt-4 text-muted">
-            Select a province or district to compare climate, water, soil, crop, and yield signals.
-          </p>
-        </div>
-        <Explorer mode="demo" />
-      </section>
     </main>
   );
 }
