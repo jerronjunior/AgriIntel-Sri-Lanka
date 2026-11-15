@@ -6,52 +6,32 @@
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 :root {
-  --navy: #e4f4c9;
-  --abyss: #f5ffdf;
-  --emerald: #239b67;
-  --cyan: #2aa9c9;
-  --snow: #173c2c;
-  --slate: #6b8975;
-  --violet: #866bc4;
-  --amber: #d99b24;
-  --rose: #d5656c;
-  --bg: #eff9d8;
-  --panel: rgba(255, 255, 255, 0.78);
-  --panel-2: rgba(228, 244, 201, 0.9);
-  --line: rgba(67, 117, 75, 0.2);
-  --text: #173c2c;
-  --muted: #52715c;
-  --glow-cyan: rgba(42, 169, 201, 0.24);
-  --glow-emerald: rgba(35, 155, 103, 0.2);
-  --glow-violet: rgba(134, 107, 196, 0.16);
-  --shadow-3d: 0 18px 40px -12px rgba(47, 92, 48, 0.18), 0 0 24px -8px rgba(42, 169, 201, 0.12);
-}
-
-[data-theme="light"] {
+  --navy: #d9effc;
+  --abyss: #f1f9ff;
+  --emerald: #2b83c6;
+  --cyan: #168fc4;
+  --lime: #55b8df;
+  --snow: #123c57;
+  --slate: #66879d;
+  --violet: #4f87c4;
+  --amber: #3f9fce;
+  --rose: #398fc4;
+  --bg: #eaf6fd;
+  --panel: rgba(255, 255, 255, 0.84);
+  --panel-2: rgba(224, 242, 253, 0.92);
+  --line: rgba(47, 126, 171, 0.22);
+  --text: #123c57;
+  --muted: #52738a;
+  --glow-cyan: rgba(22, 143, 196, 0.24);
+  --glow-emerald: rgba(43, 131, 198, 0.2);
+  --glow-lime: rgba(85, 184, 223, 0.3);
+  --shadow-3d: 0 18px 40px -12px rgba(35, 91, 128, 0.16), 0 0 24px -8px rgba(22, 143, 196, 0.12);
   color-scheme: light;
 }
 
+[data-theme="light"],
 [data-theme="dark"] {
-  --navy: #051322;
-  --abyss: #02070f;
-  --emerald: #10b981;
-  --cyan: #22d3ee;
-  --snow: #f8fafc;
-  --slate: #94a3b8;
-  --violet: #a855f7;
-  --amber: #f59e0b;
-  --rose: #fb7185;
-  --bg: #030812;
-  --panel: rgba(8, 22, 38, 0.72);
-  --panel-2: rgba(12, 30, 52, 0.65);
-  --line: rgba(56, 189, 248, 0.16);
-  --text: var(--snow);
-  --muted: #8ca2b8;
-  --glow-cyan: rgba(34, 211, 238, 0.35);
-  --glow-emerald: rgba(16, 185, 129, 0.35);
-  --glow-violet: rgba(168, 85, 247, 0.3);
-  --shadow-3d: 0 20px 50px -10px rgba(0, 0, 0, 0.75), 0 0 25px -5px rgba(34, 211, 238, 0.14);
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 @theme inline {
@@ -65,6 +45,7 @@
   --color-abyss: var(--abyss);
   --color-emerald: var(--emerald);
   --color-cyan: var(--cyan);
+  --color-lime: var(--lime);
   --color-snow: var(--snow);
   --color-slate: var(--slate);
   --color-amber: var(--amber);
@@ -98,9 +79,9 @@ body::before {
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 80% 50% at 50% -15%, rgba(176, 224, 116, 0.34), transparent 70%),
-    radial-gradient(ellipse 60% 40% at 90% 85%, rgba(42, 169, 201, 0.12), transparent 60%),
-    radial-gradient(ellipse 50% 35% at 10% 70%, rgba(255, 220, 92, 0.12), transparent 60%);
+    radial-gradient(ellipse 85% 55% at 50% -12%, rgba(105, 193, 231, 0.3), transparent 68%),
+    radial-gradient(ellipse 65% 45% at 92% 85%, rgba(22, 143, 196, 0.14), transparent 60%),
+    radial-gradient(ellipse 55% 40% at 8% 68%, rgba(79, 135, 196, 0.12), transparent 60%);
   z-index: -2;
 }
 
@@ -111,11 +92,11 @@ body::after {
   inset: 0;
   pointer-events: none;
   background-image: 
-    linear-gradient(to right, rgba(67, 117, 75, 0.07) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(67, 117, 75, 0.07) 1px, transparent 1px);
-  background-size: 40px 40px;
-  mask-image: radial-gradient(ellipse at 50% 50%, black 20%, transparent 80%);
-  -webkit-mask-image: radial-gradient(ellipse at 50% 50%, black 20%, transparent 80%);
+    linear-gradient(to right, rgba(47, 126, 171, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(47, 126, 171, 0.07) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse at 50% 50%, black 25%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 50%, black 25%, transparent 80%);
   z-index: -1;
 }
 
@@ -261,72 +242,103 @@ h1, h2, h3, .display {
   background: linear-gradient(135deg, #55c5df 0%, #2aa9c9 52%, #218fac 100%);
   color: #073847;
   font-weight: 700;
-  border: 1px solid rgba(110, 231, 183, 0.45);
+  border: 1px solid rgba(22, 143, 196, 0.45);
   box-shadow: 
-    0 8px 24px -4px rgba(16, 185, 129, 0.5),
-    0 0 15px -2px rgba(16, 185, 129, 0.3),
-    inset 0 1px 2px 0 rgba(255, 255, 255, 0.4);
-}
-
-.btn-primary::after {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0; height: 50%;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, transparent 100%);
-  border-radius: 9999px 9999px 0 0;
-  pointer-events: none;
+    0 8px 24px -4px rgba(22, 143, 196, 0.32),
+    0 0 16px -2px rgba(22, 143, 196, 0.2),
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.5);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #78d7e9 0%, #42b9d4 50%, #2aa9c9 100%);
-  transform: translateY(-2px) scale(1.01);
+  background: #78d7e9;
+  color: #073847;
+  transform: translateY(-2px) scale(1.015);
   box-shadow: 
-    0 14px 32px -4px rgba(16, 185, 129, 0.65),
-    0 0 25px 3px rgba(34, 211, 238, 0.4),
-    inset 0 1px 2px 0 rgba(255, 255, 255, 0.6);
+    0 14px 34px -4px rgba(22, 143, 196, 0.42),
+    0 0 25px 4px rgba(22, 143, 196, 0.25),
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.7);
 }
 
 .btn-primary:active:not(:disabled) {
   transform: translateY(1px) scale(0.98);
   box-shadow: 
-    0 4px 12px -2px rgba(16, 185, 129, 0.4),
+    0 4px 12px -2px rgba(22, 143, 196, 0.28),
     inset 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.btn-cyan {
-  background: linear-gradient(135deg, #ffe58a 0%, #f5ca53 100%);
-  color: #4c451d;
+/* Distinctive Farmer Pill Button with Circular Dark Arrow Badge (matching reference image) */
+.btn-farmer {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, #55c5df 0%, #2aa9c9 100%);
+  color: #073847;
   font-weight: 700;
-  border: 1px solid rgba(186, 230, 253, 0.5);
+  border-radius: 9999px;
+  padding: 0.5rem 0.6rem 0.5rem 1.4rem;
+  font-size: 0.95rem;
+  letter-spacing: -0.01em;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 10px 25px -5px rgba(22, 143, 196, 0.28);
+  cursor: pointer;
+  user-select: none;
+}
+
+.btn-farmer:hover {
+  background: #78d7e9;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 14px 35px -5px rgba(22, 143, 196, 0.4);
+}
+
+.btn-farmer-circle {
+  display: grid;
+  place-items: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 9999px;
+  background: #0e4d72;
+  color: #ffffff;
+  transition: transform 0.25s ease;
+}
+
+.btn-farmer:hover .btn-farmer-circle {
+  transform: translateX(2px) rotate(45deg);
+}
+
+.btn-cyan {
+  background: linear-gradient(135deg, #55c5df 0%, #2aa9c9 100%);
+  color: #073847;
+  font-weight: 700;
+  border: 1px solid rgba(22, 143, 196, 0.45);
   box-shadow: 
-    0 8px 24px -4px rgba(34, 211, 238, 0.5),
-    0 0 15px -2px rgba(34, 211, 238, 0.3),
+    0 8px 24px -4px rgba(22, 143, 196, 0.3),
+    0 0 15px -2px rgba(22, 143, 196, 0.18),
     inset 0 1px 2px 0 rgba(255, 255, 255, 0.4);
 }
 
 .btn-cyan:hover:not(:disabled) {
+  background: #78d7e9;
   transform: translateY(-2px) scale(1.01);
   box-shadow: 
-    0 14px 32px -4px rgba(34, 211, 238, 0.7),
-    0 0 25px 3px rgba(34, 211, 238, 0.5),
+    0 14px 32px -4px rgba(22, 143, 196, 0.4),
+    0 0 25px 3px rgba(22, 143, 196, 0.25),
     inset 0 1px 2px 0 rgba(255, 255, 255, 0.6);
 }
 
 .btn-ghost {
   background: var(--panel);
   border: 1px solid var(--line);
-  border-top: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
   color: var(--text);
   backdrop-filter: blur(12px);
-  box-shadow: 0 4px 14px rgba(47, 92, 48, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.45);
+  box-shadow: 0 4px 14px rgba(7, 25, 14, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.2);
 }
 
 .btn-ghost:hover:not(:disabled) {
   background: var(--panel-2);
   border-color: var(--cyan);
-  color: var(--text);
+  color: var(--cyan);
   transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5), 0 0 16px rgba(34, 211, 238, 0.25);
+  box-shadow: 0 8px 22px rgba(35, 91, 128, 0.16), 0 0 16px rgba(22, 143, 196, 0.18);
 }
 
 /* Pulsing radar ring */

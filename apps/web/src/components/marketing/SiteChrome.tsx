@@ -1,28 +1,28 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, Satellite, X, Sparkles, Shield, ArrowUpRight } from "lucide-react";
+import { Menu, Sprout, X, Sparkles, Shield, ArrowUpRight, ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/lib/auth-store";
 
 const NAV = [
-  { href: "/platform", label: "Platform" },
-  { href: "/industries", label: "Industries" },
-  { href: "/agrisphere", label: "AgriSphere" },
-  { href: "/experience", label: "Explore" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
+  { href: "/", label: "Home" },
+  { href: "/about", label: "About Us" },
+  { href: "/app/farms", label: "Our Farms" },
+  { href: "/app/climate", label: "Engines" },
+  { href: "/platform", label: "Sustainability" },
+  { href: "/app/simulator", label: "Simulator" },
 ];
 
 export function Logo() {
   return (
-    <Link href="/" className="group flex items-center gap-2.5 font-display text-lg font-bold tracking-tight">
-      <span className="relative grid h-9 w-9 place-items-center rounded-xl border border-cyan/40 bg-gradient-to-br from-cyan/20 to-emerald/20 shadow-[0_0_15px_rgba(34,211,238,0.25)] transition-transform duration-300 group-hover:scale-105">
-        <Satellite className="h-4.5 w-4.5 text-cyan transition-transform duration-300 group-hover:rotate-12" />
-        <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-emerald radar-ring" />
+    <Link href="/" className="group flex items-center gap-2.5 font-display text-lg font-extrabold tracking-tight">
+      <span className="relative grid h-9 w-9 place-items-center rounded-full border border-cyan/50 bg-gradient-to-br from-cyan/30 to-emerald/20 shadow-[0_0_18px_rgba(22,143,196,0.28)] transition-transform duration-300 group-hover:scale-110">
+        <Sprout className="h-4.5 w-4.5 text-cyan transition-transform duration-300 group-hover:rotate-12" />
+        <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-cyan radar-ring" />
       </span>
-      <span className="flex items-center gap-1.5 text-snow">
-        AgriIntel <span className="rounded-md border border-cyan/30 bg-cyan/10 px-1.5 py-0.5 text-[11px] font-mono font-medium text-cyan">LK</span>
+      <span className="flex items-center gap-1.5 text-snow font-black uppercase tracking-wider text-base">
+        AgriIntel
       </span>
     </Link>
   );
@@ -35,20 +35,20 @@ export function SiteHeader() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 px-4 py-3 sm:px-6">
-      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between rounded-full border border-cyan/20 bg-abyss/75 px-5 backdrop-blur-xl shadow-[0_12px_32px_-4px_rgba(0,0,0,0.7),0_0_20px_-2px_rgba(34,211,238,0.15)]">
+      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between rounded-full border border-line/70 bg-panel/90 px-4 sm:px-6 backdrop-blur-2xl shadow-[0_16px_40px_rgba(35,91,128,0.18),0_0_25px_rgba(22,143,196,0.12)]">
         <Logo />
 
-        <nav className="hidden items-center gap-1 rounded-full border border-line/40 bg-panel/40 px-3 py-1 text-sm md:flex" aria-label="Main">
+        <nav className="hidden items-center gap-1 rounded-full border border-line/60 bg-panel/50 p-1 text-sm md:flex" aria-label="Main">
           {NAV.map((n) => {
             const active = path === n.href;
             return (
               <Link
                 key={n.href}
                 href={n.href}
-                className={`rounded-full px-3.5 py-1.5 text-xs font-semibold transition-all ${
+                className={`rounded-full px-4 py-1.5 text-xs font-bold transition-all ${
                   active
-                    ? "bg-cyan/15 text-cyan shadow-[0_0_12px_rgba(34,211,238,0.25)]"
-                    : "text-muted hover:text-snow hover:bg-panel-2/60"
+                    ? "bg-cyan text-night shadow-[0_0_15px_rgba(22,143,196,0.3)]"
+                    : "text-muted hover:text-snow hover:bg-panel-2/70"
                 }`}
               >
                 {n.label}
@@ -58,15 +58,24 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
+          {!signedIn && (
+            <Link href="/login" className="text-xs font-bold text-snow/90 hover:text-cyan transition-colors px-2">
+              Sign in
+            </Link>
+          )}
           {signedIn ? (
-            <Link href="/app" className="btn btn-primary !py-2 !px-4 !text-xs shadow-md">
-              <span>Open Console</span>
-              <ArrowUpRight className="h-3.5 w-3.5" />
+            <Link href="/app" className="btn-farmer !py-1 !pl-3.5 !pr-1.5 !text-xs">
+              <span>Console</span>
+              <span className="btn-farmer-circle !h-6 !w-6">
+                <ArrowUpRight className="h-3.5 w-3.5 text-snow" />
+              </span>
             </Link>
           ) : (
-            <Link href="/contact?kind=demo" className="btn btn-primary !py-2 !px-4 !text-xs shadow-md">
-              <span>Request Demo</span>
-              <Sparkles className="h-3.5 w-3.5" />
+            <Link href="/contact" className="btn-farmer !py-1 !pl-3.5 !pr-1.5 !text-xs">
+              <span>Contact Us</span>
+              <span className="btn-farmer-circle !h-6 !w-6">
+                <ArrowRight className="h-3.5 w-3.5 text-snow" />
+              </span>
             </Link>
           )}
         </div>
@@ -82,31 +91,38 @@ export function SiteHeader() {
       </div>
 
       {open && (
-        <div className="mx-auto mt-2 max-w-7xl rounded-2xl border border-cyan/20 bg-abyss/95 p-5 backdrop-blur-2xl shadow-2xl md:hidden">
+        <div className="mx-auto mt-2 max-w-7xl rounded-2xl border border-line/70 bg-panel/95 p-5 backdrop-blur-2xl shadow-2xl md:hidden">
           <nav className="flex flex-col gap-2">
             {NAV.map((n) => (
               <Link
                 key={n.href}
                 href={n.href}
                 onClick={() => setOpen(false)}
-                className={`rounded-xl px-4 py-2.5 text-sm font-medium ${
-                  path === n.href ? "bg-cyan/15 text-cyan" : "text-muted hover:text-snow"
+                className={`rounded-xl px-4 py-2.5 text-sm font-semibold ${
+                  path === n.href ? "bg-cyan text-night" : "text-muted hover:text-snow"
                 }`}
               >
                 {n.label}
               </Link>
             ))}
-            {signedIn && (
-              <div className="mt-3 border-t border-line/60 pt-3">
+            <div className="mt-3 border-t border-line/60 pt-3 flex flex-col gap-2">
+              {!signedIn && (
                 <Link
-                  href="/app"
+                  href="/login"
                   onClick={() => setOpen(false)}
-                  className="btn btn-primary w-full !py-2.5 text-xs"
+                  className="rounded-xl px-4 py-2 text-sm font-semibold text-center text-snow hover:bg-panel"
                 >
-                  Open Console
+                  Sign in
                 </Link>
-              </div>
-            )}
+              )}
+              <Link
+                href={signedIn ? "/app" : "/contact"}
+                onClick={() => setOpen(false)}
+                className="btn btn-primary w-full !py-2.5 text-xs text-center justify-center"
+              >
+                {signedIn ? "Open Console" : "Contact Us"}
+              </Link>
+            </div>
           </nav>
         </div>
       )}

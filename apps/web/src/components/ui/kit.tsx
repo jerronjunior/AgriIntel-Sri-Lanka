@@ -8,20 +8,20 @@ export type DataClass = "observed" | "historical" | "predicted" | "simulated" | 
 const TAG: Record<DataClass, { label: string; cls: string; dot: string; title: string }> = {
   observed: {
     label: "Observed",
-    cls: "border-emerald/40 bg-emerald/10 text-emerald shadow-[0_0_12px_rgba(16,185,129,0.25)]",
+    cls: "border-emerald/40 bg-emerald/10 text-emerald shadow-[0_0_12px_rgba(34,197,94,0.25)]",
     dot: "bg-emerald",
     title: "Recent satellite or reanalysis observation",
   },
   historical: {
     label: "Historical",
-    cls: "border-cyan/40 bg-cyan/10 text-cyan shadow-[0_0_12px_rgba(34,211,238,0.2)]",
+    cls: "border-cyan/40 bg-cyan/10 text-cyan shadow-[0_0_12px_rgba(210,248,67,0.25)]",
     dot: "bg-cyan",
     title: "Past observations or long-term climatology",
   },
   predicted: {
     label: "Predicted",
-    cls: "border-violet-400/40 bg-violet-400/10 text-violet-300 shadow-[0_0_12px_rgba(168,85,247,0.2)]",
-    dot: "bg-violet-400",
+    cls: "border-emerald/40 bg-emerald/10 text-emerald shadow-[0_0_12px_rgba(34,197,94,0.2)]",
+    dot: "bg-emerald",
     title: "Output of an evaluated model",
   },
   simulated: {

@@ -140,15 +140,21 @@ export default function AppShell({ children }: { children: ReactNode }) {
   const { accessToken, orgId, setOrg, logout } = useAuth();
   const [hydrated, setHydrated] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
-  const [theme, setTheme] = useState<"dark" | "light">("light");
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
   const me = useMe();
   const qc = useQueryClient();
 
   useEffect(() => {
     setHydrated(true);
     try {
-      const t = localStorage.getItem("agriintel-theme");
-      if (t === "dark") setTheme("dark");
+      const t = localStorage.getItem("agriintel-theme-v3");
+      if (t === "light") {
+        setTheme("light");
+      } else {
+        setTheme("dark");
+        localStorage.setItem("agriintel-theme", "dark");
+        localStorage.setItem("agriintel-theme-v3", "dark");
+      }
     } catch {
       /* storage blocked */
     }
@@ -157,6 +163,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
     try {
+      localStorage.setItem("agriintel-theme-v3", theme);
       localStorage.setItem("agriintel-theme", theme);
     } catch {
       /* ignore */
@@ -215,13 +222,13 @@ export default function AppShell({ children }: { children: ReactNode }) {
                 title={collapsed ? n.label : locked ? "Not in your plan" : undefined}
                 className={`group flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-semibold transition-all ${
                   active
-                    ? "bg-gradient-to-r from-cyan/20 to-emerald/15 text-snow shadow-[0_0_20px_rgba(34,211,238,0.2)] border border-cyan/35"
+                    ? "bg-cyan text-night font-bold shadow-[0_0_18px_rgba(210,248,67,0.35)] border border-cyan/60"
                     : "text-muted hover:bg-panel-2/60 hover:text-snow"
                 } ${locked ? "opacity-45" : ""}`}
               >
                 <n.icon
                   className={`h-4 w-4 shrink-0 transition-transform group-hover:scale-110 ${
-                    active ? "text-cyan drop-shadow-[0_0_8px_rgba(34,211,238,0.6)]" : "text-muted"
+                    active ? "text-night font-bold" : "text-muted"
                   }`}
                 />
                 {!collapsed && <span>{n.label}</span>}

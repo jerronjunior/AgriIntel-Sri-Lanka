@@ -5,10 +5,13 @@ import { useState } from "react";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import {
   CloudRain, Droplets, Landmark, LineChart, Shield, Sprout, Tractor, TrendingUp, Building2, Wheat,
-  Sparkles, ArrowRight, Radio, Satellite, Layers, ShieldCheck, Award, AlertOctagon, CheckCircle2, PieChart
+  Sparkles, ArrowRight, ArrowUpRight, Radio, Satellite, Layers, ShieldCheck, Award, AlertOctagon,
+  CheckCircle2, Play, Plus, Minus, Compass, Cpu, HelpCircle
 } from "lucide-react";
 import { DataTag } from "@/components/ui/kit";
 import { api } from "@/lib/api";
+import ExperienceSection from "@/components/marketing/ExperienceSection";
+import AgriSphereSection from "@/components/agrisphere/AgriSphereSection";
 
 const FEED_LABEL: Record<string, string> = {
   nasa_power_daily: "NASA POWER Daily Weather",
@@ -19,6 +22,7 @@ const FEED_LABEL: Record<string, string> = {
   smap_l4_rootzone: "SMAP Root-Zone Moisture",
   sentinel2_l2a: "Sentinel-2 Vegetation",
 };
+
 type Source = {
   key: string;
   provider: string;
@@ -34,16 +38,16 @@ function SourceStatus() {
     queryFn: () => api<{ items: Source[] }>("/data-sources", { auth: false, org: false }),
   });
   const dot = (s: string) =>
-    s === "operational" ? "bg-emerald shadow-[0_0_8px_rgba(16,185,129,0.8)]" : s === "degraded" ? "bg-amber" : "bg-slate/50";
+    s === "operational" ? "bg-cyan shadow-[0_0_8px_rgba(22,143,196,0.45)]" : s === "degraded" ? "bg-amber" : "bg-slate/50";
 
   return (
-    <div className="glass-transmission w-full max-w-[19rem] rounded-2xl p-4.5 text-sm shadow-2xl border-cyan/30">
+    <div className="glass-transmission w-full max-w-[19rem] rounded-2xl p-4.5 text-sm shadow-2xl border-line/60 bg-panel/70">
       <div className="flex items-center justify-between mb-3 border-b border-line/60 pb-2.5">
         <div className="flex items-center gap-2">
           <Satellite className="h-4 w-4 text-cyan" />
           <p className="font-semibold text-xs uppercase tracking-wider text-snow">Observation Feeds</p>
         </div>
-        <span className="flex items-center gap-1 text-[10px] font-mono text-emerald">
+        <span className="flex items-center gap-1 text-[10px] font-mono text-cyan">
           <Radio className="h-3 w-3 animate-pulse" />
           LIVE
         </span>
@@ -70,45 +74,6 @@ function SourceStatus() {
     </div>
   );
 }
-
-const MODULES = [
-  {
-    icon: CloudRain,
-    name: "Climate Intelligence",
-    body: "Daily temperature, precipitation, humidity, solar radiation & wind across Sri Lanka, bench-marked against 20-year normals.",
-    accent: "text-cyan",
-  },
-  {
-    icon: Droplets,
-    name: "Soil & Water Balance",
-    body: "MERRA-2 root-zone wetness & water stress flags with explicit spatial resolution metrics next to every single observation.",
-    accent: "text-emerald",
-  },
-  {
-    icon: Sprout,
-    name: "Crop Suitability",
-    body: "Transparent rules engine ranking paddy, maize, pulses, chili & onion for Maha/Yala seasons with clear agronomic explanations.",
-    accent: "text-lime-400",
-  },
-  {
-    icon: TrendingUp,
-    name: "Profitability Forecasts",
-    body: "Interactive gross revenue, input costs, net margins, ROI and break-even calculations customized to local farmer parameters.",
-    accent: "text-amber",
-  },
-  {
-    icon: LineChart,
-    name: "Market Volatility",
-    body: "Historical Colombo & district wholesale price indexes, multi-year seasonal comparisons and margin sensitivity alerts.",
-    accent: "text-violet",
-  },
-  {
-    icon: Shield,
-    name: "Integrated Risk Index",
-    body: "Comprehensive composite index synthesizing climate deficit, crop vulnerability and price fluctuations with full mathematical auditability.",
-    accent: "text-rose",
-  },
-];
 
 const STEPS = [
   {
@@ -139,105 +104,309 @@ const DEMO = [
   { crop: "Groundnut", profit: 150 },
 ];
 
+const FAQS = [
+  {
+    q: "What kind of farming and agricultural solutions do you offer?",
+    a: "AgriIntel delivers end-to-end precision agricultural decision support across Sri Lanka: district-level climate stability scores, 5-tier drought vulnerability forecasting, 7-day flood warnings, precision soil water budgets (Green Gram, Cowpea, Chili), and crop suitability rankings calibrated for Maha and Yala seasons."
+  },
+  {
+    q: "How can I start using the AgriIntel platform?",
+    a: "You can sign up in seconds for our 14-day free trial or enter our instant offline demo mode directly. Simply select your home district from Sri Lanka's 25 administrative areas to view localized satellite telemetry, or register your farm coordinates for precision field-level advisories."
+  },
+  {
+    q: "Are our recommended agricultural technologies eco-friendly?",
+    a: "Yes, 100%. Our intelligence models promote regenerative agriculture, precision drip irrigation, alternate wetting and drying (AWD) for paddy, crop diversification, and organic soil structure enhancement to minimize chemical runoff and preserve groundwater."
+  },
+  {
+    q: "Do you provide localized support and training?",
+    a: "Yes. Our platform and exportable advisory reports support English, Sinhala, and Tamil. We partner with agricultural extension officers, farmer organizations, and agronomic advisors to ensure actionable field delivery."
+  }
+];
+
 type EngineTab = "climate" | "water" | "soil" | "crops" | "yield";
 
 export default function Home() {
   const [activeEngine, setActiveEngine] = useState<EngineTab>("climate");
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
+
   return (
     <>
-      {/* Hero Section */}
-      <section className="relative overflow-hidden border-b border-line/40">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_70%_45%,rgba(34,211,238,0.14),transparent_55%)]" />
-        <div className="mx-auto grid max-w-7xl items-center gap-10 px-5 py-24 md:grid-cols-[1.1fr_0.9fr]">
-          <div className="relative z-10">
-              <div className="inline-flex items-center gap-2 rounded-full border border-cyan/40 bg-cyan/10 px-3.5 py-1 text-xs font-semibold text-cyan shadow-[0_0_18px_rgba(34,211,238,0.25)] mb-6">
-                <Sparkles className="h-3.5 w-3.5" />
-                <span>Next-Gen Earth Observation SaaS</span>
+      {/* Hero Section: Lush Farmer Theme matching Reference Image */}
+      <section className="relative pt-24 pb-16 md:pt-28 md:pb-24 overflow-hidden">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="relative overflow-hidden rounded-[2.5rem] border border-line/60 bg-[#dff2fc] shadow-[0_30px_90px_rgba(35,91,128,0.18)] min-h-[580px] md:min-h-[640px] flex flex-col justify-between">
+            {/* Background Photographic Image of Lush Farm Terraces with Asian Farmer */}
+            <div className="absolute inset-0 z-0">
+              <img
+                src="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1800&q=80"
+                alt="Lush green agricultural terraces"
+                className="h-full w-full object-cover object-center filter brightness-[0.62] contrast-[1.12]"
+              />
+              {/* Organic Forest Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#dff2fc] via-[#dff2fc]/40 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#dff2fc]/95 via-[#dff2fc]/60 to-transparent" />
+            </div>
+
+            {/* Hero Content Overlay */}
+            <div className="relative z-10 p-6 sm:p-12 md:p-16 max-w-3xl">
+              {/* Sustaining Earth Pill Badge */}
+              <div className="inline-flex items-center gap-2 rounded-full border border-cyan/40 bg-white/60 px-4 py-1.5 text-xs font-bold text-cyan backdrop-blur-md shadow-[0_0_20px_rgba(22,143,196,0.18)] mb-6">
+                <span className="h-2 w-2 rounded-full bg-cyan radar-ring" />
+                <span>Sustaining Earth · Sri Lankan Agriculture</span>
               </div>
 
-              <h1 className="text-[clamp(2.7rem,5.6vw,5rem)] font-extrabold tracking-tight text-snow leading-[1.04]">
-                Intelligence above. <br />
-                <span className="bg-gradient-to-r from-emerald via-cyan to-violet bg-clip-text text-transparent">
-                  Decisions below.
-                </span>
+              {/* Headline */}
+              <h1 className="font-display text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-snow leading-[1.04]">
+                Grow the Future with{" "}
+                <span className="text-cyan block mt-1">Sustainable Agriculture</span>
               </h1>
 
-              <p className="mt-6 max-w-xl text-base sm:text-lg text-muted leading-relaxed">
-                Empowering Sri Lankan agriculture, banking and insurance with live NASA satellite telemetry, crop suitability engines, and hyper-local climate risk modeling.
+              {/* Subtitle */}
+              <p className="mt-6 max-w-xl text-base sm:text-lg text-snow/80 leading-relaxed font-sans">
+                We empower farmers with eco-friendly methods, modern tools, and a shared intent to nourish the planet, naturally and responsibly.
               </p>
 
-              <div className="mt-8 flex flex-wrap gap-4">
-                <Link href="/register" className="btn btn-primary shadow-xl !px-6 !py-3.5">
-                  <span>Start 14-Day Free Trial</span>
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-                <Link href="/platform" className="btn btn-ghost !px-6 !py-3.5">
-                  <span>Explore Architecture</span>
-                </Link>
-              </div>
-
-              <div className="mt-8 flex items-center gap-6 text-xs text-muted/80">
-                <span className="flex items-center gap-1.5">
-                  <ShieldCheck className="h-4 w-4 text-emerald" />
-                  No card required
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Layers className="h-4 w-4 text-cyan" />
-                  25 Districts mapped
-                </span>
-              </div>
-          </div>
-          <Link href="/experience" className="group relative overflow-hidden rounded-3xl border border-cyan/30 bg-gradient-to-br from-cyan/10 via-panel to-emerald/10 p-8 shadow-[0_0_60px_rgba(34,211,238,0.12)] transition hover:border-cyan/60">
-            <div className="absolute -right-20 -top-20 h-56 w-56 rounded-full bg-cyan/20 blur-3xl transition group-hover:bg-cyan/30" />
-            <div className="absolute -bottom-20 -left-20 h-56 w-56 rounded-full bg-emerald/20 blur-3xl transition group-hover:bg-emerald/30" />
-            <div className="relative">
-              <span className="text-xs font-bold uppercase tracking-wider text-cyan">New interactive experience</span>
-              <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-snow">Explore Sri Lanka from space.</h2>
-              <p className="mt-4 text-sm leading-relaxed text-muted">
-                Open the dedicated map and animated earth-observation workspace to move from regional signals to district-level decisions.
-              </p>
-              <span className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-cyan">
-                Open intelligence experience <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
-              </span>
-            </div>
-          </Link>
-        </div>
-      </section>
-
-      {/* Feature Modules Grid */}
-      <section className="relative mx-auto max-w-7xl px-5 py-28">
-        <div className="grid gap-12 md:grid-cols-[0.9fr_1.1fr] items-start">
-          <div className="sticky top-28">
-            <span className="text-xs font-bold uppercase tracking-wider text-cyan">Mission Capabilities</span>
-            <h2 className="mt-2 text-4xl font-extrabold text-snow tracking-tight">From space grid to farm decision</h2>
-            <p className="mt-4 max-w-md text-sm text-muted leading-relaxed">
-              AgriIntel ingests continental-scale NASA and Copernicus observations, translating raw physical variables into immediate, actionable intelligence for agricultural operators and underwriters.
-            </p>
-            <div className="mt-8 xl:hidden">
-              <SourceStatus />
-            </div>
-          </div>
-
-          <div className="grid gap-5 sm:grid-cols-2">
-            {MODULES.map((m) => (
-              <div key={m.name} className="panel card-3d group p-6 border-line/60">
-                <div className="flex items-center justify-between mb-4">
-                  <span className="grid h-10 w-10 place-items-center rounded-xl bg-panel border border-line/60 shadow-inner group-hover:border-cyan/40 transition-colors">
-                    <m.icon className={`h-5 w-5 ${m.accent}`} aria-hidden />
+              {/* Action Buttons */}
+              <div className="mt-8 flex flex-wrap items-center gap-4">
+                <Link href="/app/farms" className="btn-farmer !py-2.5 !pl-6 !pr-2 !text-sm">
+                  <span>Explore Our Farms</span>
+                  <span className="btn-farmer-circle !h-9 !w-9">
+                    <ArrowRight className="h-4 w-4 text-snow" />
                   </span>
-                  <span className="text-[10px] font-mono uppercase text-muted">Verified</span>
-                </div>
-                <h3 className="text-base font-bold text-snow">{m.name}</h3>
-                <p className="mt-2 text-xs text-muted leading-relaxed">{m.body}</p>
+                </Link>
+
+                <Link
+                  href="/register"
+                  className="rounded-full border border-snow/30 bg-black/40 px-6 py-3.5 text-sm font-bold text-snow backdrop-blur-md transition-all hover:border-cyan hover:text-cyan hover:bg-black/60 shadow-lg"
+                >
+                  Start 14-Day Free Trial
+                </Link>
               </div>
-            ))}
+            </div>
+
+            {/* Bottom Partner Trust Ribbon (matching bottom of reference hero) */}
+            <div className="relative z-10 border-t border-line/40 bg-white/70 backdrop-blur-xl px-6 py-4 sm:px-12">
+              <div className="flex flex-wrap items-center justify-between gap-6 text-xs font-mono text-snow/60">
+                <span className="flex items-center gap-2 text-cyan font-bold uppercase tracking-wider text-[11px]">
+                  <Satellite className="h-3.5 w-3.5" /> Earth Observation Stack:
+                </span>
+                <span className="hover:text-snow transition-colors">NASA POWER Climatology</span>
+                <span className="hover:text-snow transition-colors">Sentinel-2 Multispectral</span>
+                <span className="hover:text-snow transition-colors">GPM IMERG Precipitation</span>
+                <span className="hover:text-snow transition-colors">SMAP Soil Hydrology</span>
+                <span className="hover:text-snow transition-colors">DOA Experimental Census</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Real-time Engine Interactive Showcase: Module 1 & Module 2 */}
-      <section className="relative mx-auto max-w-7xl px-5 py-20">
-        <div className="card-3d glass-transmission rounded-3xl border border-cyan/40 bg-gradient-to-br from-panel/95 via-midnight/90 to-base/95 p-6 md:p-10 shadow-[0_25px_60px_rgba(0,0,0,0.6)]">
+      {/* Section 2: INNOVATING THE FUTURE OF AGRICULTURE (Matching Reference Image) */}
+      <section className="relative mx-auto max-w-7xl px-4 sm:px-6 py-20">
+        <div className="grid gap-8 lg:grid-cols-2 items-start mb-12">
+          <div>
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold uppercase tracking-tight text-snow leading-tight">
+              Innovating the Future <br className="hidden sm:inline" />
+              of Agriculture
+            </h2>
+          </div>
+          <div className="flex items-start gap-3">
+            <span className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-cyan radar-ring" />
+            <p className="text-sm sm:text-base text-muted leading-relaxed">
+              AgriIntel combines modern technology and sustainable practices to help farmers grow smarter crops, preserve vital groundwater, and achieve superior harvest yields across Sri Lanka’s 25 agro-ecological zones.
+            </p>
+          </div>
+        </div>
+
+        {/* 2 Visual Story Cards + 3 Statistics Grid */}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 items-stretch">
+          {/* Visual Card 1: Green Tea / Crop Rows */}
+          <div className="group relative overflow-hidden rounded-3xl border border-line/60 bg-panel/60 shadow-xl h-80 card-3d">
+            <img
+              src="https://images.unsplash.com/photo-1586771107445-d3ca888129ff?auto=format&fit=crop&w=800&q=80"
+              alt="Lush green tea plantation rows"
+              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-[0.75]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#dff2fc] via-[#dff2fc]/20 to-transparent" />
+            <div className="absolute bottom-5 left-5 right-5">
+              <span className="rounded-full bg-cyan/20 border border-cyan/40 px-2.5 py-0.5 text-[10px] font-mono font-bold text-cyan backdrop-blur-md">
+                Dry & Wet Zones
+              </span>
+              <p className="mt-2 text-sm font-bold text-snow">Precision Agro-Ecological Profiling</p>
+            </div>
+          </div>
+
+          {/* Visual Card 2: Farmer Inspecting Crops */}
+          <div className="group relative overflow-hidden rounded-3xl border border-line/60 bg-panel/60 shadow-xl h-80 card-3d">
+            <img
+              src="https://images.unsplash.com/photo-1592982537447-7440770cbfc9?auto=format&fit=crop&w=800&q=80"
+              alt="Farmer inspecting crop plant"
+              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-[0.75]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#dff2fc] via-[#dff2fc]/20 to-transparent" />
+            <div className="absolute bottom-5 left-5 right-5">
+              <span className="rounded-full bg-emerald/20 border border-emerald/40 px-2.5 py-0.5 text-[10px] font-mono font-bold text-emerald backdrop-blur-md">
+                Soil Health
+              </span>
+              <p className="mt-2 text-sm font-bold text-snow">Regenerative Root Aeration</p>
+            </div>
+          </div>
+
+          {/* Statistics Column (Matching Reference Image) */}
+          <div className="lg:col-span-2 flex flex-col justify-between gap-4">
+            <div className="rounded-3xl border border-line/60 bg-panel/60 p-6 backdrop-blur-md flex-1 flex flex-col justify-center">
+              <div className="flex items-baseline gap-2">
+                <span className="font-display text-4xl sm:text-5xl font-black text-cyan">100%</span>
+                <span className="text-sm font-bold text-snow">Customer Satisfaction</span>
+              </div>
+              <p className="mt-2 text-xs text-muted">
+                Proven satisfaction with local farming communities, commercial estates, and agronomic cooperatives.
+              </p>
+            </div>
+
+            <div className="rounded-3xl border border-line/60 bg-panel/60 p-6 backdrop-blur-md flex-1 flex flex-col justify-center">
+              <div className="flex items-baseline gap-2">
+                <span className="font-display text-4xl sm:text-5xl font-black text-emerald">20+</span>
+                <span className="text-sm font-bold text-snow">Years of Climate Data</span>
+              </div>
+              <p className="mt-2 text-xs text-muted">
+                Decades of continuous satellite reanalysis tracking Sri Lankan solar radiation, rainfall normal and GDD.
+              </p>
+            </div>
+
+            <div className="rounded-3xl border border-line/60 bg-panel/60 p-6 backdrop-blur-md flex-1 flex flex-col justify-center">
+              <div className="flex items-baseline gap-2">
+                <span className="font-display text-4xl sm:text-5xl font-black text-snow">100%</span>
+                <span className="text-sm font-bold text-cyan">Sustainable Growth</span>
+              </div>
+              <p className="mt-2 text-xs text-muted">
+                Maximizing crop yields while saving up to 42% irrigation water and eliminating excessive chemical fertilizer runoff.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section 3: WHERE TECHNOLOGY MEETS THE ROOTS OF NATURE (Matching Reference Image) */}
+      <section className="relative mx-auto max-w-7xl px-4 sm:px-6 py-20 border-t border-line/40">
+        <div className="mb-12">
+          <span className="text-xs font-bold uppercase tracking-wider text-cyan flex items-center gap-2">
+            <Cpu className="h-4 w-4" /> Precision Agronomy
+          </span>
+          <h2 className="mt-3 font-display text-3xl sm:text-4xl md:text-5xl font-extrabold uppercase tracking-tight text-snow">
+            Where Technology Meets <br />
+            the Roots of Nature
+          </h2>
+        </div>
+
+        {/* Feature Hero Card with Circular Play / Telemetry Button */}
+        <div className="group relative overflow-hidden rounded-[2.5rem] border border-cyan/40 bg-panel shadow-2xl h-96 sm:h-[450px] mb-8 card-3d">
+          <img
+            src="https://images.unsplash.com/photo-1527842891421-42eec6e703ea?auto=format&fit=crop&w=1600&q=80"
+            alt="Drone aerial view of green terraced rice paddy"
+            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-[0.7]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#dff2fc] via-transparent to-[#dff2fc]/40" />
+          
+          {/* Centered Circular Glass Play / Telemetry Button (just like in the image) */}
+          <div className="absolute inset-0 grid place-items-center">
+            <Link
+              href="/app/simulator"
+              className="group/btn relative grid h-20 w-20 place-items-center rounded-full border border-cyan/60 bg-black/50 backdrop-blur-xl shadow-[0_0_35px_rgba(210,248,67,0.4)] transition-all hover:scale-110 hover:bg-cyan hover:border-cyan"
+            >
+              <Play className="h-8 w-8 text-cyan fill-cyan transition-colors group-hover/btn:text-night group-hover/btn:fill-night ml-1" />
+              <span className="absolute -inset-2 rounded-full border border-cyan/40 animate-ping pointer-events-none" />
+            </Link>
+          </div>
+
+          <div className="absolute bottom-6 left-6 right-6 sm:bottom-10 sm:left-10 sm:right-10 flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <span className="rounded-full bg-cyan/20 border border-cyan/40 px-3 py-1 text-xs font-bold text-cyan backdrop-blur-md">
+                Satellite & Drone Telemetry
+              </span>
+              <h3 className="mt-3 font-display text-2xl sm:text-3xl font-extrabold text-snow">
+                Interactive Agro-Spatial Decision Simulator
+              </h3>
+              <p className="mt-1 text-xs sm:text-sm text-snow/80 max-w-xl">
+                Simulate rainfall anomalies, evaluate multi-layer soil hydrology, and predict harvest profits before planting.
+              </p>
+            </div>
+            <Link href="/app/simulator" className="btn-farmer !py-2 !px-4 !text-xs">
+              <span>Launch Simulator</span>
+              <span className="btn-farmer-circle !h-6 !w-6">
+                <ArrowRight className="h-3 w-3 text-snow" />
+              </span>
+            </Link>
+          </div>
+        </div>
+
+        {/* 4 Story & Tech Cards (Matching the 4 cards in Reference Image) */}
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            {
+              title: "Sustainable Farming in Climate Change",
+              category: "Climate Resilient",
+              desc: "Hyper-local dry spell and drought forecasting protecting Maha and Yala harvests against extreme heat stress.",
+              img: "https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&w=800&q=80",
+              link: "/app/climate",
+            },
+            {
+              title: "Satellite & Drone Telemetry in Farming",
+              category: "Telemetry",
+              desc: "Multispectral Sentinel-2 NDVI canopy index tracking crop vigor, nitrogen assimilation, and pest damage.",
+              img: "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=800&q=80",
+              link: "/app/crops",
+            },
+            {
+              title: "Regenerative Water Management",
+              category: "Water Intelligence",
+              desc: "Precision drip irrigation scheduling and AWD water savings up to 45% for high-value pulses and legumes.",
+              img: "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=800&q=80",
+              link: "/app/water",
+            },
+            {
+              title: "Multi-Layer Soil Health Systems",
+              category: "Soil Physics",
+              desc: "Pedological physics modeling for Reddish Brown Earths, bulk compaction density, and water retention capacity.",
+              img: "https://images.unsplash.com/photo-1592982537447-7440770cbfc9?auto=format&fit=crop&w=800&q=80",
+              link: "/app/soil",
+            },
+          ].map((item) => (
+            <Link
+              key={item.title}
+              href={item.link}
+              className="group card-3d overflow-hidden rounded-3xl border border-line/60 bg-panel/60 p-4 transition-all hover:border-cyan/50 backdrop-blur-md flex flex-col justify-between"
+            >
+              <div>
+                <div className="relative h-44 w-full overflow-hidden rounded-2xl mb-4">
+                  <img
+                    src={item.img}
+                    alt={item.title}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 filter brightness-[0.8]"
+                  />
+                  <span className="absolute top-3 left-3 rounded-full bg-cyan px-2.5 py-0.5 text-[10px] font-bold text-night">
+                    {item.category}
+                  </span>
+                </div>
+                <h4 className="font-bold text-snow text-sm group-hover:text-cyan transition-colors">
+                  {item.title}
+                </h4>
+                <p className="mt-2 text-xs text-muted leading-relaxed">
+                  {item.desc}
+                </p>
+              </div>
+              <div className="mt-4 pt-3 border-t border-line/40 flex items-center justify-between text-xs font-semibold text-cyan">
+                <span>View Intelligence</span>
+                <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Section 4: Real-time Operational Engines (All 5 Modules Tabs) */}
+      <section className="relative mx-auto max-w-7xl px-4 sm:px-6 py-20">
+        <div className="card-3d glass-transmission rounded-[2.5rem] border border-cyan/40 bg-gradient-to-br from-[#e7f7fe] via-[#dff2fc] to-[#cfeaf8] p-6 sm:p-10 shadow-[0_25px_60px_rgba(35,91,128,0.16)]">
           <div className="flex flex-wrap items-center justify-between gap-4 border-b border-line/60 pb-6">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-cyan/40 bg-cyan/10 px-3 py-1 text-xs font-semibold text-cyan">
@@ -258,7 +427,7 @@ export default function Home() {
                 onClick={() => setActiveEngine("climate")}
                 className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition-all ${
                   activeEngine === "climate"
-                    ? "bg-cyan text-night shadow-[0_0_15px_rgba(34,211,238,0.4)]"
+                    ? "bg-cyan text-night shadow-[0_0_15px_rgba(210,248,67,0.45)]"
                     : "text-muted hover:text-snow"
                 }`}
               >
@@ -269,7 +438,7 @@ export default function Home() {
                 onClick={() => setActiveEngine("water")}
                 className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition-all ${
                   activeEngine === "water"
-                    ? "bg-cyan text-night shadow-[0_0_15px_rgba(34,211,238,0.4)]"
+                    ? "bg-cyan text-night shadow-[0_0_15px_rgba(210,248,67,0.45)]"
                     : "text-muted hover:text-snow"
                 }`}
               >
@@ -280,7 +449,7 @@ export default function Home() {
                 onClick={() => setActiveEngine("soil")}
                 className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition-all ${
                   activeEngine === "soil"
-                    ? "bg-cyan text-night shadow-[0_0_15px_rgba(34,211,238,0.4)]"
+                    ? "bg-cyan text-night shadow-[0_0_15px_rgba(210,248,67,0.45)]"
                     : "text-muted hover:text-snow"
                 }`}
               >
@@ -291,7 +460,7 @@ export default function Home() {
                 onClick={() => setActiveEngine("crops")}
                 className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition-all ${
                   activeEngine === "crops"
-                    ? "bg-cyan text-night shadow-[0_0_15px_rgba(34,211,238,0.4)]"
+                    ? "bg-cyan text-night shadow-[0_0_15px_rgba(210,248,67,0.45)]"
                     : "text-muted hover:text-snow"
                 }`}
               >
@@ -302,7 +471,7 @@ export default function Home() {
                 onClick={() => setActiveEngine("yield")}
                 className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition-all ${
                   activeEngine === "yield"
-                    ? "bg-cyan text-night shadow-[0_0_15px_rgba(34,211,238,0.4)]"
+                    ? "bg-cyan text-night shadow-[0_0_15px_rgba(210,248,67,0.45)]"
                     : "text-muted hover:text-snow"
                 }`}
               >
@@ -326,7 +495,6 @@ export default function Home() {
                   </span>
                 </div>
 
-                {/* Score Cards */}
                 <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
                   <div className="rounded-2xl border border-line/60 bg-panel/60 p-4">
                     <span className="text-xs font-semibold uppercase text-muted">Climate Stability</span>
@@ -358,7 +526,6 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Monthly Drought Risk & Flood Risk Row */}
                 <div className="grid gap-6 md:grid-cols-2">
                   <div className="rounded-2xl border border-line/60 bg-panel/40 p-5">
                     <div className="flex items-center justify-between mb-3">
@@ -419,7 +586,6 @@ export default function Home() {
                   </span>
                 </div>
 
-                {/* 4 Pillars of Water Availability Index */}
                 <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
                   {[
                     { n: "Reservoir Support", v: "74%", s: "High", c: "text-emerald" },
@@ -437,7 +603,6 @@ export default function Home() {
                   ))}
                 </div>
 
-                {/* Crop Irrigation Requirement Specification Table */}
                 <div className="overflow-hidden rounded-2xl border border-line/60 bg-panel/40">
                   <div className="px-5 py-3 border-b border-line/60 bg-panel/80 flex items-center justify-between">
                     <span className="text-xs font-bold uppercase tracking-wider text-snow">
@@ -494,7 +659,6 @@ export default function Home() {
                   </span>
                 </div>
 
-                {/* Suitable Crops */}
                 <div>
                   <h4 className="text-xs font-bold uppercase tracking-wider text-cyan mb-3">Suitable Crops (Monaragala · Reddish Brown Earth)</h4>
                   <div className="grid gap-4 md:grid-cols-3">
@@ -519,7 +683,6 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* 4 Soil Health Indicators */}
                 <div>
                   <h4 className="text-xs font-bold uppercase tracking-wider text-muted mb-3">Soil Health Indicators</h4>
                   <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
@@ -562,7 +725,6 @@ export default function Home() {
                   </span>
                 </div>
 
-                {/* Best Crop Recommendation Rankings & Avoid */}
                 <div className="grid gap-6 md:grid-cols-2">
                   <div className="rounded-2xl border border-line/60 bg-panel/40 p-5">
                     <div className="flex items-center justify-between mb-3 border-b border-line/60 pb-2">
@@ -602,7 +764,6 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {/* Crop Diversification Recommendation */}
                   <div className="rounded-2xl border border-line/60 bg-panel/40 p-5">
                     <div className="flex items-center justify-between mb-3 border-b border-line/60 pb-2">
                       <h4 className="font-bold text-snow text-sm">Crop Diversification Recommendation</h4>
@@ -654,11 +815,10 @@ export default function Home() {
                   </span>
                 </div>
 
-                {/* Prompt Example: Groundnut Expected Yield */}
                 <div>
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-xs font-bold uppercase tracking-wider text-cyan">
-                      Prompt Example: Groundnut Expected Yield
+                      Prompt Reference Example: Groundnut Expected Yield
                     </span>
                     <span className="text-xs font-mono text-muted">Metric Tons per Hectare (MT/Ha)</span>
                   </div>
@@ -692,7 +852,6 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Additional Multi-Crop Table */}
                 <div className="overflow-hidden rounded-2xl border border-line/60 bg-panel/40">
                   <div className="px-5 py-3 border-b border-line/60 bg-panel/80 flex items-center justify-between">
                     <span className="text-xs font-bold uppercase tracking-wider text-snow">
@@ -742,33 +901,68 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How It Works (Steps) with 3D Depth */}
-      <section className="relative border-y border-line/60 bg-gradient-to-b from-navy/50 via-abyss to-navy/50 py-28">
-        <div className="mx-auto max-w-7xl px-5">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <span className="text-xs font-bold uppercase tracking-wider text-emerald">Pipeline Architecture</span>
-            <h2 className="mt-2 text-4xl font-extrabold text-snow tracking-tight">How AgriIntel computes intelligence</h2>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-4">
-            {STEPS.map((s) => (
-              <div key={s.name} className="panel card-3d relative p-6 border-line/60">
-                <span className="font-mono text-2xl font-black text-cyan/30">{s.step}</span>
-                <h3 className="mt-2 text-lg font-bold text-snow">{s.name}</h3>
-                <p className="mt-2 text-xs text-muted leading-relaxed">{s.body}</p>
+      {/* Section 5: Crisp Dark Forest Green & Lime FAQ */}
+      <section className="relative mx-auto max-w-7xl px-4 sm:px-6 py-20">
+        <div className="glass-transmission rounded-[2.5rem] bg-gradient-to-br from-[#0c2417]/95 via-[#081b10]/95 to-[#06160d]/95 text-snow p-8 sm:p-14 shadow-2xl border border-cyan/25">
+          <div className="grid gap-12 lg:grid-cols-[1fr_1.4fr] items-start">
+            <div>
+              <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-cyan">
+                <span className="h-2 w-2 rounded-full bg-cyan animate-pulse" />
+                Frequently Asked Questions
+              </span>
+              <h2 className="mt-3 font-display text-3xl sm:text-4xl font-extrabold uppercase tracking-tight text-snow">
+                Got Questions? <br />
+                We’ve Got You Covered.
+              </h2>
+              <p className="mt-4 text-sm text-[#95af93] leading-relaxed max-w-md">
+                Everything you need to know about starting with AgriIntel’s precision agricultural intelligence platform in Sri Lanka.
+              </p>
+              <div className="mt-8">
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center gap-3 rounded-full bg-cyan text-[#07190e] px-6 py-3.5 text-xs font-bold transition-all hover:bg-[#e2fc68] shadow-[0_0_20px_rgba(210,248,67,0.35)]"
+                >
+                  <span>Ask a Question</span>
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
               </div>
-            ))}
+            </div>
+
+            {/* Clean Dark Green Accordion Items */}
+            <div className="divide-y divide-line/40">
+              {FAQS.map((faq, idx) => {
+                const isOpen = openFaq === idx;
+                return (
+                  <div key={faq.q} className="py-5">
+                    <button
+                      onClick={() => setOpenFaq(isOpen ? null : idx)}
+                      className="w-full flex items-center justify-between text-left gap-4 font-display font-bold text-base sm:text-lg text-snow hover:text-cyan transition-colors"
+                    >
+                      <span>{faq.q}</span>
+                      <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-cyan/40 bg-panel-2 text-cyan shadow-[0_0_12px_rgba(210,248,67,0.2)]">
+                        {isOpen ? <Minus className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+                      </span>
+                    </button>
+                    {isOpen && (
+                      <p className="mt-3 text-sm text-[#95af93] leading-relaxed animate-fadeIn">
+                        {faq.a}
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Decision Simulator Interactive Teaser */}
-      <section className="mx-auto grid max-w-7xl items-center gap-12 px-5 py-28 md:grid-cols-2">
+      {/* Section 6: Decision Simulator Interactive Teaser */}
+      <section className="mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 py-20 md:grid-cols-2 border-t border-line/40">
         <div>
           <span className="text-xs font-bold uppercase tracking-wider text-cyan">Interactive Modeling</span>
-          <h2 className="mt-2 text-4xl font-extrabold text-snow tracking-tight">The Decision Simulator</h2>
+          <h2 className="mt-2 text-3xl sm:text-4xl font-extrabold text-snow tracking-tight">The Decision Simulator</h2>
           <p className="mt-4 text-sm text-muted leading-relaxed">
-            Test realistic farming scenarios before investing capital. For example: Compare Green Gram, Sesame and Groundnut in Monaragala under a 20% Yala rainfall deficit. AgriIntel synthesizes the NASA POWER climate baseline, adjusts soil water budgets, and calculates estimated yields, revenues, and risk metrics.
+            Test realistic farming scenarios before investing capital. Compare Green Gram, Sesame and Groundnut in Monaragala under a 20% Yala rainfall deficit. AgriIntel synthesizes the NASA POWER climate baseline, adjusts soil water budgets, and calculates estimated yields, revenues, and risk metrics.
           </p>
           <div className="mt-8">
             <Link href="/register" className="btn btn-primary !py-3.5 shadow-lg">
@@ -790,18 +984,19 @@ export default function Home() {
           <div className="h-56">
             <ResponsiveContainer>
               <BarChart data={DEMO} layout="vertical" margin={{ left: 10 }}>
-                <XAxis type="number" stroke="#94A3B8" fontSize={11} tickLine={false} />
-                <YAxis type="category" dataKey="crop" stroke="#94A3B8" fontSize={11} width={90} tickLine={false} />
+                <XAxis type="number" stroke="#92ab90" fontSize={11} tickLine={false} />
+                <YAxis type="category" dataKey="crop" stroke="#92ab90" fontSize={11} width={90} tickLine={false} />
                 <Tooltip
-                  cursor={{ fill: "rgba(34, 211, 238, 0.08)" }}
+                  cursor={{ fill: "rgba(22, 143, 196, 0.08)" }}
                   contentStyle={{
-                    background: "rgba(8, 22, 38, 0.95)",
-                    border: "1px solid rgba(34, 211, 238, 0.3)",
+                    background: "rgba(14, 38, 24, 0.95)",
+                    border: "1px solid rgba(22, 143, 196, 0.3)",
                     borderRadius: "12px",
                     boxShadow: "0 10px 25px rgba(0,0,0,0.5)",
+                    color: "#f6faf4",
                   }}
                 />
-                <Bar dataKey="profit" fill="#10B981" radius={[0, 8, 8, 0]} />
+                <Bar dataKey="profit" fill="#168fc4" radius={[0, 8, 8, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -812,10 +1007,10 @@ export default function Home() {
       </section>
 
       {/* Industry Verticals */}
-      <section className="border-t border-line/60 py-24">
-        <div className="mx-auto max-w-7xl px-5 text-center">
+      <section className="border-t border-line/60 py-20 bg-[#dff2fc]/60">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 text-center">
           <h2 className="text-3xl font-extrabold text-snow tracking-tight">Built for agricultural risk bearers</h2>
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 md:grid-cols-5">
+          <div className="mt-10 grid gap-5 sm:grid-cols-2 md:grid-cols-5">
             {[
               { i: Tractor, n: "Commercial Farms" },
               { i: Landmark, n: "Agricultural Banks" },
@@ -838,13 +1033,13 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="relative overflow-hidden border-t border-line/60 bg-gradient-to-b from-navy/60 to-abyss py-28 text-center">
+      {/* Final Call to Action Section */}
+      <section className="relative overflow-hidden border-t border-line/60 bg-gradient-to-b from-[#0e2719] to-[#07170e] py-28 text-center">
         <div className="pointer-events-none absolute -left-20 top-0 h-96 w-96 rounded-full bg-cyan/10 blur-[140px]" />
         <div className="pointer-events-none absolute -right-20 bottom-0 h-96 w-96 rounded-full bg-emerald/10 blur-[140px]" />
 
-        <div className="relative mx-auto max-w-3xl px-5">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald/40 bg-emerald/10 px-3 py-1 text-xs font-semibold text-emerald mb-4">
+        <div className="relative mx-auto max-w-3xl px-4 sm:px-6">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-cyan/40 bg-cyan/10 px-3.5 py-1 text-xs font-semibold text-cyan mb-4">
             <Radio className="h-3 w-3 animate-pulse" />
             25 Districts Synchronized
           </span>
@@ -860,12 +1055,20 @@ export default function Home() {
               <span>Start Free Organization Trial</span>
               <ArrowRight className="h-4 w-4" />
             </Link>
-            <Link href="/contact?kind=demo" className="btn btn-ghost !px-7 !py-3.5">
+            <Link href="/contact" className="btn btn-ghost !px-7 !py-3.5">
               <span>Schedule Live Walkthrough</span>
             </Link>
           </div>
         </div>
       </section>
+
+      <div id="experience" className="scroll-mt-24">
+        <ExperienceSection />
+      </div>
+
+      <div id="agrisphere" className="scroll-mt-24">
+        <AgriSphereSection />
+      </div>
     </>
   );
 }
