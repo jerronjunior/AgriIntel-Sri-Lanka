@@ -14,15 +14,17 @@ const QUESTIONS = [
   "Which crops will generate the highest ROI?",
 ];
 
-type Status = "Connected" | "CSV import" | "Planned";
-const EO: [string, string, string, string][] = [
-  ["NASA POWER", "Yes", "32.5%", "Temperature, humidity, sunshine, and normal Maha/Yala rainfall"],
-  ["SMAP", "Yes", "20%", "Root-zone and surface soil moisture, plus water stress"],
-  ["MODIS", "Yes", "15%", "Vegetation greenness (NDVI) compared with past years"],
-  ["ECOSTRESS", "Yes", "12.5%", "Land-surface temperature, heat stress, and evapotranspiration"],
-  ["GPM IMERG", "Yes", "10%", "30-day rainfall, difference from normal, and heavy-rain days"],
-  ["SRTM", "Yes", "10%", "Elevation and how hilly the land is"],
-  ["Landsat", "Yes, for farms", "0% of district scores", "Farm-level greenness (NDVI) at 30 m for supplied farm boundaries"],
+type Status = "Connected" | "Not connected" | "CSV import" | "Planned";
+const EO: [string, string, Status][] = [
+  ["NASA POWER", "Temperature, solar radiation, humidity, wind, rainfall normals", "Connected"],
+  ["NASA GPM IMERG", "Rainfall, anomalies, accumulated precipitation", "Not connected"],
+  ["NASA SMAP", "Surface and root-zone soil moisture, drought conditions", "Not connected"],
+  ["NASA ECOSTRESS", "Evapotranspiration, surface temperature", "Not connected"],
+  ["Landsat", "Reflectance, NDVI, historical crop performance", "Not connected"],
+  ["MODIS / VIIRS", "Regional vegetation and seasonal crop development", "Not connected"],
+  ["Sentinel-2 (EU Copernicus)", "Field-level crop monitoring and vegetation indices", "Not connected"],
+  ["NASA GLDAS", "Soil moisture, runoff, drought indicators", "Not connected"],
+  ["SRTM", "Elevation, slope, drainage", "Not connected"],
 ];
 const LK: [string, string, Status][] = [
   ["Department of Agriculture", "Crop calendars, crop suitability, crop forecasts, agro-met advisories", "Planned"],
@@ -33,7 +35,7 @@ const LK: [string, string, Status][] = [
   ["Sri Lanka Open Data Portal", "Crop forecasts, agricultural statistics", "Planned"],
 ];
 const STATUS_CLS: Record<Status, string> = {
-  Connected: "border-emerald/50 text-emerald", "CSV import": "border-amber/50 text-amber", Planned: "border-line text-muted",
+  Connected: "border-emerald/50 text-emerald", "Not connected": "border-line text-muted", "CSV import": "border-amber/50 text-amber", Planned: "border-line text-muted",
 };
 
 const MODULES: [string, string][] = [
@@ -73,44 +75,17 @@ export default function AgriSpherePage() {
       <section className="border-y border-line bg-navy">
         <div className="mx-auto max-w-7xl px-5 py-20">
           <h2 className="text-4xl font-semibold">Two data layers, one answer</h2>
-          <p className="mt-3 max-w-2xl text-muted">Earth observation signals are combined into each district&apos;s opportunity score. Farm-level Landsat adds detail for boundaries you supply.</p>
+          <p className="mt-3 max-w-2xl text-muted">Statuses reflect whether each source is connected to live application data. Demo and discovery-only values are not marked as connected.</p>
           <div className="mt-10 grid gap-10 lg:grid-cols-2">
             {([["Earth observation layer", EO], ["Sri Lankan agricultural intelligence layer", LK]] as const).map(([title, rows]) => (
               <div key={title}>
                 <h3 className="text-xl font-semibold">{title}</h3>
-                {title === "Earth observation layer" ? (
-                  <div className="mt-4 overflow-hidden rounded-2xl border border-cyan/20 bg-panel shadow-[0_18px_50px_rgba(47,92,48,0.14)]">
-                    <div className="grid grid-cols-[1.05fr_.8fr_.75fr] gap-3 border-b border-line px-4 py-3 text-[10px] font-bold uppercase tracking-[0.16em] text-cyan/80 sm:grid-cols-[1fr_.8fr_.7fr_1.7fr]">
-                      <span>NASA data</span><span>Used</span><span>Share</span><span className="hidden sm:block">What it&apos;s used for</span>
-                    </div>
-                    <ul className="divide-y divide-line">
-                      {(rows as [string, string, string, string][]).map(([name, used, share, purpose]) => (
-                        <li key={name} className="grid grid-cols-[1.05fr_.8fr_.75fr] gap-3 px-4 py-4 sm:grid-cols-[1fr_.8fr_.7fr_1.7fr]">
-                          <div>
-                            <span className="font-semibold text-ink">{name}</span>
-                            <div className="mt-2 h-1.5 w-full max-w-[110px] overflow-hidden rounded-full bg-line/30">
-                              <span className="block h-full rounded-full bg-gradient-to-r from-cyan to-emerald" style={{ width: share.startsWith("0") ? "8%" : share }} />
-                            </div>
-                          </div>
-                          <span className="text-sm font-semibold text-emerald">{used}</span>
-                          <span className="text-sm font-semibold text-cyan">{share}</span>
-                          <span className="col-span-3 text-xs leading-relaxed text-muted sm:col-span-1 sm:text-sm">{purpose}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    <div className="flex items-center justify-between border-t border-cyan/20 bg-cyan/5 px-4 py-3 text-sm font-bold">
-                      <span className="text-ink">Total district-score contribution</span>
-                      <span className="text-cyan">100%</span>
-                    </div>
-                  </div>
-                ) : (
-                  <ul className="mt-4 divide-y divide-line border-y border-line">
-                    {(rows as [string, string, Status][]).map(([n, d, s]) => (
-                      <li key={n} className="flex items-start justify-between gap-4 py-3">
-                        <span><span className="font-medium">{n}</span><span className="block text-sm text-muted">{d}</span></span><Badge s={s} />
-                      </li>))}
-                  </ul>
-                )}
+                <ul className="mt-4 divide-y divide-line border-y border-line">
+                  {rows.map(([n, d, s]) => (
+                    <li key={n} className="flex items-start justify-between gap-4 py-3">
+                      <span><span className="font-medium">{n}</span><span className="block text-sm text-muted">{d}</span></span><Badge s={s} />
+                    </li>))}
+                </ul>
               </div>))}
           </div>
         </div>
