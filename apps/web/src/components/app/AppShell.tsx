@@ -198,7 +198,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
             </span>
             {!collapsed && (
               <span className="flex items-center gap-1 text-sm font-semibold text-snow">
-                AgriIntel <span className="rounded bg-cyan/15 px-1 py-0.2 text-[10px] font-mono text-cyan">LK</span>
+                AgriIntel
               </span>
             )}
           </Link>

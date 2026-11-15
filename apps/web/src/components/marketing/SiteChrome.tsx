@@ -22,7 +22,7 @@ export function Logo() {
         <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-emerald radar-ring" />
       </span>
       <span className="flex items-center gap-1.5 text-snow">
-        AgriIntel <span className="rounded-md border border-cyan/30 bg-cyan/10 px-1.5 py-0.5 text-[11px] font-mono font-medium text-cyan">LK</span>
+        AgriIntel
       </span>
     </Link>
   );
