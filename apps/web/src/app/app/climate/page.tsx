@@ -152,7 +152,7 @@ export default function ClimatePage() {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="font-display text-xl font-bold tracking-tight text-snow">
-              District Climate Score
+
             </h2>
             <p className="text-xs text-muted">
               Synthesized environmental health indices for {district}
@@ -230,9 +230,8 @@ export default function ClimatePage() {
                 return (
                   <div
                     key={lvl}
-                    className={`h-2 flex-1 rounded-full ${
-                      active ? "bg-rose shadow-[0_0_10px_rgba(251,113,133,0.5)]" : "bg-line/40"
-                    }`}
+                    className={`h-2 flex-1 rounded-full ${active ? "bg-rose shadow-[0_0_10px_rgba(251,113,133,0.5)]" : "bg-line/40"
+                      }`}
                   />
                 );
               })}
@@ -262,9 +261,8 @@ export default function ClimatePage() {
                 return (
                   <div
                     key={sec}
-                    className={`h-2 flex-1 rounded-full ${
-                      active ? "bg-emerald shadow-[0_0_10px_rgba(52,211,153,0.5)]" : "bg-line/40"
-                    }`}
+                    className={`h-2 flex-1 rounded-full ${active ? "bg-emerald shadow-[0_0_10px_rgba(52,211,153,0.5)]" : "bg-line/40"
+                      }`}
                   />
                 );
               })}
@@ -318,11 +316,10 @@ export default function ClimatePage() {
               return (
                 <div
                   key={item.month}
-                  className={`relative rounded-xl p-3.5 transition-all border ${
-                    isCur
+                  className={`relative rounded-xl p-3.5 transition-all border ${isCur
                       ? "border-cyan bg-cyan/10 shadow-[0_0_15px_rgba(34,211,238,0.2)]"
                       : "border-line/40 bg-panel/40 hover:border-line hover:bg-panel/70"
-                  }`}
+                    }`}
                 >
                   {isCur && (
                     <span className="absolute -top-2 right-2 rounded-full bg-cyan px-1.5 py-0.2 text-[9px] font-bold text-night">
@@ -332,9 +329,8 @@ export default function ClimatePage() {
                   <p className="text-xs font-semibold text-snow">{item.month}</p>
                   <div className="mt-2 flex items-center justify-between">
                     <span
-                      className={`text-xs font-bold ${
-                        isCrit ? "text-red-400" : isHigh ? "text-rose" : isMod ? "text-amber" : isLow ? "text-cyan" : "text-emerald"
-                      }`}
+                      className={`text-xs font-bold ${isCrit ? "text-red-400" : isHigh ? "text-rose" : isMod ? "text-amber" : isLow ? "text-cyan" : "text-emerald"
+                        }`}
                     >
                       {item.risk_level}
                     </span>
@@ -342,9 +338,8 @@ export default function ClimatePage() {
                   </div>
                   <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-base">
                     <div
-                      className={`h-full rounded-full ${
-                        isCrit ? "bg-red-500" : isHigh ? "bg-rose" : isMod ? "bg-amber" : isLow ? "bg-cyan" : "bg-emerald"
-                      }`}
+                      className={`h-full rounded-full ${isCrit ? "bg-red-500" : isHigh ? "bg-rose" : isMod ? "bg-amber" : isLow ? "bg-cyan" : "bg-emerald"
+                        }`}
                       style={{ width: `${item.risk_score}%` }}
                     />
                   </div>
@@ -369,13 +364,12 @@ export default function ClimatePage() {
           <div className="flex items-center gap-2">
             <span className="text-xs text-muted">7-Day Aggregate Risk:</span>
             <span
-              className={`rounded-full px-3 py-0.5 text-xs font-bold uppercase tracking-wider border ${
-                flood?.overall_flood_probability === "High"
+              className={`rounded-full px-3 py-0.5 text-xs font-bold uppercase tracking-wider border ${flood?.overall_flood_probability === "High"
                   ? "border-rose/50 bg-rose/20 text-rose"
                   : flood?.overall_flood_probability === "Medium"
-                  ? "border-amber/50 bg-amber/20 text-amber"
-                  : "border-emerald/50 bg-emerald/20 text-emerald"
-              }`}
+                    ? "border-amber/50 bg-amber/20 text-amber"
+                    : "border-emerald/50 bg-emerald/20 text-emerald"
+                }`}
             >
               {flood?.overall_flood_probability ?? "Low"} Flood Probability
             </span>
@@ -407,18 +401,16 @@ export default function ClimatePage() {
                   <div className="flex items-center justify-between text-xs">
                     <span className="text-muted">Probability:</span>
                     <span
-                      className={`font-semibold ${
-                        isHigh ? "text-rose" : isMed ? "text-amber" : "text-emerald"
-                      }`}
+                      className={`font-semibold ${isHigh ? "text-rose" : isMed ? "text-amber" : "text-emerald"
+                        }`}
                     >
                       {d.flood_probability}
                     </span>
                   </div>
                   <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-base">
                     <div
-                      className={`h-full rounded-full ${
-                        isHigh ? "bg-rose" : isMed ? "bg-amber" : "bg-emerald"
-                      }`}
+                      className={`h-full rounded-full ${isHigh ? "bg-rose" : isMed ? "bg-amber" : "bg-emerald"
+                        }`}
                       style={{ width: `${d.flood_probability_pct}%` }}
                     />
                   </div>
